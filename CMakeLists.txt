@@ -79,4 +79,5 @@ add_subdirectory(hw3)
 #add_subdirectory(hw3_solution)
 add_subdirectory(collision_demo)
 add_subdirectory(project_starter_code)
-
+add_subdirectory(panda_example)
+add_subdirectory(mmp_panda_example)
