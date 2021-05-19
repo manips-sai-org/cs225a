@@ -12,8 +12,11 @@
 #include "force_sensor/ForceSensorDisplay.h"
 #include <signal.h>
 
+// flags for simulation and controller states
 bool fSimulationRunning = false;
 void sighandler(int){fSimulationRunning = false;}
+bool fSimulationLoopDone = false;
+bool fControllerLoopDone = true; // initialize as true for first loop
 
 using namespace std;
 using namespace Eigen;
@@ -43,6 +46,9 @@ const std::string EE_FORCE_KEY = "cs225a::sensor::force";
 const std::string EE_MOMENT_KEY = "cs225a::sensor::moment";
 // - read:
 const std::string JOINT_TORQUES_COMMANDED_KEY  = "cs225a::robot::panda::actuators::fgc";
+// - read + write: 
+const std::string SIMULATION_LOOP_DONE_KEY = "cs225a::simulation::done";
+const std::string CONTROLLER_LOOP_DONE_KEY = "cs225a::controller::done";
 
 // force sensor
 ForceSensorSim* force_sensor;
@@ -52,6 +58,12 @@ ForceSensorDisplay* force_display;
 
 // simulation thread
 void simulation(Sai2Model::Sai2Model* robot, Sai2Model::Sai2Model* object, Simulation::Sai2Simulation* sim, UIForceWidget *ui_force_widget);
+
+// function for converting string to bool
+bool string_to_bool(const std::string& x);
+
+// function for converting bool to string
+inline const char * const bool_to_string(bool b);
 
 // callback to print glfw errors
 void glfwError(int error, const char* description);
@@ -172,6 +184,8 @@ int main() {
 	redis_client.setEigenMatrixJSON(JOINT_VELOCITIES_KEY, robot->_dq); 
 	redis_client.setEigenMatrixJSON(OBJ_JOINT_ANGLES_KEY, object->_q); 
 	redis_client.setEigenMatrixJSON(OBJ_JOINT_VELOCITIES_KEY, object->_dq); 
+    redis_client.set(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
+	redis_client.set(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone));
 
 	// start simulation thread
 	thread sim_thread(simulation, robot, object, sim, ui_force_widget);
@@ -345,7 +359,7 @@ void simulation(Sai2Model::Sai2Model* robot, Sai2Model::Sai2Model* object, Simul
 	const std::string false_message = "Not Detected";
 
 	// setup redis client data container for pipeset (batch write)
-	std::vector<std::pair<std::string, std::string>> redis_data(10);  // set with the number of keys to write 
+	std::vector<std::pair<std::string, std::string>> redis_data(12);  // set with the number of keys to write 
 
 	// setup white noise generator
     const double mean = 0.0;
@@ -353,94 +367,133 @@ void simulation(Sai2Model::Sai2Model* robot, Sai2Model::Sai2Model* object, Simul
     std::default_random_engine generator;
     std::normal_distribution<double> dist(mean, stddev);
 
+	unsigned long long counter = 0;
+
 	fSimulationRunning = true;
 	while (fSimulationRunning) {
-		fTimerDidSleep = timer.waitForNextLoop();
+		// fTimerDidSleep = timer.waitForNextLoop(); // commented out to let current simulation loop finish before next loop
 
-		// get gravity torques
-		robot->gravityVector(g);
+		// run simulation loop when (1) controller is done or (2) there is user force input
+		if (fControllerLoopDone || fRobotLinkSelect) {
+			// get gravity torques
+			robot->gravityVector(g);
 
-		// read arm torques from redis and apply to simulated robot
-		command_torques = redis_client.getEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY);
+			// read arm torques from redis and apply to simulated robot
+	    	if (fControllerLoopDone) {
+				command_torques = redis_client.getEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY);
+			}
+			else {
+				command_torques.setZero();
+			}
 
-		// get forces from interactive screen 
-		ui_force_widget->getUIForce(ui_force);
-		ui_force_widget->getUIJointTorques(ui_force_command_torques);
+			// get forces from interactive screen 
+			ui_force_widget->getUIForce(ui_force);
+			ui_force_widget->getUIJointTorques(ui_force_command_torques);
 
-		if (fRobotLinkSelect)
-			sim->setJointTorques(robot_name, command_torques + ui_force_command_torques - robot->_M*kvj*robot->_dq + g);
-		else
-			sim->setJointTorques(robot_name, command_torques - robot->_M*kvj*robot->_dq + g);  // can comment out the joint damping if controller does this 
+			if (fRobotLinkSelect)
+				sim->setJointTorques(robot_name, command_torques + ui_force_command_torques - robot->_M*kvj*robot->_dq + g);
+			else
+				sim->setJointTorques(robot_name, command_torques - robot->_M*kvj*robot->_dq + g);  // can comment out the joint damping if controller does this 
 
-		// integrate forward
-		double curr_time = timer.elapsedTime() / time_slowdown_factor;
-		double loop_dt = curr_time - last_time; 
-		sim->integrate(loop_dt);
+			// integrate forward
+			double curr_time = timer.elapsedTime() / time_slowdown_factor;
+			double loop_dt = curr_time - last_time; 
+			// sim->integrate(loop_dt);
+			sim->integrate(0.001); // integrate at 1 kHz
 
-		// read joint positions, velocities, update model
-		sim->getJointPositions(robot_name, robot->_q);
-		sim->getJointVelocities(robot_name, robot->_dq);
-		robot->updateModel();
+			// read joint positions, velocities, update model
+			sim->getJointPositions(robot_name, robot->_q);
+			sim->getJointVelocities(robot_name, robot->_dq);
+			robot->updateModel();
 
-		sim->getJointPositions(obj_name, object->_q);
-		sim->getJointVelocities(obj_name, object->_dq);
-		object->updateModel();
+			sim->getJointPositions(obj_name, object->_q);
+			sim->getJointVelocities(obj_name, object->_dq);
+			object->updateModel();
 
-		// update force sensor readings
-		force_sensor->update(sim);
-		force_sensor->getForceLocalFrame(sensed_force);  // refer to ForceSensorSim.h in sai2-common/src/force_sensor (can also get wrt global frame)
-        force_sensor->getMomentLocalFrame(sensed_moment);
+			// update force sensor readings
+			force_sensor->update(sim);
+			force_sensor->getForceLocalFrame(sensed_force);  // refer to ForceSensorSim.h in sai2-common/src/force_sensor (can also get wrt global frame)
+	        force_sensor->getMomentLocalFrame(sensed_moment);
 
-		// std::cout << "Sensed Force: " << sensed_force.transpose() << "Sensed Moment: " << sensed_moment.transpose() << std::endl;
+			// std::cout << "Sensed Force: " << sensed_force.transpose() << "Sensed Moment: " << sensed_moment.transpose() << std::endl;
 
-        // query object position and ee pos/ori for camera detection 
-		object->positionInWorld(obj_pos, "link6");
-		robot->positionInWorld(camera_pos, "link7");
-		robot->rotationInWorld(camera_ori, "link7");  // local to world frame 
+	        // query object position and ee pos/ori for camera detection 
+			object->positionInWorld(obj_pos, "link6");
+			robot->positionInWorld(camera_pos, "link7");
+			robot->rotationInWorld(camera_ori, "link7");  // local to world frame 
 
-		// add position offset in world.urdf file since positionInWorld() doesn't account for this 
-		obj_pos += obj_offset;
-		camera_pos += robot_offset;  // camera position/orientation is set to the panda's last link
+			// add position offset in world.urdf file since positionInWorld() doesn't account for this 
+			obj_pos += obj_offset;
+			camera_pos += robot_offset;  // camera position/orientation is set to the panda's last link
 
-		// object camera detect 
-		detect = cameraFOV(obj_pos, camera_pos, camera_ori, 1.0, M_PI/6);
-		if (detect == true) {
-			obj_pos(0) += dist(generator);  // add white noise 
-			obj_pos(1) += dist(generator);
-			obj_pos(2) += dist(generator);
-			redis_data.at(0) = std::pair<string, string>(CAMERA_DETECT_KEY, true_message);
-			redis_data.at(1) = std::pair<string, string>(CAMERA_OBJ_POS_KEY, redis_client.encodeEigenMatrixJSON(obj_pos));
+			// object camera detect 
+			detect = cameraFOV(obj_pos, camera_pos, camera_ori, 1.0, M_PI/6);
+			if (detect == true) {
+				obj_pos(0) += dist(generator);  // add white noise 
+				obj_pos(1) += dist(generator);
+				obj_pos(2) += dist(generator);
+				redis_data.at(0) = std::pair<string, string>(CAMERA_DETECT_KEY, true_message);
+				redis_data.at(1) = std::pair<string, string>(CAMERA_OBJ_POS_KEY, redis_client.encodeEigenMatrixJSON(obj_pos));
+			}
+			else {
+				redis_data.at(0) = std::pair<string, string>(CAMERA_DETECT_KEY, false_message);
+				redis_data.at(1) = std::pair<string, string>(CAMERA_OBJ_POS_KEY, redis_client.encodeEigenMatrixJSON(Vector3d::Zero()));
+			}
+
+			// simulation loop is done
+	        fSimulationLoopDone = true;
+
+	        // ask for next control loop
+	        fControllerLoopDone = false;
+
+			// publish all redis keys at once to reduce multiple redis calls that slow down simulation 
+			// shown explicitly here, but you can define a helper function to publish data 
+			redis_data.at(2) = std::pair<string, string>(JOINT_ANGLES_KEY, redis_client.encodeEigenMatrixJSON(robot->_q));
+			redis_data.at(3) = std::pair<string, string>(JOINT_VELOCITIES_KEY, redis_client.encodeEigenMatrixJSON(robot->_dq));
+			redis_data.at(4) = std::pair<string, string>(OBJ_JOINT_ANGLES_KEY, redis_client.encodeEigenMatrixJSON(object->_q));
+			redis_data.at(5) = std::pair<string, string>(OBJ_JOINT_VELOCITIES_KEY, redis_client.encodeEigenMatrixJSON(object->_dq));
+			redis_data.at(6) = std::pair<string, string>(CAMERA_POS_KEY, redis_client.encodeEigenMatrixJSON(camera_pos));
+			redis_data.at(7) = std::pair<string, string>(CAMERA_ORI_KEY, redis_client.encodeEigenMatrixJSON(camera_ori));
+			redis_data.at(8) = std::pair<string, string>(EE_FORCE_KEY, redis_client.encodeEigenMatrixJSON(sensed_force));
+			redis_data.at(9) = std::pair<string, string>(EE_MOMENT_KEY, redis_client.encodeEigenMatrixJSON(sensed_moment));
+	        redis_data.at(10) = std::pair<string, string>(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
+	        // redis_data.at(10) = std::pair<string, string>(SIMULATION_LOOP_DONE_KEY, "false");
+	        redis_data.at(11) = std::pair<string, string>(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone)); // ask for next control loop
+
+			redis_client.pipeset(redis_data);
+
+			// update last time
+			last_time = curr_time;
+        	
+        	++counter;
 		}
-		else {
-			redis_data.at(0) = std::pair<string, string>(CAMERA_DETECT_KEY, false_message);
-			redis_data.at(1) = std::pair<string, string>(CAMERA_OBJ_POS_KEY, redis_client.encodeEigenMatrixJSON(Vector3d::Zero()));
-		}
 
-		// publish all redis keys at once to reduce multiple redis calls that slow down simulation 
-		// shown explicitly here, but you can define a helper function to publish data 
-		redis_data.at(2) = std::pair<string, string>(JOINT_ANGLES_KEY, redis_client.encodeEigenMatrixJSON(robot->_q));
-		redis_data.at(3) = std::pair<string, string>(JOINT_VELOCITIES_KEY, redis_client.encodeEigenMatrixJSON(robot->_dq));
-		redis_data.at(4) = std::pair<string, string>(OBJ_JOINT_ANGLES_KEY, redis_client.encodeEigenMatrixJSON(object->_q));
-		redis_data.at(5) = std::pair<string, string>(OBJ_JOINT_VELOCITIES_KEY, redis_client.encodeEigenMatrixJSON(object->_dq));
-		redis_data.at(6) = std::pair<string, string>(CAMERA_POS_KEY, redis_client.encodeEigenMatrixJSON(camera_pos));
-		redis_data.at(7) = std::pair<string, string>(CAMERA_ORI_KEY, redis_client.encodeEigenMatrixJSON(camera_ori));
-		redis_data.at(8) = std::pair<string, string>(EE_FORCE_KEY, redis_client.encodeEigenMatrixJSON(sensed_force));
-		redis_data.at(9) = std::pair<string, string>(EE_MOMENT_KEY, redis_client.encodeEigenMatrixJSON(sensed_moment));
-
-		redis_client.pipeset(redis_data);
-
-		// update last time
-		last_time = curr_time;
+		// read controller state
+        fControllerLoopDone = string_to_bool(redis_client.get(CONTROLLER_LOOP_DONE_KEY));
 	}
 
 	double end_time = timer.elapsedTime() / time_slowdown_factor;
 	std::cout << "\n";
 	std::cout << "Simulation Loop run time  : " << end_time << " seconds\n";
-	std::cout << "Simulation Loop updates   : " << timer.elapsedCycles() << "\n";
-	std::cout << "Simulation Loop frequency : " << timer.elapsedCycles()/end_time << "Hz\n";
-
+	// std::cout << "Simulation Loop updates   : " << timer.elapsedCycles() << "\n";
+	// std::cout << "Simulation Loop frequency : " << timer.elapsedCycles()/end_time << "Hz\n";
+	std::cout << "Simulation Loop updates   : " << counter << "\n";
 }
 
+
+//------------------------------------------------------------------------------
+
+bool string_to_bool(const std::string& x) {
+  assert(x == "false" || x == "true");
+  return x == "true";
+}
+
+//------------------------------------------------------------------------------
+
+inline const char * const bool_to_string(bool b)
+{
+  return b ? "true" : "false";
+}
 
 //------------------------------------------------------------------------------
 

@@ -9,18 +9,20 @@ using namespace std;
 using namespace Eigen;
 
 #include <signal.h>
+// flags for simulation and controller states
 bool runloop = false;
 void sighandler(int){runloop = false;}
+bool fSimulationLoopDone = false;
+bool fControllerLoopDone = false;
 
 // helper function 
-double sat(double x) {
-	if (abs(x) <= 1.0) {
-		return x;
-	}
-	else {
-		return signbit(x);
-	}
-}
+double sat(double x);
+
+// function for converting string to bool
+bool string_to_bool(const std::string& x);
+
+// function for converting bool to string
+inline const char * const bool_to_string(bool b);
 
 #define RAD(deg) ((double)(deg) * M_PI / 180.0)
 
@@ -38,6 +40,9 @@ const std::string OBJ_JOINT_ANGLES_KEY  = "cs225a::object::cup::sensors::q";
 const std::string OBJ_JOINT_VELOCITIES_KEY = "cs225a::object::cup::sensors::dq";
 // - write:
 const std::string JOINT_TORQUES_COMMANDED_KEY  = "cs225a::robot::panda::actuators::fgc";
+// - read + write: 
+const std::string SIMULATION_LOOP_DONE_KEY = "cs225a::simulation::done";
+const std::string CONTROLLER_LOOP_DONE_KEY = "cs225a::controller::done";
 
 int main() {
 	
@@ -96,73 +101,87 @@ int main() {
 	double control_freq = 1000;
 	LoopTimer timer;
 	timer.setLoopFrequency(control_freq);   // 1 KHz
-	double last_time = timer.elapsedTime(); //secs
-	bool fTimerDidSleep = true;
 	timer.initializeTimer(1000000); // 1 ms pause before starting loop
+	bool fTimerDidSleep = true;
+	double start_time = timer.elapsedTime(); // secs
 
 	unsigned long long counter = 0;
 
 	runloop = true;
-	while (runloop) 
+	while (runloop)
 	{ 
-		fTimerDidSleep = timer.waitForNextLoop();
+		// fTimerDidSleep = timer.waitForNextLoop(); // commented out to let current controller loop finish before next loop
 
-		// read robot state from redis
-		robot->_q = redis_client.getEigenMatrixJSON(JOINT_ANGLES_KEY);
-		robot->_dq = redis_client.getEigenMatrixJSON(JOINT_VELOCITIES_KEY);
+		// read simulation state
+        fSimulationLoopDone = string_to_bool(redis_client.get(SIMULATION_LOOP_DONE_KEY));
 
-		// update robot model and compute gravity
-		robot->updateModel();
-		robot->gravityVector(g);
+		// run controller loop when simulation loop is done
+		if (fSimulationLoopDone) {
+			// read robot state from redis
+			robot->_q = redis_client.getEigenMatrixJSON(JOINT_ANGLES_KEY);
+			robot->_dq = redis_client.getEigenMatrixJSON(JOINT_VELOCITIES_KEY);
 
-		// compute control torques
-		robot->position(x, link_name, pos_in_link);
-		robot->linearVelocity(x_vel, link_name, pos_in_link);
-		robot->angularVelocity(w, link_name);
-		robot->rotation(R, link_name);
+			// update robot model and compute gravity
+			robot->updateModel();
+			robot->gravityVector(g);
 
-		MatrixXd J(6, dof);
-		robot->J_0(J, link_name, pos_in_link);
-		robot->nullspaceMatrix(N, J);
+			// compute control torques
+			robot->position(x, link_name, pos_in_link);
+			robot->linearVelocity(x_vel, link_name, pos_in_link);
+			robot->angularVelocity(w, link_name);
+			robot->rotation(R, link_name);
 
-		MatrixXd Lambda0(6, 6);
-		robot->taskInertiaMatrix(Lambda0, J);
+			MatrixXd J(6, dof);
+			robot->J_0(J, link_name, pos_in_link);
+			robot->nullspaceMatrix(N, J);
 
-		// note: please use sai2-primitive functions - explicit control law shown here for clarity
+			MatrixXd Lambda0(6, 6);
+			robot->taskInertiaMatrix(Lambda0, J);
 
-		double kp = 25;
-		double kv = 10;
-		double kpj = 10;
-		double kvj = 5;
-		double kdamp = 10;
-		double kmid = 10;
+			// note: please use sai2-primitive functions - explicit control law shown here for clarity
 
-		// q_high << 2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973;
-		// q_low << -2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973;
+			double kp = 25;
+			double kv = 10;
+			double kpj = 10;
+			double kvj = 5;
+			double kdamp = 10;
+			double kmid = 10;
 
-		// Gamma_mid = - (kmid * (2 * robot->_q - (q_high + q_low)));
-		Gamma_damp = - (kdamp * robot->_dq);
+			// q_high << 2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973;
+			// q_low << -2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973;
 
-		Vector3d delta_phi;
-		delta_phi = -0.5 * (R.col(0).cross(Rd.col(0)) + R.col(1).cross(Rd.col(1)) + R.col(2).cross(Rd.col(2)));
+			// Gamma_mid = - (kmid * (2 * robot->_q - (q_high + q_low)));
+			Gamma_damp = - (kdamp * robot->_dq);
 
-		double Vmax = 0.5;
-		dxd = - kp / kv * (x - x1_des);
-		double nu = sat(Vmax / dxd.norm());
+			Vector3d delta_phi;
+			delta_phi = -0.5 * (R.col(0).cross(Rd.col(0)) + R.col(1).cross(Rd.col(1)) + R.col(2).cross(Rd.col(2)));
 
-		Vector3d pd_x = - kp * nu * (x - x1_des) - kv * x_vel;
-		Vector3d pd_w = kp * (- delta_phi) - kv * w;
-		VectorXd pd(6);
-		pd << pd_x[0], pd_x[1], pd_x[2], pd_w[0], pd_w[1], pd_w[2];
+			double Vmax = 0.5;
+			dxd = - kp / kv * (x - x1_des);
+			double nu = sat(Vmax / dxd.norm());
 
-		VectorXd F(6);
-		F = Lambda0 * pd;
-		control_torques = J.transpose() * F + N.transpose() * ( Gamma_damp ) + 0*g;  // gravity is compensated in simviz loop as of now
+			Vector3d pd_x = - kp * nu * (x - x1_des) - kv * x_vel;
+			Vector3d pd_w = kp * (- delta_phi) - kv * w;
+			VectorXd pd(6);
+			pd << pd_x[0], pd_x[1], pd_x[2], pd_w[0], pd_w[1], pd_w[2];
 
-		// send torques to redis
-		redis_client.setEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY, control_torques);
+			VectorXd F(6);
+			F = Lambda0 * pd;
+			control_torques = J.transpose() * F + N.transpose() * ( Gamma_damp ) + 0*g;  // gravity is compensated in simviz loop as of now
 
-		counter++;
+			// send torques to redis
+			redis_client.setEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY, control_torques);
+
+			// controller loop is done
+            fControllerLoopDone = true;
+            redis_client.set(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone));
+
+            // ask for next simulation loop
+            fSimulationLoopDone = false;
+            redis_client.set(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
+		
+			++counter;
+		}
 	}
 
 	control_torques.setZero();
@@ -171,9 +190,35 @@ int main() {
 	double end_time = timer.elapsedTime();
     std::cout << "\n";
     std::cout << "Control Loop run time  : " << end_time << " seconds\n";
-    std::cout << "Control Loop updates   : " << timer.elapsedCycles() << "\n";
-    std::cout << "Control Loop frequency : " << timer.elapsedCycles()/end_time << "Hz\n";
-
+    // std::cout << "Control Loop updates   : " << timer.elapsedCycles() << "\n";
+    // std::cout << "Control Loop frequency : " << timer.elapsedCycles()/end_time << "Hz\n";
+    std::cout << "Control Loop updates   : " << counter << "\n";
 
     return 0;
+}
+
+
+//------------------------------------------------------------------------------
+
+double sat(double x) {
+	if (abs(x) <= 1.0) {
+		return x;
+	}
+	else {
+		return signbit(x);
+	}
+}
+
+//------------------------------------------------------------------------------
+
+bool string_to_bool(const std::string& x) {
+  assert(x == "false" || x == "true");
+  return x == "true";
+}
+
+//------------------------------------------------------------------------------
+
+inline const char * const bool_to_string(bool b)
+{
+  return b ? "true" : "false";
 }
