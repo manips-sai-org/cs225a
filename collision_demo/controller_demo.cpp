@@ -172,20 +172,24 @@ int main() {
 			// send torques to redis
 			redis_client.setEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY, control_torques);
 
-			// controller loop is done
-            fControllerLoopDone = true;
-            redis_client.set(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone));
-
             // ask for next simulation loop
             fSimulationLoopDone = false;
             redis_client.set(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
 		
 			++counter;
 		}
+
+		// controller loop is done
+        fControllerLoopDone = true;
+        redis_client.set(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone));
 	}
 
 	control_torques.setZero();
 	redis_client.setEigenMatrixJSON(JOINT_TORQUES_COMMANDED_KEY, control_torques);
+
+	// controller loop is turned off
+    fControllerLoopDone = false;
+    redis_client.set(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone));
 
 	double end_time = timer.elapsedTime();
     std::cout << "\n";

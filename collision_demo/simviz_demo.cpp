@@ -90,6 +90,7 @@ bool fTransYp = false;
 bool fTransYn = false;
 bool fTransZp = false;
 bool fTransZn = false;
+bool fshowCameraPose = false;
 bool fRotPanTilt = false;
 bool fRobotLinkSelect = false;
 
@@ -258,6 +259,12 @@ int main() {
 			camera_pos = camera_pos - 0.1*cam_depth_axis;
 			camera_lookat = camera_lookat - 0.1*cam_depth_axis;
 		}
+		if (fshowCameraPose) {
+            cout << endl;
+            cout << "camera position : " << camera_pos.transpose() << endl;
+            cout << "camera lookat : " << camera_lookat.transpose() << endl;
+            cout << endl;
+        }
 		if (fRotPanTilt) {
 			// get current cursor position
 			double cursorx, cursory;
@@ -304,6 +311,8 @@ int main() {
 
 	// wait for simulation to finish
 	fSimulationRunning = false;
+	fSimulationLoopDone = false;
+    redis_client.set(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
 	sim_thread.join();
 
 	// destroy context
@@ -373,7 +382,7 @@ void simulation(Sai2Model::Sai2Model* robot, Sai2Model::Sai2Model* object, Simul
 	while (fSimulationRunning) {
 		// fTimerDidSleep = timer.waitForNextLoop(); // commented out to let current simulation loop finish before next loop
 
-		// run simulation loop when (1) controller is done or (2) there is user force input
+		// run simulation loop when (1) control loop is done or (2) there is user force input
 		if (fControllerLoopDone || fRobotLinkSelect) {
 			// get gravity torques
 			robot->gravityVector(g);
@@ -457,7 +466,6 @@ void simulation(Sai2Model::Sai2Model* robot, Sai2Model::Sai2Model* object, Simul
 			redis_data.at(8) = std::pair<string, string>(EE_FORCE_KEY, redis_client.encodeEigenMatrixJSON(sensed_force));
 			redis_data.at(9) = std::pair<string, string>(EE_MOMENT_KEY, redis_client.encodeEigenMatrixJSON(sensed_moment));
 	        redis_data.at(10) = std::pair<string, string>(SIMULATION_LOOP_DONE_KEY, bool_to_string(fSimulationLoopDone));
-	        // redis_data.at(10) = std::pair<string, string>(SIMULATION_LOOP_DONE_KEY, "false");
 	        redis_data.at(11) = std::pair<string, string>(CONTROLLER_LOOP_DONE_KEY, bool_to_string(fControllerLoopDone)); // ask for next control loop
 
 			redis_client.pipeset(redis_data);
@@ -622,6 +630,9 @@ void keySelect(GLFWwindow* window, int key, int scancode, int action, int mods)
 		case GLFW_KEY_Z:
 			fTransZn = set;
 			break;
+		case GLFW_KEY_S:
+            fshowCameraPose = set;
+            break;
 		default:
 			break;
 	}
