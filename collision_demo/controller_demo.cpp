@@ -58,9 +58,9 @@ int main() {
 
     // load robots, read current state nd update the model
     Eigen::Vector3d robot_offset = Eigen::Vector3d(0.0, 0.3, 0.0);
-    Eigen::Matrix3d R_world_robot = Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitX())
+    Eigen::Matrix3d R_world_robot = Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitZ())
                                     * Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitY())
-                                    * Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitZ());
+                                    * Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitX());
 
     Eigen::Affine3d T_world_robot = Eigen::Affine3d::Identity();
     T_world_robot.translation() = robot_offset;
