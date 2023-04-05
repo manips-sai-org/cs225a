@@ -1,20 +1,19 @@
 # cs225a
-
 This repository will contain the homeworks and demos for the class cs225a.
 
 ## Dependencies
 The project depends on the sai2 libraries. You have received instructions to install sai2 in class.
 
-## Build and run
-in the main folder make a build folder and compile from there
+## Build and make
+In the main directory, create a build directory and build from that folder:
 ```
 mkdir build
 cd build
 cmake .. && make -j4
 ```
-## run the code
-go to the bin folder and then to the folder of the application you want to run.
-for hw0 for example
+## Run
+Go to the bin folder and then to the folder of the application you want to run.
+For hw0 for example:
 ```
 cd bin/hw0
 ./hw0
