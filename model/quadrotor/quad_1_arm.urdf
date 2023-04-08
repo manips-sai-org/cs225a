@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <robot name="quad_1_arm">
+    <link name="link1_base">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size = "0.2 0.1 0.1"/>
+            </geometry>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+    <link name="link2_virtual">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size = "0.1 0.2 0.1"/>
+            </geometry>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+    <link name="link3_virtual">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size = "0.1 0.1 0.2"/>
+            </geometry>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+    <link name="link4_virtual">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="0.0 -1.570796 0.0"  />
+            <geometry>
+                <cylinder radius="0.025" length="0.7"/>
+            </geometry>
+            <material name="axes_red">
+                <color rgba="0.7 0.0 0.0 0.5" />
+            </material>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+    <link name="link5_virtual">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="1.570796 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.025" length="0.7"/>
+            </geometry>
+            <material name="axes_green">
+                <color rgba="0.0 0.7 0.0 0.5" />
+            </material>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+    <link name="link6_virtual">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+<!--         <visual>
+            <origin xyz="0 0 0" rpy="0.0 1.570796 0.0"  />
+            <geometry>
+                <cylinder radius="0.025" length="0.7"/>
+            </geometry>
+            <material name="axes_blue">
+                <color rgba="0.0 0.0 0.7 0.5" />
+            </material>
+        </visual> -->
+<!--         <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+        </collision> -->
+    </link>
+
+ <link name="armL_bfinger">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.05426"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+      <visual name="visual_0_armL_bfinger">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL bfinger.002.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="collision_0_armL_bfinger">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL bfinger.003.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="armL_hand">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.51528"/>
+        <inertia ixx="0.001" ixy="-2e-05" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+      <visual name="visual_0_armL_hand">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL hand.004.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+<!--         <material name="hand_blue"/> -->
+      </visual>
+<!--       <collision name="collision_0_armL_hand">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL hand.005.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision> -->
+    </link>
+
+    <link name="armL_link1">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.29699"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="-2e-05" izz="0.001"/>
+      </inertial>
+      <visual name="visual_0_armL_link1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link1.004.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+<!--         <material name="arm_beige"/> -->
+      </visual>
+<!--       <collision name="collision_0_armL_link1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link1.005.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision> -->
+    </link>
+
+    <link name="armL_link2">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.43522"/>
+        <inertia ixx="0.00442" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.00438"/>
+      </inertial>
+      <visual name="visual_0_armL_link2">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link2.002.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+<!--       <collision name="collision_0_armL_link2">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link2.003.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision> -->
+    </link>
+
+    <link name="armL_link3">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.40456"/>
+        <inertia ixx="0.00113" ixy="0" ixz="0" iyy="0.001" iyz="8e-05" izz="0.00112"/>
+      </inertial>
+      <visual name="visual_0_armL_link3">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link3.002.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+<!--       <collision name="collision_0_armL_link3">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL link3.003.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision> -->
+    </link>
+
+    <link name="armL_tfinger">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.10851"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+      <visual name="visual_0_armL_tfinger">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL tfinger.004.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="collision_0_armL_tfinger">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/armL tfinger.005.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="dji_hexcopter">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="1.8786"/>
+        <inertia ixx="0.00376" ixy="0" ixz="0" iyy="0.00479" iyz="0" izz="0.00173"/>
+      </inertial>
+      <visual name="visual_0_dji_hexcopter">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/dji hexcopter.002.obj" scale="1.4 1.4 1.4"/>
+        </geometry>
+<!--         <material name="hexcopter_red"/> -->
+      </visual>
+<!--       <collision name="collision_0_dji_hexcopter">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="../../../model/quadrotor/dji_arms_exported_urdf_blender/meshes/obj/dji hexcopter.003.obj" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision> -->
+    </link>
+
+    <joint name="armL_joint1" type="revolute">
+      <origin xyz="0.09567 -0.02984 -0.0907" rpy="-1.1425 0 -1.5708"/>
+      <parent link="dji_hexcopter"/>
+      <child link="armL_link1"/>
+      <axis xyz="0 1.0 0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="armL_joint2" type="revolute">
+      <origin xyz="0 0.06133 -0.0677" rpy="0 0 0"/>
+      <parent link="armL_link1"/>
+      <child link="armL_link2"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="armL_joint3" type="revolute">
+      <origin xyz="0 0.2125 -0.02883" rpy="0 0 0"/>
+      <parent link="armL_link2"/>
+      <child link="armL_link3"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="armL_joint_bfinger" type="revolute">
+      <origin xyz="0.03336 0.05794 0" rpy="0 0 0"/>
+      <parent link="armL_hand"/>
+      <child link="armL_bfinger"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="armL_joint_tfinger" type="revolute">
+      <origin xyz="-0.0334 0.05794 0" rpy="0 0 0"/>
+      <parent link="armL_hand"/>
+      <child link="armL_tfinger"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="armL_joint_wrist" type="revolute">
+      <origin xyz="0 0.18481 0.09983" rpy="-0.03467 1.57079 -0.04367"/>
+      <parent link="armL_link3"/>
+      <child link="armL_hand"/>
+      <axis xyz="0 1.0 0"/>
+      <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+    <joint name="quad_x_pris" type="prismatic">
+        <parent link="link1_base" />
+        <child link="link2_virtual" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        <axis xyz="1 0 0" />
+        <limit lower="-100" upper="100" effort="100" velocity="100" />
+    </joint>
+    <joint name="quad_y_pris" type="prismatic">
+        <parent link="link2_virtual" />
+        <child link="link3_virtual" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        <axis xyz="0 1 0" />
+        <limit lower="-100" upper="100" effort="100" velocity="100" />
+    </joint>
+    <joint name="quad_z_pris" type="prismatic">
+        <parent link="link3_virtual" />
+        <child link="link4_virtual" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-100" upper="100" effort="100" velocity="100" />
+    </joint>
+    <joint name="quad_roll" type="revolute">
+        <parent link="link4_virtual" />
+        <child link="link5_virtual" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 1.570796 0.0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+    <joint name="quad_pitch" type="revolute">
+        <parent link="link5_virtual" />
+        <child link="link6_virtual" />
+        <origin xyz="0.0 0.0 0.0" rpy="-1.570796 0.0 0.0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+    <joint name="quad_yaw" type="revolute">
+        <parent link="link6_virtual" />
+        <child link="dji_hexcopter" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.570796 0.0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14159" upper="3.14159" effort="100" velocity="50" />
+    </joint>
+
+
+    <material name="arm_beige">
+      <color rgba="0.94509 0.79215 0.72941 0.5"/>
+    </material>
+
+    <material name="finger_purple">
+      <color rgba="0.54901 0.38823 0.81176 0.5"/>
+    </material>
+
+    <material name="hand_blue">
+      <color rgba="0.2 0.67843 0.8 0.5"/>
+    </material>
+
+    <material name="hexcopter_red">
+      <color rgba="0.7098 0.18823 0.14117 0.5"/>
+    </material>
+
+</robot>

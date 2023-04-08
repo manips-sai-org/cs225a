@@ -1,0 +1,15 @@
+# create an executable
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CS225A_BINARY_DIR}/hw0)
+ADD_EXECUTABLE (hw0 hw0.cpp ${CS225A_COMMON_SOURCE})
+ADD_EXECUTABLE (hw0_viz hw0_viz.cpp ${CS225A_COMMON_SOURCE})
+
+# and link the library against the executable
+TARGET_LINK_LIBRARIES (hw0 ${CS225A_COMMON_LIBRARIES})
+TARGET_LINK_LIBRARIES (hw0_viz ${CS225A_COMMON_LIBRARIES})
+
+# export resources such as model files.
+# NOTE: this requires an install build
+SET(APP_RESOURCE_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources)
+FILE(MAKE_DIRECTORY ${APP_RESOURCE_DIR})
+FILE(COPY world.urdf DESTINATION ${APP_RESOURCE_DIR})
+FILE(COPY rprbot.urdf DESTINATION ${APP_RESOURCE_DIR})
