@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+
+<world name="demo_world" gravity="0.0 0.0 -9.81">
+
+	<robot name="panda_collision">
+		<model dir="./resources" path="panda_collision.urdf" name="panda_collision" />
+		<origin xyz="0.0 0.3 0.0" rpy="0 0 0" />
+	</robot>
+
+	<robot name="cup">
+		<model dir="./resources" path="cup.urdf" name="cup" />
+		<origin xyz="0 -0.35 0.593" rpy="0 0 0" />
+	</robot>
+
+	<static_object name="Ground_With_Texture">
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+		<collision>
+	        <origin xyz="0.0 0.0 -0.0001" rpy="0 0 0" />
+	        <geometry>
+	            <box size="100 100 0.0002" />  
+	        </geometry>
+	    </collision>
+	    <visual>
+	    	<!-- <origin xyz="0.0 0.0 0.0" rpy="0 0 0" /> -->
+	        <origin xyz="0.0 0.0 -0.0001" rpy="0 0 0" />
+	        <geometry>
+	            <!-- <mesh filename="./resources/../../../model/test_objects/meshes/visual/ground.obj" scale="1.0 1.0 1.0"/> -->
+	            <box size="100 100 0.0002" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="0.5 0.5 0.5 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+	<static_object name="Table">
+		<origin xyz="0.0 -0.8 0" rpy="0 0 0" />
+		<collision>
+	        <origin xyz="0.0 0.0 0.2715" rpy="0 0 0" />
+	        <geometry>
+	            <box size="1.515 1.0 0.543" />
+	        </geometry>
+	    </collision>
+	    <visual>
+	    	<!-- <origin xyz="0.0 0.0 0.0" rpy="0 0 0" /> -->
+	        <origin xyz="0.0 0.0 0.2715" rpy="0 0 0" />
+	        <geometry>
+	            <!-- <mesh filename="./resources/../../../model/test_objects/meshes/visual/table.obj" scale="1.0 1.0 1.0"/> -->
+	             <box size="1.515 1.0 0.543" />
+	        </geometry>
+	        <material name="material_grey">
+		        <color rgba="0.1 0.1 0.1 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+	<static_object name="Cup2">
+		<origin xyz="0.2 -0.6 0.543" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+	        <geometry>
+	            <mesh filename="./resources/../../../model/test_objects/meshes/visual/cup.obj" scale="1.0 1.0 1.0"/>
+	        </geometry>
+	    </visual>
+	</static_object>
+
+	<static_object name="Cup3">
+		<origin xyz="-0.2 -0.6 0.543" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+	        <geometry>
+	            <mesh filename="./resources/../../../model/test_objects/meshes/visual/cup.obj" scale="1.0 1.0 1.0"/>
+	        </geometry>
+	    </visual>
+	</static_object>
+
+	<light name="light1" type="directional">
+		<position xyz="2.0 -2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light2" type="directional">
+		<position xyz="2.0 2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<camera name="camera_fixed">
+<!-- 		<position xyz="2.0 -1.2 1" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="0.0 -0.5 0.3" /> -->
+		<position xyz="0.1 0.3 5.0" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="0.0 0.3 0.0" />
+	</camera>
+
+</world>
