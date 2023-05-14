@@ -1,0 +1,557 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="stanbot">
+
+    <link name="right_foot">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="4" />
+        <inertia ixx="0.4" iyy="0.4" izz="0.4" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/stanbot/meshes/visual/foot.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_calf">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="4" />
+        <inertia ixx="0.3" iyy="0.3" izz="0.3" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/calf.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_thigh">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="3" />
+        <inertia ixx="0.3" iyy="0.3" izz="0.3" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/thigh.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="chest">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="3" />
+        <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/chest_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_thigh">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="3" />
+        <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/thigh.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_calf">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="3" />
+        <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/calf.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_foot">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="2" />
+        <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/foot.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="head">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/head_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_upper_arm">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/upperArm_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_lower_arm">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/lowerArm_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_hand">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/hand_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_upper_arm">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/upperArm_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_lower_arm">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/lowerArm_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="left_hand">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="../../../model/panda/meshes/visual/hand_ascii.obj"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Extraneous virtual links for spherical joints -->
+    <link name="right_hip_rx">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_hip_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_hip_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hip_rx">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hip_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hip_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_shoulder_rx">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_shoulder_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_shoulder_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_shoulder_rx">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_shoulder_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_shoulder_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_hand_rx">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_hand_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="right_hand_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hand_rx">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hand_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <link name="left_hand_rz">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
+    <!-- Joints -->
+    <joint name="joint1" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="-0.06, 0, -0.8"/>
+      <parent link="right_foot"/>
+      <child link="right_calf"/>
+      <axis xyz="1 0 0"/>
+      <calibration falling="-80.0" />
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint2" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-1.7628" soft_upper_limit="1.7628"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_calf"/>
+      <child link="right_thigh"/>
+      <axis xyz="1 0 0"/>
+      <calibration falling="-45.0" />
+      <limit effort="87" lower="-1.7628" upper="1.7628" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint3" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_thigh"/>
+      <child link="right_hip_rx"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+    </joint>
+    
+    <joint name="joint3" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_hip_rx"/>
+      <child link="right_hip_ry"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint3" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_hip_ry"/>
+      <child link="chest"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+    </joint>
+
+    <!-- Left Leg -->
+    <joint name="joint4" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.0718" soft_upper_limit="-0.0698"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="chest"/>
+      <child link="left_hip_rz"/>
+      <axis xyz="0 0 1"/>
+      <calibration falling="-125.0" />
+      <limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint4" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.0718" soft_upper_limit="-0.0698"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_hip_rz"/>
+      <child link="left_hip_ry"/>
+      <axis xyz="0 1 0"/>
+      <calibration falling="-125.0" />
+      <limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint4" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.0718" soft_upper_limit="-0.0698"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_hip_ry"/>
+      <child link="left_thigh"/>
+      <axis xyz="1 0 0"/>
+      <calibration falling="-125.0" />
+      <limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750"/>
+    </joint>
+
+    <joint name="joint5" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_thigh"/>
+      <child link="left_calf"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint6" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-0.0175" soft_upper_limit="3.7525"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_calf"/>
+      <child link="left_foot"/>
+      <axis xyz="1 0 0"/>
+      <calibration falling="80.0" />
+      <limit effort="12" lower="-0.0175" upper="3.7525" velocity="2.6100"/>
+    </joint>
+
+    <!-- Right Arm -->
+    <joint name="joint7" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="chest"/>
+      <child link="right_shoulder_rx"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint7" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_shoulder_rx"/>
+      <child link="right_shoulder_ry"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint7" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_shoulder_ry"/>
+      <child link="right_upper_arm"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint8" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_upper_arm"/>
+      <child link="right_lower_arm"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint9" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_lower_arm"/>
+      <child link="right_hand_rx"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint9" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_hand_rx"/>
+      <child link="right_hand_ry"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint9" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_hand_ry"/>
+      <child link="right_hand"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <!-- Left Arm -->
+    <joint name="joint10" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="chest"/>
+      <child link="left_shoulder_rx"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint10" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_shoulder_rx"/>
+      <child link="left_shoulder_ry"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint10" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_shoulder_ry"/>
+      <child link="left_upper_arm"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint11" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_upper_arm"/>
+      <child link="left_lower_arm"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint12" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_lower_arm"/>
+      <child link="left_hand_rx"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint12" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_hand_rx"/>
+      <child link="left_hand_ry"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+    <joint name="joint12" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="left_hand_ry"/>
+      <child link="left_hand"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+    </joint>
+
+</robot>
