@@ -49,7 +49,7 @@ int main() {
 	double kp = 50;
 	double kv = 10;
 	VectorXd q_desired = VectorXd::Zero(dof);
-	double q_center = 0.5;
+	double q_center = 0.8;
 
 	VectorXd control_torques = VectorXd::Zero(dof);
 	VectorXd gravity = VectorXd::Zero(dof);
