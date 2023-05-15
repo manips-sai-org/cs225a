@@ -5,11 +5,11 @@ add_definitions(${SAI2-PRIMITIVES_DEFINITIONS})
 
 # create an executable
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CS225A_BINARY_DIR}/stanbot_example)
-# ADD_EXECUTABLE (controller_stan controller.cpp ${CS225A_COMMON_SOURCE})
+ADD_EXECUTABLE (controller_stan controller.cpp ${CS225A_COMMON_SOURCE})
 ADD_EXECUTABLE (simviz_stan simviz.cpp ${CS225A_COMMON_SOURCE})
 
 # and link the library against the executable
-# TARGET_LINK_LIBRARIES (controller_stan ${CS225A_COMMON_LIBRARIES} ${SAI2-PRIMITIVES_LIBRARIES})
+TARGET_LINK_LIBRARIES (controller_stan ${CS225A_COMMON_LIBRARIES} ${SAI2-PRIMITIVES_LIBRARIES})
 TARGET_LINK_LIBRARIES (simviz_stan ${CS225A_COMMON_LIBRARIES} ${SAI2-PRIMITIVES_LIBRARIES})
 
 # export resources such as model files.
