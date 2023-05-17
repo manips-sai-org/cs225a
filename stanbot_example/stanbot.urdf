@@ -290,6 +290,14 @@
     </link>
 
     <!-- Extraneous virtual links for spherical joints -->
+    <link name="right_foot_ry">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-10" />
+        <inertia ixx="1e-10" iyy="1e-10" izz="1e-10" ixy="0" ixz="0" iyz="0" />
+      </inertial>
+    </link>
+
     <link name="left_foot_rx">
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -492,10 +500,20 @@
 
     <!-- Joints -->
     <!-- Right Leg -->
-    <joint name="j1" type="revolute">
+    <joint name="j0" type="revolute">
       <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
       <origin rpy="0 0 0" xyz="0 0.03 0.02"/>
       <parent link="right_foot"/>
+      <child link="right_foot_ry"/>
+      <axis xyz="0 1 0"/>
+      <calibration falling="0" />
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+    </joint>
+
+    <joint name="j1" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <parent link="right_foot_ry"/>
       <child link="right_calf"/>
       <axis xyz="1 0 0"/>
       <calibration falling="0" />

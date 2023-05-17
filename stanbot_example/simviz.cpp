@@ -84,9 +84,9 @@ int main() {
 	// load robots
 	auto robot = new Sai2Model::Sai2Model(robot_file, false);
 	robot->_q.setZero();
-    robot->_q(0) = M_PI / 8;
-    robot->_q(1) = -2 * M_PI / 8;
-    robot->_q(2) = M_PI / 8;
+    robot->_q(1) = M_PI / 8;
+    robot->_q(2) = -2 * M_PI / 8;
+    robot->_q(3) = M_PI / 8;
 	// add initial robot configuration here if needed 
 	robot->updateModel();
 
