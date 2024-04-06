@@ -1,0 +1,13 @@
+<simvizConfiguration>
+	<worldFilePath>${HW0_FOLDER}/world.urdf</worldFilePath>
+
+	<mode>vizOnly</mode>
+
+	<logger>
+		<logFolderName>simviz_log_files</logFolderName>
+		<logFrequency>100</logFrequency>
+		<startWithSimulation>false</startWithSimulation>
+		<timestampInFilename>false</timestampInFilename>
+	</logger>
+
+</simvizConfiguration>
