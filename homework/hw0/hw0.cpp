@@ -122,6 +122,7 @@ int main() {
 	// part ii
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
+	robot->updateKinematics();
 	ee_position = robot->position(ee_link_name, ee_pos_in_link);
 	cout << "========================================= Q2-c-ii" << endl << endl;
 	cout << "End effector position for configuration i\n" << ee_position.transpose() << endl << endl;
@@ -136,7 +137,8 @@ int main() {
 	cout << "Jv for configuration d-i\n" << ee_jacobian << endl << endl;
 	// part ii
 	robot_q << 0.0, 0.0, 0.0; // modify this
-	robot->setQ(robot_q);	robot->updateKinematics();
+	robot->setQ(robot_q);
+	robot->updateKinematics();
 	ee_jacobian = robot->Jv(ee_link_name, ee_pos_in_link);
 	cout << "========================================= Q2-d-ii" << endl << endl;
 	cout << "Jv for configuration d-ii\n" << ee_jacobian << endl << endl;
