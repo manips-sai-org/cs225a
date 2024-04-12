@@ -1,0 +1,29 @@
+<simvizConfiguration>
+	<worldFilePath>${HW1_FOLDER}/world.urdf</worldFilePath>
+
+	<mode>simviz</mode>
+
+	<simParameters>
+		<timestep>0.001</timestep>
+		<speedupFactor>1.0</speedupFactor>
+		<enableJointLimits>true</enableJointLimits>
+		<enableGravityCompensation>true</enableGravityCompensation>
+		<coeffFriction>0.5</coeffFriction>
+		<collisionRestitution>0.0</collisionRestitution>
+	</simParameters>
+
+	<logger>
+		<logFolderName>simviz_log_files</logFolderName>
+		<logFrequency>100</logFrequency>
+		<startWithSimulation>false</startWithSimulation>
+		<timestampInFilename>false</timestampInFilename>
+	</logger>
+
+	<!-- <forceSensor>
+		<robotName>Panda</robotName>
+		<linkName>end-effector</linkName>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<filterCutoff>5.0</filterCutoff>
+	</forceSensor> -->
+
+</simvizConfiguration>
