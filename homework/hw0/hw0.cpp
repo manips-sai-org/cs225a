@@ -146,7 +146,7 @@ int main() {
 	// ---------------------------  question 2-e -------------------------------
 	// part i
 	ofstream file_2e_i;
-	file_2e_i.open("../../hw0/data_files/q2-e-i.txt");
+	file_2e_i.open("../../homework/hw0/q2-e-i.txt");
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
@@ -160,7 +160,7 @@ int main() {
 
 	// part ii
 	ofstream file_2e_ii;
-	file_2e_ii.open("../../hw0/data_files/q2-e-ii.txt");
+	file_2e_ii.open("../../homework/hw0/q2-e-ii.txt");
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
@@ -175,7 +175,7 @@ int main() {
 	// ---------------------------  question 2-f -------------------------------
 	// part i
 	ofstream file_2f_i;
-	file_2f_i.open("../../hw0/data_files/q2-f-i.txt");
+	file_2f_i.open("../../hw0/homework/q2-f-i.txt");
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
@@ -190,7 +190,7 @@ int main() {
 
 	// part ii
 	ofstream file_2f_ii;
-	file_2f_ii.open("../../hw0/data_files/q2-f-ii.txt");
+	file_2f_ii.open("../../hw0/homework/q2-f-ii.txt");
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
