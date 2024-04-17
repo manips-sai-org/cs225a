@@ -153,6 +153,7 @@ int main(int argc, char** argv) {
         // **********************
 
         // send to redis
+        redis_client.setInt("cs225a::simviz::gravity_comp_enabled", 0);
         redis_client.sendAllFromGroup();
     }
 
