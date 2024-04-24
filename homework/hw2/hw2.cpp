@@ -92,8 +92,8 @@ int main(int argc, char** argv) {
     redis_client.connect();
 
     // setup send and receive groups
-    VectorXd robot_q = VectorXd::Zero(dof);
-    VectorXd robot_dq = VectorXd::Zero(dof);
+    VectorXd robot_q = redis_client.getEigen(JOINT_ANGLES_KEY);
+    VectorXd robot_dq = redis_client.getEigen(JOINT_VELOCITIES_KEY);
     redis_client.addToReceiveGroup(JOINT_ANGLES_KEY, robot_q);
     redis_client.addToReceiveGroup(JOINT_VELOCITIES_KEY, robot_dq);
 
