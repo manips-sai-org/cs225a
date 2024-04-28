@@ -12,7 +12,7 @@ and is used to define the prefix of the redis keys used by the interface -->
 	<simParameters>
 		<timestep>0.001</timestep>
 		<speedupFactor>1.0</speedupFactor>
-		<enableJointLimits>true</enableJointLimits>
+		<enableJointLimits>false</enableJointLimits>
 		<enableGravityCompensation>true</enableGravityCompensation>
 		<coeffFriction>0.5</coeffFriction>
 		<collisionRestitution>0.0</collisionRestitution>
