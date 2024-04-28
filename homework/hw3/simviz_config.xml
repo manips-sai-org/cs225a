@@ -1,0 +1,38 @@
+<!-- the redisPrefix parameter is optional, defaults to "sai2::interfaces" 
+and is used to define the prefix of the redis keys used by the interface -->
+<simvizConfiguration redisPrefix="cs225a">
+
+	<!-- required -->
+	<worldFilePath>${HW3_FOLDER}/world.urdf</worldFilePath>
+
+	<!-- optional. default value is simviz, possible values are simviz, simOnly, vizOnly -->
+	<mode>simviz</mode>
+
+	<!-- optional. The following are the default values if one ore more are not specified -->
+	<simParameters>
+		<timestep>0.001</timestep>
+		<speedupFactor>1.0</speedupFactor>
+		<enableJointLimits>false</enableJointLimits>
+		<enableGravityCompensation>true</enableGravityCompensation>
+		<coeffFriction>0.5</coeffFriction>
+		<collisionRestitution>0.0</collisionRestitution>
+	</simParameters>
+
+	<!-- optional. the following are the default values if one or more are not specified -->
+	<logger>
+		<logFolderName>simviz_log_files</logFolderName>
+		<logFrequency>100</logFrequency>
+		<startWithSimulation>false</startWithSimulation>
+		<timestampInFilename>false</timestampInFilename>
+	</logger>
+
+	<!-- optional. If present, the robotName, linkName and filterCutoff are required. -->
+	<!-- The origin represents the transformation between link frame and sensor frame and defaults to identity -->
+	<!-- <forceSensor>
+		<robotName>Panda</robotName>
+		<linkName>end-effector</linkName>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<filterCutoff>5.0</filterCutoff>
+	</forceSensor> -->
+
+</simvizConfiguration>

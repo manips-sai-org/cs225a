@@ -132,9 +132,9 @@
         </geometry>
       </visual>
       <visual>
-        <origin xyz="0 0 0.1" rpy="0 -0 0" />
+        <origin xyz="0 0 0.15" rpy="0 -0 0" />
         <geometry>
-          <box size="0.15 0.15 0.01"/>
+          <sphere radius="0.03"/>
         </geometry>
       </visual>
       <!-- <collision>
