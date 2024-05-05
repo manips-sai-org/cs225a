@@ -1,0 +1,1096 @@
+--- 
+- name: Divebot
+  type: robot
+  links: 
+        - name: PrisX
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0 #in axis angle format: (x y z) degrees
+          mass: 0.000001
+          inertia_matrix: >
+              0.000001 0.0      0.0
+              0.0      0.000001 0.0
+              0.0      0.0      0.000001
+          center_of_mass: 0.000000 0.000000 0.000000
+          #joint_name: PrisX_Joint
+          parent: ground
+          joint_type: prismatic_x
+          #joint_limits: 0.000000 20.000000
+          # initial_joint_q: -0.22863
+          initial_joint_q: 2.84851
+          force_limit: -10000 10000 #max force motor can exert in -q, max force motor can exert in q
+          graphics:
+          collision:
+  
+        - name: PrisY
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0
+          mass: 0.000001
+          inertia_matrix: >
+              0.000001 0.0      0.0
+              0.0      0.000001 0.0
+              0.0      0.0      0.000001
+          center_of_mass: 0.000000 0.000000 0.000000
+          #joint_name: PrisY_Joint
+          parent: PrisX
+          joint_type: prismatic_y
+          #joint_limits: 0.000000 20.000000
+          # initial_joint_q: 2.22695
+          initial_joint_q: 1.94773
+          force_limit: -10000 10000
+          graphics:
+          collision:
+  
+        - name: PrisZ
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0
+          mass: 0.000001
+          inertia_matrix: >
+              0.000001 0.0      0.0
+              0.0      0.000001 0.0
+              0.0      0.0      0.000001
+          center_of_mass: 0.000000 0.000000 0.000000
+          #joint_name: PrisZ_Joint
+          parent: PrisY
+          joint_type: prismatic_z
+          #joint_limits: 0.000000 20.000000
+          # initial_joint_q: 0.601018
+          initial_joint_q: 0.703213
+          force_limit: -10000 10000
+          graphics:
+          collision:
+  
+        - name: RotZ
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0
+          mass: 0.000001
+          inertia_matrix: >
+              0.000001 0.0      0.0
+              0.0      0.000001 0.0
+              0.0      0.0      0.000001
+          center_of_mass: 0.000000 0.000000 0.000000
+          #joint_name: RotZ_Joint
+          parent: PrisZ
+          joint_type: revolute_z
+          #joint_limits: 0.000000 3.140000
+          # initial_joint_q: -0.436929
+          initial_joint_q: -3.23437
+          force_limit: -10000 10000
+          graphics:
+          collision:
+  
+        - name: RotY
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0
+          mass: 0.000001
+          inertia_matrix: >
+              0.000001 0.0      0.0
+              0.0      0.000001 0.0
+              0.0      0.0      0.000001
+          center_of_mass: 0.000000 0.000000 0.000000
+          #joint_name: RotY_Joint
+          parent: RotZ
+          joint_type: revolute_y
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.0
+          force_limit: -10000 10000
+          graphics:
+          collision:
+  
+        - name: Body
+          translation_in_parent: 0.000000 0.000000 0.000000
+          rotation_in_parent: 1 0 0 0
+          mass: 150.810000
+          inertia_matrix: >
+              0.291400 0.0      0.0
+              0.0      0.458290 0.0
+              0.0      0.0      0.369260
+          center_of_mass: -0.034400 -0.001100 0.134400
+          #joint_name: RotX_Joint
+          parent: RotY
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.0
+          force_limit: -10000 10000
+          graphics:
+              # mesh: ../assets/ocean1_graphics/ger/body_paint.obj
+              mesh: ../assets/ocean1_graphics/ger/body_paint_no_lamp.obj
+              translation_in_parent: 0.095 0 -0.03
+              rotation_in_parent: 0 1 0 0
+              scaling: 0.85 0.85 0.85
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              # mesh: ../assets/ocean1_graphics/ger/body_paint.obj
+              mesh: ../assets/ocean1_graphics/ger/body_paint_no_lamp.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0.1 0 -0.03
+              rotation_in_parent: 0 0 1 0
+              scaling: 0.85 0.85 0.85
+
+# ------------------------------
+# LEFT ARM
+# ------------------------------
+
+        - name: shoulderT_left
+          translation_in_parent: 0.5768673 0.194584 -0.1893698
+          rotation_in_parent: -0.38268 0.92387 0 180
+          mass: 3.12
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.022 0.0 0.0
+          #joint_name: RotX_Joint
+          parent: Body
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.393231
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/shoulderT_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/shoulderT_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: shoulderL_left
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.99
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0 -0.021 0.054
+          #joint_name: RotX_Joint
+          parent: shoulderT_left
+          joint_type: revolute_y
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.679611
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/shoulderL_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/shoulderL_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: upperArm_left
+          translation_in_parent: 0.0 0.0 0.281541
+          rotation_in_parent: 0 0 1 0
+          mass: 4.08
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 -0.088
+          #joint_name: RotX_Joint
+          parent: shoulderL_left
+          joint_type: revolute_z
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.167332
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/upperArm_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/upperArm_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: elbow_left
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.974
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.027 0.0 0.047
+          #joint_name: RotX_Joint
+          parent: upperArm_left
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 1.51072
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/elbow_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/elbow_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: lowerArm_left
+          translation_in_parent: 0.0 0.0 0.331339
+          rotation_in_parent: 0 0 1 0
+          mass: 3.71
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 -0.138
+          #joint_name: RotX_Joint
+          parent: elbow_left
+          joint_type: revolute_z
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.612064
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/lowerArm_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/lowerArm_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: wristDiff_left
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.22
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 0.0
+          #joint_name: RotX_Joint
+          parent: lowerArm_left
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.570785
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/wristDiff_left.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/wristDiff_left.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: endEffector_left
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 2.7874
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 0.01
+          #joint_name: RotX_Joint
+          parent: wristDiff_left
+          joint_type: revolute_y
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.395843
+          force_limit: -10000 10000
+          graphics:
+              # mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left.obj
+             # mesh: ../assets/ocean1_graphics/ger/HandO2.obj
+              mesh: ../assets/ocean1_graphics/ger/HandO2_small.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_with_flag.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_open.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: aabb #types include: triangle, convex_hull, aabb, none
+              # mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2.obj
+              mesh: ../assets/ocean1_graphics/ger/HandO2_small.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+
+
+
+
+
+# # ------------------------------
+# # RIGH ARM
+# # ------------------------------
+
+        - name: shoulderT_right
+          translation_in_parent: 0.5768673 -0.194584 -0.1893698
+          rotation_in_parent: 0.92387 -0.38268 0 180
+          mass: 3.12
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: -0.022 0.0 0.0
+          #joint_name: RotX_Joint
+          parent: Body
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.391854
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/shoulderT_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/shoulderT_right.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: shoulderL_right
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.99
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0 -0.021 0.054
+          #joint_name: RotX_Joint
+          parent: shoulderT_right
+          joint_type: revolute_y
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.678206
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/shoulderL_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/shoulderL_right.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: upperArm_right
+          translation_in_parent: 0.0 0.0 0.281541
+          rotation_in_parent: 0 0 1 0
+          mass: 4.08
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 -0.088
+          #joint_name: RotX_Joint
+          parent: shoulderL_right
+          joint_type: revolute_z
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.168584
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/upperArm_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/upperArm_right.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: elbow_right
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.974
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: -0.027 0.0 0.047
+          #joint_name: RotX_Joint
+          parent: upperArm_right
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 1.50967
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/elbow_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/elbow_right.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: lowerArm_right
+          translation_in_parent: 0.0 0.0 0.331339
+          rotation_in_parent: 0 0 1 0
+          mass: 3.71
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 -0.138
+          #joint_name: RotX_Joint
+          parent: elbow_right
+          joint_type: revolute_z
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.614752
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/lowerArm_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/lowerArm_right.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: wristDiff_right
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 0.22
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 0.0
+          #joint_name: RotX_Joint
+          parent: lowerArm_right
+          joint_type: revolute_x
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: -0.569571
+          force_limit: -10000 10000
+          graphics:
+              mesh: ../assets/ocean1_graphics/ger/wristDiff_right.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: none #types include: triangle, convex_hull, aabb, none
+              mesh: ../assets/ocean1_graphics/ger/wristDiff_right.obj
+              radius: 0.0001
+              error: 0.0001TODO
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+        - name: endEffector_right
+          translation_in_parent: 0.0 0.0 0.0
+          rotation_in_parent: 0 0 1 0
+          mass: 2.7874
+          inertia_matrix: >
+              0.00466  0.0      0.0
+              0.0      0.00375  0.0
+              0.0      0.0      0.00288
+          center_of_mass: 0.0 0.0 0.01
+          #joint_name: RotX_Joint
+          parent: wristDiff_right
+          joint_type: revolute_y
+          #joint_limits: 0.000000 3.140000
+          initial_joint_q: 0.393743
+          force_limit: -10000 10000
+          graphics:
+              # mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2.obj
+              mesh: ../assets/ocean1_graphics/ger/HandO2_small.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_small_with_valve.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_open.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_half_open.obj
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+          collision:
+              type: aabb #types include: triangle, convex_hull, aabb, none
+              # mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2.obj
+              mesh: ../assets/ocean1_graphics/ger/HandO2_small.obj
+              # mesh: ../assets/ocean1_graphics/ger/HandO2_open.obj
+              radius: 0.0001
+              error: 0.0001
+              translation_in_parent: 0 0 0
+              rotation_in_parent: 0 0 1 0
+              scaling: 1 1 1
+
+
+        # - name: endEffector_right
+        #   translation_in_parent: 0.000000 0.000000 0.00000
+        #   rotation_in_parent: 0.57735 -0.57735 0.57735 0
+        #   mass: 1.11
+        #   inertia_matrix: >
+        #       0.0001 0.0       0.0
+        #       0.0    0.0000606 0.0
+        #       0.0    0.0       0.00005838
+        #   center_of_mass: 0 0 0
+        #   #joint_name: wrist-yaw-right-joint
+        #   parent: wristDiff_right
+        #   joint_type: revolute_z
+        #   #joint_limits: -3.141590 3.141590
+        #   initial_joint_q: 160
+        #   force_limit: -10000 10000
+        #   graphics:
+        #       mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left_blue.obj
+        #       translation_in_parent: 0.000000 0.000000 0.000000
+        #       rotation_in_parent: 1 0 0 0
+        #       scaling: 1 1 1
+        #   collision:
+        #       type: aabb
+        #       mesh: ../assets/ocean1_graphics/ger/endEffectorWPalm_left_blue.obj
+        #       radius: 0.0001
+        #       error: 0.0001
+        #       translation_in_parent: 0 0 0
+        #       rotation_in_parent: 1 0 0 0
+        #       scaling: 1 1 1
+
+
+
+# # # ------------------------------
+# # # LEFT FINGERS
+# # # ------------------------------
+
+#         - name: finger0-left # inner - back
+#           translation_in_parent: 0.02585 -0.05866 0.17625
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-left-joint
+#           parent: endEffector_left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: finger1-left # inner - front
+#           translation_in_parent: -0.02585 -0.05866 0.17625
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-left-joint
+#           parent: endEffector_left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+
+#         # x = pi; y = 130*pi/180; R = Ry*Rx
+#         - name: finger2-left # outer - back
+#           translation_in_parent: 0.05898 -0.01623 0.219
+#           rotation_in_parent: 0 0 1 180
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-left-joint
+#           parent: endEffector_left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: finger3-left # outer - front
+#           translation_in_parent: -0.05898 -0.01623 0.219
+#           rotation_in_parent: 0 0 1 180
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-left-joint
+#           parent: endEffector_left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+
+
+#         - name: fingertip0-left
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger0-left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip1-left
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger1-left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip2-left
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger2-left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip3-left
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger3-left
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1 
+
+
+
+
+# # # ------------------------------
+# # # RIGHT FINGERS
+# # # ------------------------------
+
+# #         # x = pi; y = -60*pi/180; R = Ry*Rx
+
+#         - name: finger0-right
+#           translation_in_parent: 0.02585 -0.05866 0.17625
+#           rotation_in_parent: 0.86602 0 0.5 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: endEffector_right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: finger1-right
+#           translation_in_parent: -0.02585 -0.05866 0.17625
+#           rotation_in_parent: 0.86602 0 0.5 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: endEffector_right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         # x = 0; y = -130*pi/180; R = Ry*Rx
+#         - name: finger2-right
+#           translation_in_parent: 0.05898 -0.01623 0.219
+#           rotation_in_parent: 0 0 1 180
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: endEffector_right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: finger3-right
+#           translation_in_parent: -0.05898 -0.01623 0.219
+#           rotation_in_parent: 0 0 1 180
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: endEffector_right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerBase.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+
+
+
+
+
+#         - name: fingertip0-right
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger0-right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip1-right
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger1-right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip2-right
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger2-right
+#           joint_type: revolute_x
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+
+#         - name: fingertip3-right
+#           translation_in_parent: 0.0 0.0 0.078
+#           rotation_in_parent: 0 1 0 0
+#           mass: 0.25
+#           inertia_matrix: >
+#               0.001 0.0       0.0
+#               0.0    0.001 0.0
+#               0.0    0.0       0.001
+#           center_of_mass: 0.0 0.0 0.05
+#           #joint_name: finger0-right-joint
+#           parent: finger3-right
+#           joint_type: revolute_y
+#           #joint_limits: -3.141590 3.141590
+#           initial_joint_q: 0.0
+#           force_limit: -10000 10000
+#           graphics:
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               translation_in_parent: 0.000000 0.000000 0.000000
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1
+#           collision:
+#               type: aabb
+#               mesh: ../assets/ocean1_graphics/ger/fingerTip.obj
+#               radius: 0.0001
+#               error: 0.0001
+#               translation_in_parent: 0 0 0
+#               rotation_in_parent: 1 0 0 0
+#               scaling: 1 1 1 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
