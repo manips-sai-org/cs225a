@@ -112,7 +112,7 @@ int main() {
 
 			command_torques = joint_task->computeTorques();
 
-			if ((robot->q() - q_desired).norm() < 0.15) {
+			if ((robot->q() - q_desired).norm() < 1e-2) {
 				cout << "Posture To Motion" << endl;
 				pose_task->reInitializeTask();
 				base_task->reInitializeTask();
@@ -121,14 +121,13 @@ int main() {
 				ee_pos = robot->position(control_link, control_point);
 				ee_ori = robot->rotation(control_link);
 
-				// base_task->setGoalPosition(Vector3d(0.5, 0.5, 0.2));
 				pose_task->setGoalPosition(Vector3d(0.8, 0.8, 0) + ee_pos);
 				pose_task->setGoalOrientation(AngleAxisd(M_PI / 6, Vector3d::UnitX()).toRotationMatrix() * ee_ori);
 
 				state = MOTION;
 			}
 		} else if (state == MOTION) {
-			// update goal positions and orientations 
+			// update goal positions and orientations of base and arm 
 
 			// update task model for arm-driven motion
 			if (arm_driven_control) {

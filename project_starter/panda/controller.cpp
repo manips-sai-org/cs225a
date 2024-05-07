@@ -75,8 +75,9 @@ int main() {
 	auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, gripper_selection_matrix);
 	gripper_task->setDynamicDecouplingType(JointTask::DynamicDecouplingType::IMPEDANCE);
 	double kp_gripper = 1e3;
-	gripper_task->setGains(kp_gripper, 2 * sqrt(kp_gripper), 0);
-	gripper_task->setGains(kp_gripper, 2 * sqrt(kp_gripper), 0);
+	double kv_gripper = 1e2;
+	gripper_task->setGains(kp_gripper, kv_gripper, 0);
+	gripper_task->setGains(kp_gripper, kv_gripper, 0);
 
 	// joint task
 	auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
@@ -109,7 +110,7 @@ int main() {
 
 			command_torques = joint_task->computeTorques();
 
-			if ((robot->q() - q_desired).norm() < 0.15) {
+			if ((robot->q() - q_desired).norm() < 1e-2) {
 				cout << "Posture To Motion" << endl;
 				pose_task->reInitializeTask();
 				gripper_task->reInitializeTask();
@@ -125,7 +126,7 @@ int main() {
 				state = MOTION;
 			}
 		} else if (state == MOTION) {
-			// update goal positions and orientations 
+			// update goal position and orientation
 
 			// update task model
 			N_prec.setIdentity();

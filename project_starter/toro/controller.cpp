@@ -88,7 +88,7 @@ int main() {
         compliant_frame.translation() = primary_control_points[i];
         primary_tasks[primary_control_links[i]] = std::make_shared<Sai2Primitives::MotionForceTask>(robot, primary_control_links[i], compliant_frame);
         primary_tasks[primary_control_links[i]]->disableInternalOtg();
-        primary_tasks[primary_control_links[i]]->setDynamicDecouplingType(Sai2Primitives::FULL_DYNAMIC_DECOUPLING);
+        primary_tasks[primary_control_links[i]]->setDynamicDecouplingType(Sai2Primitives::MotionForceTask::FULL_DYNAMIC_DECOUPLING);
         primary_tasks[primary_control_links[i]]->setPosControlGains(400, 40, 0);
         primary_tasks[primary_control_links[i]]->setOriControlGains(400, 40, 0);
     }
@@ -98,8 +98,8 @@ int main() {
         compliant_frame.translation() = secondary_control_points[i];
         secondary_tasks[secondary_control_links[i]] = std::make_shared<Sai2Primitives::MotionForceTask>(robot, secondary_control_links[i], compliant_frame);
         secondary_tasks[secondary_control_links[i]]->disableInternalOtg();
-        secondary_tasks[secondary_control_links[i]]->enableJointHandling(false);  // don't perform singularity handling in second-level tasks 
-        secondary_tasks[secondary_control_links[i]]->setDynamicDecouplingType(Sai2Primitives::FULL_DYNAMIC_DECOUPLING);
+        // secondary_tasks[secondary_control_links[i]]->enableJointHandling(false);  // don't perform singularity handling in second-level tasks 
+        secondary_tasks[secondary_control_links[i]]->setDynamicDecouplingType(Sai2Primitives::MotionForceTask::FULL_DYNAMIC_DECOUPLING);
         secondary_tasks[secondary_control_links[i]]->setPosControlGains(400, 40, 0);
         secondary_tasks[secondary_control_links[i]]->setOriControlGains(400, 40, 0);
     }
@@ -147,7 +147,7 @@ int main() {
 
 			command_torques = joint_task->computeTorques();
 
-			if ((robot->q() - q_desired).norm() < 0.15) {
+			if ((robot->q() - q_desired).norm() < 1e-2) {
 				cout << "Posture To Motion" << endl;
 				for (auto name : primary_control_links) {
 					primary_tasks[name]->reInitializeTask();
@@ -160,7 +160,7 @@ int main() {
 				state = MOTION;
 			}
 		} else if (state == MOTION) {
-          // update primary task model
+            // update primary task model
             N_prec.setIdentity();
             for (auto it = primary_tasks.begin(); it != primary_tasks.end(); ++it) {
                 it->second->updateTaskModel(N_prec);

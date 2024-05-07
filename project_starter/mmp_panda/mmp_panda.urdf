@@ -33,7 +33,8 @@
   <link name = "base_link">
     <inertial>
       <origin xyz="0.0 0.0 0.1757" rpy="0 0 0" />
-      <mass value = "64.6" />
+      <!-- <mass value = "64.6" /> -->
+      <mass value = "1" />
       <inertia ixx="1.721" ixy="0.0" ixz="0.0" iyy="1.712" iyz="0.0" izz="2.030" />
     </inertial>
     <visual>

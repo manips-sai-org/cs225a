@@ -68,7 +68,7 @@ int main() {
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, camera_name, false);
 	graphics->setBackgroundColor(66.0/255, 135.0/255, 245.0/255);  // set blue background 	
 	// graphics->showLinkFrame(true, robot_name, "link7", 0.15);  // can add frames for different links
-	graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
+	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
 	graphics->addUIForceInteraction(robot_name);
 
 	// load robots
