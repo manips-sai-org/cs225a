@@ -61,9 +61,9 @@ find_package(SAI2-PRIMITIVES REQUIRED)
 include_directories(${SAI2-PRIMITIVES_INCLUDE_DIRS})
 add_definitions(${SAI2-PRIMITIVES_DEFINITIONS})
 
-# # - SAI2-INTERFACES
-# find_package(SAI2-INTERFACES REQUIRED)
-# include_directories(${SAI2-INTERFACES_INCLUDE_DIRS})
+# - SAI2-INTERFACES
+find_package(SAI2-INTERFACES REQUIRED)
+include_directories(${SAI2-INTERFACES_INCLUDE_DIRS})
 
 # - glfw3
 find_package(glfw3 QUIET)
@@ -75,7 +75,7 @@ find_library(HIREDIS_LIBRARY hiredis)
 
 set(CS225A_COMMON_LIBRARIES
 	${CHAI3D_LIBARIES}
-	# ${SAI2-INTERFACES_LIBRARIES}
+	${SAI2-INTERFACES_LIBRARIES}
 	${HIREDIS_LIBRARY}
 	${GLFW_LIBRARY}
 	${SAI2-MODEL_LIBRARIES}
@@ -94,5 +94,5 @@ add_definitions(-DCS225A_URDF_FOLDER="${URDF_MODELS_FOLDER}")
 
 set(CS225A_BINARY_DIR ${PROJECT_SOURCE_DIR}/bin)
 
-# add_subdirectory(${PROJECT_SOURCE_DIR}/homework)
+add_subdirectory(${PROJECT_SOURCE_DIR}/homework)
 add_subdirectory(${PROJECT_SOURCE_DIR}/project_starter)
