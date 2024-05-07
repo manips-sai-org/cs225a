@@ -1,0 +1,505 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="Divebot">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO: verify conversion from 
+axis-angle in yaml to rpy
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+LINKS: BODY
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <link name="ground">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisX">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisY">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisZ">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="RotZ">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="RotY">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="Body">
+    <inertial>
+      <origin xyz="-0.034400 -0.001100 0.134400" rpy="0.0 0.0 0.0" />
+      <mass value="150.810000" />
+      <inertia ixx="0.291400" iyy="0.458290" izz="0.369260" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <!-- TODO: FIX SCALING & TEST ORIGIN -->
+      <origin xyz="0.095 0 -0.03" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <!-- <box size="0.1 0.1 0.1" /> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/body_paint.obj" scale="0.85 0.85 0.85" /> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/body_paint_no_lamp.obj" scale="0.85 0.85 0.85" /> -->
+        <mesh filename="../../../model/ocean1/ocean1_graphics/O2_body_new_head.obj" scale="0.85 0.85 0.85" />
+      </geometry>
+    </visual>
+  </link>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+LINKS: LEFT ARM
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <link name="shoulderT_left">
+    <inertial>
+      <origin xyz="0.022 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="3.12" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderT_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="shoulderL_left">
+    <inertial>
+      <origin xyz="0.0 -0.021 0.054" rpy="0.0 0.0 0.0" />
+      <mass value="0.99" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderL_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="upperArm_left">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.088" rpy="0.0 0.0 0.0" />
+      <mass value="4.08" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/upperArm_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="elbow_left">
+    <inertial>
+      <origin xyz="0.027 0.0 0.047" rpy="0.0 0.0 0.0" />
+      <mass value="0.974" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/elbow_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="lowerArm_left">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.138" rpy="0.0 0.0 0.0" />
+      <mass value="3.71" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/lowerArm_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="wristDiff_left">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.22" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/wristDiff_left.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="endEffector_left">
+    <inertial>
+      <origin xyz="0.0 0.0 0.01" rpy="0.0 0.0 0.0" />
+      <mass value="2.7874" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_left.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
+        <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_with_flag.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
+      </geometry>
+    </visual>
+    <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_left.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/> -->
+      </geometry>
+    </collision>
+  </link>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+LINKS: RIGHT ARM
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <link name="shoulderT_right">
+    <inertial>
+      <origin xyz="-0.022 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="3.12" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderT_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="shoulderL_right">
+    <inertial>
+      <origin xyz="0.0 -0.021 0.054" rpy="0.0 0.0 0.0" />
+      <mass value="0.99" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderL_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="upperArm_right">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.088" rpy="0.0 0.0 0.0" />
+      <mass value="4.08" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/upperArm_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="elbow_right">
+    <inertial>
+      <origin xyz="-0.027 0.0 0.047" rpy="0.0 0.0 0.0" />
+      <mass value="0.974" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/elbow_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="lowerArm_right">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.138" rpy="0.0 0.0 0.0" />
+      <mass value="3.71" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/lowerArm_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="wristDiff_right">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.22" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="../../../model/ocean1/ocean1_graphics/wristDiff_right.obj"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="endEffector_right">
+    <inertial>
+      <origin xyz="0.0 0.0 0.01" rpy="0.0 0.0 0.0" />
+      <mass value="2.7874" />
+      <inertia ixx="0.00466" iyy="0.00375" izz="0.00288" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_right.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
+        <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_with_flag.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_half_open.obj"/> -->
+      </geometry>
+    </visual>
+    <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_right.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/> -->
+        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
+      </geometry>
+    </collision>
+  </link>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+JOINTS: BODY
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <joint name="PrisX_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="ground" />
+    <child link="PrisX" />
+    <axis xyz="1 0 0" />
+    <!-- TODO: check that calibration mimics initial_joint_q behavior -->
+    <calibration rising="2.84851" />
+    <!-- TODO: change lower, upper, effort, and velocity limits -->
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="PrisY_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisX" />
+    <child link="PrisY" />
+    <axis xyz="0 1 0" />
+    <calibration rising="1.94773" />
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="PrisZ_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisY" />
+    <child link="PrisZ" />
+    <axis xyz="0 0 1" />
+    <calibration rising="0.703213" />
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="RotZ_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisZ" />
+    <child link="RotZ" />
+    <axis xyz="0 0 1" />
+    <calibration falling="-185.3157504" />
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="RotY_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="RotZ" />
+    <child link="RotY" />
+    <axis xyz="0 1 0" />
+    <calibration falling="0.0"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="RotX_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="RotY" />
+    <child link="Body" />
+    <axis xyz="1 0 0" />
+    <calibration falling="0.0"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+JOINTS: LEFT ARM
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <joint name="shoulderT_left_Joint" type="revolute">
+    <origin rpy="-3.1415927 0.0 -2.3561935" xyz="0.5768673 0.194584 -0.1893698"/>
+    <parent link="Body" />
+    <child link="shoulderT_left" />
+    <axis xyz="1 0 0" />
+    <calibration falling="-22.530476674"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="shoulderL_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="shoulderT_left" />
+    <child link="shoulderL_left" />
+    <axis xyz="0 1 0" />
+    <calibration falling="-38.938842011"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="upperArm_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.281541"/>
+    <parent link="shoulderL_left" />
+    <child link="upperArm_left" />
+    <axis xyz="0 0 1" />
+    <calibration falling="-9.5874173775"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="elbow_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="upperArm_left" />
+    <child link="elbow_left" />
+    <axis xyz="1 0 0" />
+    <calibration falling="86.55788003"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="lowerArm_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.331339"/>
+    <parent link="elbow_left" />
+    <child link="lowerArm_left" />
+    <axis xyz="0 0 1" />
+    <calibration falling="35.068683992"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="wristDiff_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="lowerArm_left" />
+    <child link="wristDiff_left" />
+    <axis xyz="1 0 0" />
+    <calibration falling="-32.703571509"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="endEffector_left_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="wristDiff_left" />
+    <child link="endEffector_left" />
+    <axis xyz="0 1 0" />
+    <calibration falling="-22.68013325"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
+JOINTS: RIGHT ARM
+~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <joint name="shoulderT_right_Joint" type="revolute">
+    <origin rpy="3.1415927 0.0 -0.7853991" xyz="0.5768673 -0.194584 -0.1893698"/>
+    <parent link="Body" />
+    <child link="shoulderT_right" />
+    <axis xyz="1 0 0" />
+    <calibration falling="-22.451580385"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="shoulderL_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="shoulderT_right" />
+    <child link="shoulderL_right" />
+    <axis xyz="0 1 0" />
+    <calibration falling="38.858341441"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="upperArm_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.281541"/>
+    <parent link="shoulderL_right" />
+    <child link="upperArm_right" />
+    <axis xyz="0 0 1" />
+    <calibration falling="9.6591516935"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="elbow_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="upperArm_right" />
+    <child link="elbow_right" />
+    <axis xyz="1 0 0" />
+    <calibration falling="86.49771946"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="lowerArm_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.331339"/>
+    <parent link="elbow_right" />
+    <child link="lowerArm_right" />
+    <axis xyz="0 0 1" />
+    <calibration falling="-35.222695047"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="wristDiff_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="lowerArm_right" />
+    <child link="wristDiff_right" />
+    <axis xyz="1 0 0" />
+    <calibration falling="-32.634014433"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+  <joint name="endEffector_right_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="wristDiff_right" />
+    <child link="endEffector_right" />
+    <axis xyz="0 1 0" />
+    <calibration falling="22.559812113"/>
+    <limit effort="100.0" velocity="3.0"/>
+  </joint>
+
+</robot>
