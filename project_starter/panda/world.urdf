@@ -3,7 +3,7 @@
 <world name="demo_world" gravity="0.0 0.0 -9.81">
 
 	<robot name="panda_arm_hand">
-		<model dir="./resources" path="panda_arm_hand.urdf" name="panda_arm_hand" />
+		<model dir="${CS225A_URDF_FOLDER}/panda" path="panda_arm_hand.urdf" name="panda_arm_hand" />
 		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
 	</robot>
 

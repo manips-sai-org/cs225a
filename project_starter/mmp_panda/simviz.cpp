@@ -38,10 +38,8 @@ VectorXd ui_torques;
 mutex mutex_torques, mutex_update;
 
 // specify urdf and robots 
-const string world_file = "./resources/world_mmp_panda.urdf";
-const string robot_file = "./resources/mmp_panda.urdf";
-const string robot_name = "mmp_panda";
-const string camera_name = "camera_fixed";
+static const string robot_name = "mmp_panda";
+static const string camera_name = "camera_fixed";
 
 // dynamic objects information
 const vector<std::string> object_names = {"cup"};
@@ -53,6 +51,9 @@ const int n_objects = object_names.size();
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 
 int main() {
+	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
+	static const string robot_file = string(CS225A_URDF_FOLDER) + "/mmp_panda/mmp_panda.urdf";
+	static const string world_file = string(MMP_PANDA_FOLDER) + "/world_mmp_panda.urdf";
 	std::cout << "Loading URDF world model file: " << world_file << endl;
 
 	// start redis client
