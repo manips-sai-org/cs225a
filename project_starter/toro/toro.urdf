@@ -222,8 +222,8 @@
     <joint name="j_rl_knee" type="revolute">
         <origin xyz="0.0000000000 0.0000000000 -0.3999000880" rpy="0 0 0" />
         <parent link="RL_KOSY_L4"/>
-    <child link="RL_KOSY_L56"/> 
-        <limit lower="-1.8326" upper="1.8326" effort="165" velocity="3.0718" />
+        <child link="RL_KOSY_L56"/> 
+        <limit lower="0.2" upper="1.8326" effort="165" velocity="3.0718" />
         <calibration falling="45.0" />
          <axis xyz="0 1 0"/>
     </joint>
@@ -407,7 +407,7 @@
         <origin xyz="0.0000000000 0.0000000000 -0.3999000880" rpy="0 0 0" />
         <parent link="LL_KOSY_L4"/>
         <child link="LL_KOSY_L56"/> 
-        <limit lower="-1.8326" upper="1.8326" effort="165" velocity="3.0718" />
+        <limit lower="0.2" upper="1.8326" effort="165" velocity="3.0718" />
         <calibration falling="45.0" />
         <axis xyz="0 1 0"/>
     </joint>
@@ -626,7 +626,7 @@
         <origin xyz="-0.0000000000 -0.0300000000  0.3129000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
         <parent link="ra_link3"/>
         <child link="ra_link4"/> 
-        <limit lower="0" upper="2.5831" effort="40" velocity="2.0944" />
+        <limit lower="0.5" upper="2.5831" effort="40" velocity="2.0944" />
         <calibration falling="70.0" />
         <axis xyz="1 0 0"/>
     </joint>
@@ -661,8 +661,6 @@
         <calibration falling="0.0" />
         <axis xyz="0 0 1"/>
     </joint>
-
-
 
     <link name="ra_link6">
         <tcp number="2"/>        
@@ -712,10 +710,19 @@
         </collision>
     </link>
 
-    <joint name="j_rhand_fixed" type="fixed">
+    <!-- <joint name="j_rhand_fixed" type="fixed">
             <origin xyz="0 0 0.056" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
         <parent link="ra_link6"/>
         <child link="ra_end_effector"/> 
+    </joint> -->
+
+    <joint name="j_rhand_revolute" type="revolute">
+        <origin xyz="0 0 0.056" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+        <parent link="ra_link6"/>
+        <child link="ra_end_effector"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="35" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
     </joint>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -820,8 +827,8 @@
     <joint name="j_la_elbow" type="revolute">
         <origin xyz="0.0300000000 -0.3128000000 -0.0000000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
         <parent link="la_link3"/>
-    <child link="la_link4"/> 
-        <limit lower="0" upper="2.5831" effort="40" velocity="2.0944" />
+        <child link="la_link4"/> 
+        <limit lower="0.5" upper="2.5831" effort="40" velocity="2.0944" />
         <calibration falling="70.0" />
          <axis xyz="0 0 1"/>
     </joint>
@@ -909,10 +916,19 @@
         </collision>
     </link>
 
-    <joint name="j_lhand_fixed" type="fixed">
+    <!-- <joint name="j_lhand_fixed" type="fixed">
             <origin xyz="0 -0.056 0" rpy="-1.5707963268  0.0000000000 0.0000000000" />
         <parent link="la_link6"/>
         <child link="la_end_effector"/> 
+    </joint> -->
+
+    <joint name="j_lhand_revolute" type="revolute">
+        <origin xyz="0 -0.056 0" rpy="-1.5707963268  0.0000000000 0.0000000000" />
+        <parent link="la_link6"/>
+        <child link="la_end_effector"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="35" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
     </joint>
       
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->

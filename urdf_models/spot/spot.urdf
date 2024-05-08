@@ -1,0 +1,471 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="spot">
+    <link name="ground">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <!-- Add floating joints -->
+    <link name="px">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <link name="py">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <link name="pz">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <link name="rx">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <link name="ry">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+    <joint name="px_virtual" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="ground" />
+        <child link="px" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <joint name="py_virtual" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="px" />
+        <child link="py" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <joint name="pz_virtual" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
+        <parent link="py" />
+        <child link="pz" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <joint name="rx_virtual" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="pz" />
+        <child link="rx" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <joint name="ry_virtual" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="rx" />
+        <child link="ry" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <joint name="rz_virtual" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
+        <parent link="ry" />
+        <child link="body" />
+        <limit effort="1000" velocity="1000.00" lower="-1e16" upper="1e16" />
+    </joint>
+
+    <link name="body">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="8" />
+          <inertia ixx="0.190987333" iyy="0.830987333" izz="0.973333333" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/body.obj" />
+            </geometry>
+        </visual>
+<!--         <visual>
+            <geometry>
+                <sphere radius="0.1"/>
+            </geometry>
+        </visual> -->
+    </link>
+
+    <link name="base_link">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <joint name="base_link_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="body" />
+        <child link="base_link" />
+    </joint>
+
+    <link name="front_rail">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <joint name="front_rail_joint" type="fixed">
+        <origin xyz="0.223 0 0.0805" rpy="0 0 0" />
+        <parent link="body" />
+        <child link="front_rail" />
+    </joint>
+
+    <link name="rear_rail">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <joint name="rear_rail_joint" type="fixed">
+        <origin xyz="-0.223 0 0.0805" rpy="0 0 0" />
+        <parent link="body" />
+        <child link="rear_rail" />
+    </joint>
+
+    <link name="front_left_hip">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.009522" iyy="0.009522" izz="0.009522" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_left_hip.obj" />
+            </geometry>
+        </visual>
+<!--         <visual>
+            <geometry>
+                <sphere radius="0.1"/>
+            </geometry>
+        </visual> -->
+    </link>
+    <joint name="front_left_hip_x" type="revolute">
+        <origin xyz="0.29785 0.05500 0.00000" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="body" />
+        <child link="front_left_hip" />
+        <limit effort="1000" velocity="1000.00" lower="-0.78539816339744827899" upper="0.78539816339744827899" />
+    </joint>
+    <link name="front_left_upper_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.04607325" iyy="0.045778651" izz="0.004907401" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_left_upper_leg.obj" />
+            </geometry>
+        </visual>
+<!--         <visual>
+            <origin xyz="0 0 -0.15" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.05"/>
+            </geometry>
+        </visual> -->
+    </link>
+    <joint name="front_left_hip_y" type="revolute">
+        <origin xyz="0.0 0.110945 0.0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="front_left_hip" />
+        <child link="front_left_upper_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-0.89884456477707963539" upper="2.2951079663725435509" />
+    </joint>
+    <link name="front_left_lower_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.103885315" iyy="0.046776052" izz="0.059443485" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_left_lower_leg.obj" />
+            </geometry>
+        </visual>
+<!--         <visual>
+            <origin xyz="0 0 -0.15" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.05"/>
+            </geometry>
+        </visual> -->
+    </link>
+    <joint name="front_left_knee" type="revolute">
+        <origin xyz="0.025 0.000 -0.3205" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="front_left_upper_leg" />
+        <child link="front_left_lower_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-2.7929" upper="-0.254801" />
+    </joint>
+    <link name="front_left_foot">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <sphere radius="0.033" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="front_left_ankle" type="fixed">
+        <origin xyz="0 0 -0.34" rpy="0 0 0" />
+        <parent link="front_left_lower_leg" />
+        <child link="front_left_foot" />
+    </joint>
+    <link name="front_right_hip">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.009522" iyy="0.009522" izz="0.009522" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_right_hip.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="front_right_hip_x" type="revolute">
+        <origin xyz="0.29785 -0.05500 0.00000" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="body" />
+        <child link="front_right_hip" />
+        <limit effort="1000" velocity="1000.00" lower="-0.78539816339744827899" upper="0.78539816339744827899" />
+    </joint>
+    <link name="front_right_upper_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.04607325" iyy="0.045778651" izz="0.004907401" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_right_upper_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="front_right_hip_y" type="revolute">
+        <origin xyz="0.0 -0.110945 0.0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="front_right_hip" />
+        <child link="front_right_upper_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-0.89884456477707963539" upper="2.2951079663725435509" />
+    </joint>
+    <link name="front_right_lower_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.103885315" iyy="0.046776052" izz="0.059443485" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/front_right_lower_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="front_right_knee" type="revolute">
+        <origin xyz="0.025 0.000 -0.3205" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="front_right_upper_leg" />
+        <child link="front_right_lower_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-2.7929" upper="-0.247563" />
+    </joint>
+    <link name="front_right_foot">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <sphere radius="0.033" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="front_right_ankle" type="fixed">
+        <origin xyz="0 0 -0.34" rpy="0 0 0" />
+        <parent link="front_right_lower_leg" />
+        <child link="front_right_foot" />
+    </joint>
+    <link name="rear_left_hip">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.009522" iyy="0.009522" izz="0.009522" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_left_hip.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_left_hip_x" type="revolute">
+        <origin xyz="-0.29785 0.05500 0.00000" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="body" />
+        <child link="rear_left_hip" />
+        <limit effort="1000" velocity="1000.00" lower="-0.78539816339744827899" upper="0.78539816339744827899" />
+    </joint>
+    <link name="rear_left_upper_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.04607325" iyy="0.045778651" izz="0.004907401" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_left_upper_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_left_hip_y" type="revolute">
+        <origin xyz="0.0 0.110945 0.0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="rear_left_hip" />
+        <child link="rear_left_upper_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-0.89884456477707963539" upper="2.2951079663725435509" />
+    </joint>
+    <link name="rear_left_lower_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.103885315" iyy="0.046776052" izz="0.059443485" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_left_lower_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_left_knee" type="revolute">
+        <origin xyz="0.025 0.000 -0.3205" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="rear_left_upper_leg" />
+        <child link="rear_left_lower_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-2.7929" upper="-0.267153" />
+    </joint>
+    <link name="rear_left_foot">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <sphere radius="0.033" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rear_left_ankle" type="fixed">
+        <origin xyz="0 0 -0.34" rpy="0 0 0" />
+        <parent link="rear_left_lower_leg" />
+        <child link="rear_left_foot" />
+    </joint>
+    <link name="rear_right_hip">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.009522" iyy="0.009522" izz="0.009522" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_right_hip.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_right_hip_x" type="revolute">
+        <origin xyz="-0.29785 -0.05500 0.00000" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <parent link="body" />
+        <child link="rear_right_hip" />
+        <limit effort="1000" velocity="1000.00" lower="-0.78539816339744827899" upper="0.78539816339744827899" />
+    </joint>
+    <link name="rear_right_upper_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.04607325" iyy="0.045778651" izz="0.004907401" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_right_upper_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_right_hip_y" type="revolute">
+        <origin xyz="0.0 -0.110945 0.0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="rear_right_hip" />
+        <child link="rear_right_upper_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-0.89884456477707963539" upper="2.2951079663725435509" />
+    </joint>
+    <link name="rear_right_lower_leg">
+        <inertial>
+          <origin xyz="0 0 -0.15" rpy="0 0 0" />
+          <mass value="3" />
+          <inertia ixx="0.103885315" iyy="0.046776052" izz="0.059443485" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="../../../model/spot/meshes/rear_right_lower_leg.obj" />
+            </geometry>
+        </visual>
+    </link>
+    <joint name="rear_right_knee" type="revolute">
+        <origin xyz="0.025 0.000 -0.3205" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <parent link="rear_right_upper_leg" />
+        <child link="rear_right_lower_leg" />
+        <limit effort="1000" velocity="1000.00" lower="-2.7929" upper="-0.257725" />
+    </joint>
+    <link name="rear_right_foot">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="1e-16" />
+          <inertia ixx="1e-16" iyy="1e-16" izz="1e-16" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <sphere radius="0.033" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rear_right_ankle" type="fixed">
+        <origin xyz="0 0 -0.34" rpy="0 0 0" />
+        <parent link="rear_right_lower_leg" />
+        <child link="rear_right_foot" />
+    </joint>
+
+</robot>

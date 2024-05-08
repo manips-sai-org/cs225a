@@ -73,8 +73,8 @@ int main() {
 	gripper_selection_matrix(0, 7) = 1;
 	gripper_selection_matrix(1, 8) = 1;
 	auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, gripper_selection_matrix);
-	gripper_task->setDynamicDecouplingType(JointTask::DynamicDecouplingType::IMPEDANCE);
-	double kp_gripper = 1e3;
+	gripper_task->setDynamicDecouplingType(Sai2Primitives::DynamicDecouplingType::IMPEDANCE);
+	double kp_gripper = 5e3;
 	double kv_gripper = 1e2;
 	gripper_task->setGains(kp_gripper, kv_gripper, 0);
 	gripper_task->setGains(kp_gripper, kv_gripper, 0);
