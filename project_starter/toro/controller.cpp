@@ -23,9 +23,6 @@ void sighandler(int){runloop = false;}
 
 #include "redis_keys.h"
 
-// Location of URDF files specifying world and robot information
-const string robot_file = "./resources/toro.urdf";
-
 // States 
 enum State {
 	POSTURE = 0, 
@@ -48,6 +45,9 @@ Eigen::VectorXd generateRandomVector(double lowerBound, double upperBound, int s
 }
 
 int main() {
+	// Location of URDF files specifying world and robot information
+	static const string robot_file = string(CS225A_URDF_FOLDER) + "/toro/toro.urdf";
+
 	// initial state 
 	int state = POSTURE;
 	string controller_status = "1";

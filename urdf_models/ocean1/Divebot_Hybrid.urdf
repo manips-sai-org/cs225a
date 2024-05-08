@@ -69,9 +69,9 @@ LINKS: BODY
       <origin xyz="0.095 0 -0.03" rpy="0.0 0.0 0.0" />
       <geometry>
         <!-- <box size="0.1 0.1 0.1" /> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/body_paint.obj" scale="0.85 0.85 0.85" /> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/body_paint_no_lamp.obj" scale="0.85 0.85 0.85" /> -->
-        <mesh filename="../../../model/ocean1/ocean1_graphics/O2_body_new_head.obj" scale="0.85 0.85 0.85" />
+        <!-- <mesh filename="ocean1_graphics/body_paint.obj" scale="0.85 0.85 0.85" /> -->
+        <!-- <mesh filename="ocean1_graphics/body_paint_no_lamp.obj" scale="0.85 0.85 0.85" /> -->
+        <mesh filename="ocean1_graphics/O2_body_new_head.obj" scale="0.85 0.85 0.85" />
       </geometry>
     </visual>
   </link>
@@ -89,7 +89,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderT_left.obj"/>
+        <mesh filename="ocean1_graphics/shoulderT_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -103,7 +103,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderL_left.obj"/>
+        <mesh filename="ocean1_graphics/shoulderL_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -117,7 +117,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/upperArm_left.obj"/>
+        <mesh filename="ocean1_graphics/upperArm_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -131,7 +131,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/elbow_left.obj"/>
+        <mesh filename="ocean1_graphics/elbow_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -145,7 +145,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/lowerArm_left.obj"/>
+        <mesh filename="ocean1_graphics/lowerArm_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -159,7 +159,7 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/wristDiff_left.obj"/>
+        <mesh filename="ocean1_graphics/wristDiff_left.obj"/>
       </geometry>
     </visual>
   </link>
@@ -173,20 +173,20 @@ LINKS: LEFT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_left.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
-        <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_with_flag.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_left.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
+        <mesh filename="ocean1_graphics/HandO2_small.obj"/>
+        <!-- <mesh filename="ocean1_graphics/HandO2_with_flag.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_open.obj"/> -->
       </geometry>
     </visual>
     <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
     <collision>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_left.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_left.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_small.obj"/> -->
       </geometry>
     </collision>
   </link>
@@ -204,7 +204,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderT_right.obj"/>
+        <mesh filename="ocean1_graphics/shoulderT_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -218,7 +218,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/shoulderL_right.obj"/>
+        <mesh filename="ocean1_graphics/shoulderL_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -232,7 +232,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/upperArm_right.obj"/>
+        <mesh filename="ocean1_graphics/upperArm_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -246,7 +246,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/elbow_right.obj"/>
+        <mesh filename="ocean1_graphics/elbow_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -260,7 +260,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/lowerArm_right.obj"/>
+        <mesh filename="ocean1_graphics/lowerArm_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -274,7 +274,7 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <mesh filename="../../../model/ocean1/ocean1_graphics/wristDiff_right.obj"/>
+        <mesh filename="ocean1_graphics/wristDiff_right.obj"/>
       </geometry>
     </visual>
   </link>
@@ -288,22 +288,22 @@ LINKS: RIGHT ARM
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_right.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
-        <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_with_flag.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_half_open.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_right.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
+        <mesh filename="ocean1_graphics/HandO2_small.obj"/>
+        <!-- <mesh filename="ocean1_graphics/HandO2_with_flag.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_open.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_half_open.obj"/> -->
       </geometry>
     </visual>
     <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
     <collision>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/endEffectorWPalm_right.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_small.obj"/> -->
-        <!-- <mesh filename="../../../model/ocean1/ocean1_graphics/HandO2_open.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_right.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_small.obj"/> -->
+        <!-- <mesh filename="ocean1_graphics/HandO2_open.obj"/> -->
       </geometry>
     </collision>
   </link>
