@@ -31,7 +31,7 @@
 	    <visual>
 	        <origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-	            <mesh filename="../../urdf_models/test_objects/meshes/visual/cup.obj" />
+	            <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/cup.obj" />
 	        </geometry>
 	    </visual>
 
