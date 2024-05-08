@@ -25,7 +25,7 @@
 #include "timer/LoopTimer.h"
 #include "logger/Logger.h"
 
-bool fSimulationRunning = false;
+bool fSimulationRunning = true;
 void sighandler(int){fSimulationRunning = false;}
 
 #include "redis_keys.h"
@@ -38,10 +38,8 @@ VectorXd ui_torques;
 mutex mutex_torques, mutex_update;
 
 // specify urdf and robots 
-const string world_file = "./resources/world_toro.urdf";
-const string robot_file = "./resources/toro.urdf";
-const string robot_name = "toro";
-const string camera_name = "camera_fixed";
+static const string robot_name = "toro";
+static const string camera_name = "camera_fixed";
 
 // dynamic objects information
 const vector<std::string> object_names = {"cup"};
@@ -53,6 +51,9 @@ const int n_objects = object_names.size();
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 
 int main() {
+	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
+	static const string robot_file = string(CS225A_URDF_FOLDER) + "/toro/toro.urdf";
+	static const string world_file = string(TORO_FOLDER) + "/world_toro.urdf";
 	std::cout << "Loading URDF world model file: " << world_file << endl;
 
 	// start redis client
@@ -106,7 +107,7 @@ int main() {
 	thread sim_thread(simulation, sim);
 
 	// while window is open:
-	while (graphics->isWindowOpen()) {
+	while (graphics->isWindowOpen() && fSimulationRunning) {
         graphics->updateRobotGraphics(robot_name, redis_client.getEigen(JOINT_ANGLES_KEY));
 		{
 			lock_guard<mutex> lock(mutex_update);
@@ -130,7 +131,7 @@ int main() {
 
 //------------------------------------------------------------------------------
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
-	fSimulationRunning = true;
+	// fSimulationRunning = true;
 
     // create redis client
     auto redis_client = Sai2Common::RedisClient();
