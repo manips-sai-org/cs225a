@@ -54,7 +54,7 @@ int main() {
 
 	// prepare controller
 	int dof = robot->dof();
-	VectorXd command_torques = VectorXd::Zero(dof);  // panda + gripper torques 
+	VectorXd command_torques = VectorXd::Zero(dof); 
 	MatrixXd N_prec = MatrixXd::Identity(dof, dof);
 
     // trunk task (first 6 joints)
