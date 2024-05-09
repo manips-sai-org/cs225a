@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<robot name="Divebot">
+<robot name="ocean1">
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
 TODO: verify conversion from 
@@ -74,6 +74,12 @@ LINKS: BODY
         <mesh filename="ocean1_graphics/O2_body_new_head.obj" scale="0.85 0.85 0.85" />
       </geometry>
     </visual>
+    <!-- <visual>
+      <origin xyz="-0.034400 -0.001100 0.134400" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size="0.1 0.1 0.1" />
+      </geometry>
+    </visual> -->
   </link>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -181,14 +187,14 @@ LINKS: LEFT ARM
       </geometry>
     </visual>
     <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
-    <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-      <geometry>
+    <!-- <collision> -->
+      <!-- <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" /> -->
+      <!-- <geometry> -->
         <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_left.obj"/> -->
         <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
         <!-- <mesh filename="ocean1_graphics/HandO2_small.obj"/> -->
-      </geometry>
-    </collision>
+      <!-- </geometry> -->
+    <!-- </collision> -->
   </link>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,15 +303,15 @@ LINKS: RIGHT ARM
       </geometry>
     </visual>
     <!-- TODO: implement aabb collision detection (or make coarser collision mesh) -->
-    <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-      <geometry>
+    <!-- <collision> -->
+      <!-- <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" /> -->
+      <!-- <geometry> -->
         <!-- <mesh filename="ocean1_graphics/endEffectorWPalm_right.obj"/> -->
         <!-- <mesh filename="ocean1_graphics/HandO2.obj"/> -->
         <!-- <mesh filename="ocean1_graphics/HandO2_small.obj"/> -->
         <!-- <mesh filename="ocean1_graphics/HandO2_open.obj"/> -->
-      </geometry>
-    </collision>
+      <!-- </geometry> -->
+    <!-- </collision> -->
   </link>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -318,9 +324,9 @@ JOINTS: BODY
     <child link="PrisX" />
     <axis xyz="1 0 0" />
     <!-- TODO: check that calibration mimics initial_joint_q behavior -->
-    <calibration rising="2.84851" />
+    <!-- <calibration falling="2.84851" /> -->
     <!-- TODO: change lower, upper, effort, and velocity limits -->
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="PrisY_Joint" type="prismatic">
@@ -328,8 +334,8 @@ JOINTS: BODY
     <parent link="PrisX" />
     <child link="PrisY" />
     <axis xyz="0 1 0" />
-    <calibration rising="1.94773" />
-    <limit effort="100.0" velocity="3.0"/>
+    <!-- <calibration falling="1.94773" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="PrisZ_Joint" type="prismatic">
@@ -337,8 +343,8 @@ JOINTS: BODY
     <parent link="PrisY" />
     <child link="PrisZ" />
     <axis xyz="0 0 1" />
-    <calibration rising="0.703213" />
-    <limit effort="100.0" velocity="3.0"/>
+    <!-- <calibration falling="0.703213" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="RotZ_Joint" type="revolute">
@@ -346,8 +352,8 @@ JOINTS: BODY
     <parent link="PrisZ" />
     <child link="RotZ" />
     <axis xyz="0 0 1" />
-    <calibration falling="-185.3157504" />
-    <limit effort="100.0" velocity="3.0"/>
+    <!-- <calibration falling="-185.3157504" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="RotY_Joint" type="revolute">
@@ -355,8 +361,8 @@ JOINTS: BODY
     <parent link="RotZ" />
     <child link="RotY" />
     <axis xyz="0 1 0" />
-    <calibration falling="0.0"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <!-- <calibration falling="0.0"/> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="RotX_Joint" type="revolute">
@@ -364,8 +370,8 @@ JOINTS: BODY
     <parent link="RotY" />
     <child link="Body" />
     <axis xyz="1 0 0" />
-    <calibration falling="0.0"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <!-- <calibration falling="0.0"/> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -378,7 +384,7 @@ JOINTS: LEFT ARM
     <child link="shoulderT_left" />
     <axis xyz="1 0 0" />
     <calibration falling="-22.530476674"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="shoulderL_left_Joint" type="revolute">
@@ -387,7 +393,7 @@ JOINTS: LEFT ARM
     <child link="shoulderL_left" />
     <axis xyz="0 1 0" />
     <calibration falling="-38.938842011"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="upperArm_left_Joint" type="revolute">
@@ -396,7 +402,7 @@ JOINTS: LEFT ARM
     <child link="upperArm_left" />
     <axis xyz="0 0 1" />
     <calibration falling="-9.5874173775"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="elbow_left_Joint" type="revolute">
@@ -405,7 +411,7 @@ JOINTS: LEFT ARM
     <child link="elbow_left" />
     <axis xyz="1 0 0" />
     <calibration falling="86.55788003"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="lowerArm_left_Joint" type="revolute">
@@ -414,7 +420,7 @@ JOINTS: LEFT ARM
     <child link="lowerArm_left" />
     <axis xyz="0 0 1" />
     <calibration falling="35.068683992"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="wristDiff_left_Joint" type="revolute">
@@ -423,7 +429,7 @@ JOINTS: LEFT ARM
     <child link="wristDiff_left" />
     <axis xyz="1 0 0" />
     <calibration falling="-32.703571509"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="endEffector_left_Joint" type="revolute">
@@ -432,7 +438,7 @@ JOINTS: LEFT ARM
     <child link="endEffector_left" />
     <axis xyz="0 1 0" />
     <calibration falling="-22.68013325"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -445,7 +451,7 @@ JOINTS: RIGHT ARM
     <child link="shoulderT_right" />
     <axis xyz="1 0 0" />
     <calibration falling="-22.451580385"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="shoulderL_right_Joint" type="revolute">
@@ -454,7 +460,7 @@ JOINTS: RIGHT ARM
     <child link="shoulderL_right" />
     <axis xyz="0 1 0" />
     <calibration falling="38.858341441"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="upperArm_right_Joint" type="revolute">
@@ -463,7 +469,7 @@ JOINTS: RIGHT ARM
     <child link="upperArm_right" />
     <axis xyz="0 0 1" />
     <calibration falling="9.6591516935"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="elbow_right_Joint" type="revolute">
@@ -472,7 +478,7 @@ JOINTS: RIGHT ARM
     <child link="elbow_right" />
     <axis xyz="1 0 0" />
     <calibration falling="86.49771946"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="lowerArm_right_Joint" type="revolute">
@@ -481,7 +487,7 @@ JOINTS: RIGHT ARM
     <child link="lowerArm_right" />
     <axis xyz="0 0 1" />
     <calibration falling="-35.222695047"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="wristDiff_right_Joint" type="revolute">
@@ -490,7 +496,7 @@ JOINTS: RIGHT ARM
     <child link="wristDiff_right" />
     <axis xyz="1 0 0" />
     <calibration falling="-32.634014433"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
   <joint name="endEffector_right_Joint" type="revolute">
@@ -499,7 +505,7 @@ JOINTS: RIGHT ARM
     <child link="endEffector_right" />
     <axis xyz="0 1 0" />
     <calibration falling="22.559812113"/>
-    <limit effort="100.0" velocity="3.0"/>
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
   </joint>
 
 </robot>
