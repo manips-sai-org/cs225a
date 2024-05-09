@@ -83,7 +83,7 @@ int main() {
         compliant_frame.translation() = control_points[i];
         pose_tasks[control_links[i]] = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_links[i], compliant_frame);
         pose_tasks[control_links[i]]->disableInternalOtg();
-        pose_tasks[control_links[i]]->setDynamicDecouplingType(Sai2Primitives::MotionForceTask::FULL_DYNAMIC_DECOUPLING);
+        pose_tasks[control_links[i]]->setDynamicDecouplingType(Sai2Primitives::FULL_DYNAMIC_DECOUPLING);
         pose_tasks[control_links[i]]->setPosControlGains(400, 40, 0);
         pose_tasks[control_links[i]]->setOriControlGains(400, 40, 0);
     }

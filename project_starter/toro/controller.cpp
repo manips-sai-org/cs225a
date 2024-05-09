@@ -91,7 +91,7 @@ int main() {
         compliant_frame.translation() = secondary_control_points[i];
         secondary_tasks[secondary_control_links[i]] = std::make_shared<Sai2Primitives::MotionForceTask>(robot, secondary_control_links[i], compliant_frame);
         secondary_tasks[secondary_control_links[i]]->disableInternalOtg();
-        secondary_tasks[secondary_control_links[i]]->enableSingularityHandling(false);  // don't perform singularity handling in second-level tasks 
+        secondary_tasks[secondary_control_links[i]]->disableSingularityHandling();  // don't perform singularity handling in second-level tasks 
         secondary_tasks[secondary_control_links[i]]->setDynamicDecouplingType(Sai2Primitives::DynamicDecouplingType::FULL_DYNAMIC_DECOUPLING);
         secondary_tasks[secondary_control_links[i]]->setPosControlGains(400, 40, 0);
         secondary_tasks[secondary_control_links[i]]->setOriControlGains(400, 40, 0);
