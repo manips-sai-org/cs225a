@@ -65,8 +65,8 @@ int main() {
 	pose_task->setPosControlGains(400, 40, 0);
 	pose_task->setOriControlGains(400, 40, 0);
 
-	Vector3d ee_pos;
-	Matrix3d ee_ori;
+	Vector3d ee_pos = robot->position(control_link, control_point);
+	Matrix3d ee_ori = robot->rotation(control_link);
 
 	// base partial joint task 
 	MatrixXd base_selection_matrix = MatrixXd::Zero(3, robot->dof());
@@ -75,6 +75,8 @@ int main() {
 	base_selection_matrix(2, 2) = 1;
 	auto base_task = std::make_shared<Sai2Primitives::JointTask>(robot, base_selection_matrix);
 	base_task->setGains(400, 40, 0);
+
+	Vector3d base_pose = robot->q().head(3);
 
 	// joint task
 	auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
@@ -87,6 +89,7 @@ int main() {
 	joint_task->setGoalPosition(q_desired);
 
 	bool arm_driven_control = true;
+	// bool arm_driven_control = false;
 	if (arm_driven_control) {
 		base_task->setGains(0, 40, 0);
 	}
@@ -120,9 +123,14 @@ int main() {
 
 				ee_pos = robot->position(control_link, control_point);
 				ee_ori = robot->rotation(control_link);
+				base_pose = robot->q().head(3);
 
-				pose_task->setGoalPosition(Vector3d(0.8, 0.8, 0) + ee_pos);
-				pose_task->setGoalOrientation(AngleAxisd(M_PI / 6, Vector3d::UnitX()).toRotationMatrix() * ee_ori);
+				if (arm_driven_control) {
+					pose_task->setGoalPosition(ee_pos + Vector3d(0.8, 0.8, 0));
+					pose_task->setGoalOrientation(AngleAxisd(M_PI / 6, Vector3d::UnitX()).toRotationMatrix() * ee_ori);
+				} else {
+					base_task->setGoalPosition(base_pose + Vector3d(0.2, 0.2, 0.5));
+				}
 
 				state = MOTION;
 			}

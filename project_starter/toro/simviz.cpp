@@ -25,7 +25,7 @@
 #include "timer/LoopTimer.h"
 #include "logger/Logger.h"
 
-bool fSimulationRunning = false;
+bool fSimulationRunning = true;
 void sighandler(int){fSimulationRunning = false;}
 
 #include "redis_keys.h"
@@ -107,7 +107,7 @@ int main() {
 	thread sim_thread(simulation, sim);
 
 	// while window is open:
-	while (graphics->isWindowOpen()) {
+	while (graphics->isWindowOpen() && fSimulationRunning) {
         graphics->updateRobotGraphics(robot_name, redis_client.getEigen(JOINT_ANGLES_KEY));
 		{
 			lock_guard<mutex> lock(mutex_update);
@@ -131,7 +131,7 @@ int main() {
 
 //------------------------------------------------------------------------------
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
-	fSimulationRunning = true;
+	// fSimulationRunning = true;
 
     // create redis client
     auto redis_client = Sai2Common::RedisClient();

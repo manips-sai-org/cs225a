@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0.0)
 project (cs225a)
 SET(CMAKE_CXX_FLAGS "-std=c++17 -I/usr/include -I/usr/local/include -O3")
-SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_BUILD_TYPE "Release")
 
 # Mac OS X global build options
 if(CMAKE_SYSTEM_NAME MATCHES Darwin)

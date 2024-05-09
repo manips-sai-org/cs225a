@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+
+<world name="demo_world" gravity="0.0 0.0 -9.81">
+
+	<robot name="spot">
+		<model dir="./resources" path="spot.urdf" name="spot" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+	</robot>
+
+	<static_object name="Ground_With_Texture">
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 -0.0001" rpy="0 0 0" />
+	        <geometry>
+	            <box size="2 2 0.0002" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="0.5 0.5 0.5 1.0" />
+	        </material>
+	    </visual>
+		<collision>
+	        <origin xyz="0.0 0.0 -0.0001" rpy="0 0 0" />
+	        <geometry>
+	            <box size="1 1 0.0002" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="0.5 0.5 0.5 1.0" />
+	        </material>
+	    </collision>
+	</static_object>
+
+	<dynamic_object name="cup">
+		<origin xyz="1.0 0.0 1.0" rpy="0 0 0" />
+		<inertial>
+        	<origin xyz="0 0 0" rpy="0 0 0" />
+        	<mass value="10" />
+        	<inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0" />
+      	</inertial>
+
+	    <visual>
+	        <origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+	            <mesh filename="../../urdf_models/test_objects/meshes/visual/cup.obj" />
+	        </geometry>
+	    </visual>
+
+		<visual>
+	        <origin xyz="0 0 0.06" rpy="0 0 0" />
+	        <geometry>
+	            <box size="0.1 0.1 0.15" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1 1 1 1.0" />
+	        </material>
+	    </visual>
+
+	    <!-- <collision>
+	        <origin xyz="0 0 0.06" rpy="0 0 0" />
+	        <geometry>
+	            <box size="0.1 0.1 0.15" />
+	        </geometry>
+	    </collision> -->
+	</dynamic_object>
+
+	<light name="light1" type="directional">
+		<position xyz="2.0 2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light2" type="directional">
+		<position xyz="-2.0 -2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<camera name="camera_fixed">
+		<position xyz="3.0 -0.8 1.0" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="0.0 0.0 1.0" />
+	</camera>
+
+</world>
