@@ -178,7 +178,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
 
     optionsDict = {}
-    optionsDict["clientAddress"] = "172.24.68.64"
+    optionsDict["clientAddress"] = "172.31.87.237"
     optionsDict["serverAddress"] = "172.24.68.48"
     optionsDict["use_multicast"] = False
 
