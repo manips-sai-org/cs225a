@@ -67,7 +67,10 @@ int main() {
 
 	Vector3d ee_pos;
 	Matrix3d ee_ori;
-
+	cout << dof << endl;
+	cout << dof << endl;
+}
+/*
 	// gripper partial joint task 
 	MatrixXd gripper_selection_matrix = MatrixXd::Zero(2, robot->dof());
 	gripper_selection_matrix(0, 7) = 1;
@@ -148,3 +151,5 @@ int main() {
 
 	return 0;
 }
+
+*/

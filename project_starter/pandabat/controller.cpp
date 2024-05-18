@@ -30,7 +30,6 @@ enum State {
 
 int main() {
 	// Location of URDF files specifying world and robot information
-	cout << "hello" ;
 	static const string robot_file = string(CS225A_URDF_FOLDER) + "/panda/panda_arm_bat.urdf";
 
 	// initial state 
@@ -70,10 +69,11 @@ int main() {
 	Matrix3d ee_ori;
 
 	// gripper partial joint task 
-	MatrixXd gripper_selection_matrix = MatrixXd::Zero(2, robot->dof());
-	gripper_selection_matrix(0, 7) = 1;
-	gripper_selection_matrix(1, 8) = 1;
-	auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, gripper_selection_matrix);
+	MatrixXd bat_selection_matrix = MatrixXd::Zero(2, robot->dof());
+	bat_selection_matrix(0, dof -2) = 1;
+	bat_selection_matrix(1, dof - 1) = 1;
+
+	auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, bat_selection_matrix);
 	gripper_task->setDynamicDecouplingType(Sai2Primitives::DynamicDecouplingType::IMPEDANCE);
 	double kp_gripper = 5e3;
 	double kv_gripper = 1e2;
@@ -85,10 +85,10 @@ int main() {
 	joint_task->setGains(400, 40, 0);
 
 	VectorXd q_desired(dof);
-	q_desired.head(7) << -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
-	q_desired.head(7) *= M_PI / 180.0;
-	q_desired.tail(2) << 0.04, -0.04;
-	joint_task->setGoalPosition(q_desired);
+	//q_desired.head(7) << -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
+	//q_desired.head(7) *= M_PI / 180.0;
+	//q_desired.tail(2) << 0.04, -0.04;
+	//joint_task->setGoalPosition(q_desired);
 
 	// create a loop timer
 	runloop = true;
@@ -96,6 +96,7 @@ int main() {
 	Sai2Common::LoopTimer timer(control_freq, 1e6);
 
 	while (runloop) {
+		
 		timer.waitForNextLoop();
 		const double time = timer.elapsedSimTime();
 
@@ -140,6 +141,7 @@ int main() {
 
 		// execute redis write callback
 		redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, command_torques);
+		
 	}
 
 	timer.stop();
@@ -149,3 +151,4 @@ int main() {
 
 	return 0;
 }
+
