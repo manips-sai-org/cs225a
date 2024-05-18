@@ -38,7 +38,7 @@ VectorXd ui_torques;
 mutex mutex_torques, mutex_update;
 
 // specify urdf and robots 
-static const string robot_name = "panda_arm_hand";
+static const string robot_name = "panda_arm_bat";
 static const string camera_name = "camera_fixed";
 
 // dynamic objects information
@@ -52,7 +52,7 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
-	static const string robot_file = string(CS225A_URDF_FOLDER) + "/panda/panda_arm_hand.urdf";
+	static const string robot_file = string(CS225A_URDF_FOLDER) + "/panda/panda_arm_bat.urdf";
 	static const string world_file = string(PANDABAT_FOLDER) + "/world.urdf";
 	std::cout << "Loading URDF world model file: " << world_file << endl;
 
@@ -70,7 +70,7 @@ int main() {
 	graphics->setBackgroundColor(66.0/255, 135.0/255, 245.0/255);  // set blue background 	
 	// graphics->showLinkFrame(true, robot_name, "link7", 0.15);  // can add frames for different links
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
-	graphics->addUIForceInteraction(robot_name);
+	//graphics->addUIForceInteraction(robot_name);
 
 	// load robots
 	auto robot = std::make_shared<Sai2Model::Sai2Model>(robot_file, false);

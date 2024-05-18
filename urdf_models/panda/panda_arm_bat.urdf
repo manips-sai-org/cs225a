@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<robot name="panda">
+<robot name="panda_arm_bat">
 
 	<link name="link0">
 		<inertial>
@@ -150,12 +150,11 @@
 			<material name="bat_color">
 				<color rgba="0.74 0.43 0.26 1.0" />
 			</material>
-		</visual>
-		<!-- <visual>
-			<geometry>
+			<!--geometry>
 				<mesh filename="meshes/visual/Bat.obj"/>
-			</geometry>
-		</visual> -->
+			</geometry-->
+		</visual>
+			
 		<collision>
 			<geometry>
 				<cylinder radius="0.025" length="0.5"/>

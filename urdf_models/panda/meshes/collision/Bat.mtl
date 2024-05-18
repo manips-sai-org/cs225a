@@ -1,0 +1,23 @@
+# Blender MTL File: 'baseball.blend'
+# Material Count: 2
+
+newmtl Wood_Black_UA
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Ns -s 10.000000 1.000000 10.000000 C:\\Users\\husey\\Desktop\\blenderkit_data\\materials\\wood_black_ua_38702d7b-d7c7-4dea-9296-117b769b1045\\textures_2k\\Wood063_2K_Roughness.jpg
+
+newmtl spruce_wood
+Ns 639.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
