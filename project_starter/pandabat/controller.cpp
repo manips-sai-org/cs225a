@@ -53,12 +53,12 @@ int main() {
 
 	// prepare controller
 	int dof = robot->dof();
-	VectorXd command_torques = VectorXd::Zero(dof);  // panda + gripper torques 
+	VectorXd command_torques = VectorXd::Zero(dof);  // panda 
 	MatrixXd N_prec = MatrixXd::Identity(dof, dof);
 
 	// arm task
-	const string control_link = "link7";
-	const Vector3d control_point = Vector3d(0, 0, 0.07);
+	const string control_link = "end-effector";
+	const Vector3d control_point = Vector3d(0, 0, -0.5);
 	Affine3d compliant_frame = Affine3d::Identity();
 	compliant_frame.translation() = control_point;
 	auto pose_task = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_link, compliant_frame);
@@ -73,22 +73,22 @@ int main() {
 	bat_selection_matrix(0, dof -2) = 1;
 	bat_selection_matrix(1, dof - 1) = 1;
 
-	auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, bat_selection_matrix);
-	gripper_task->setDynamicDecouplingType(Sai2Primitives::DynamicDecouplingType::IMPEDANCE);
-	double kp_gripper = 5e3;
-	double kv_gripper = 1e2;
-	gripper_task->setGains(kp_gripper, kv_gripper, 0);
-	gripper_task->setGains(kp_gripper, kv_gripper, 0);
+	//auto gripper_task = std::make_shared<Sai2Primitives::JointTask>(robot, bat_selection_matrix);
+	//gripper_task->setDynamicDecouplingType(Sai2Primitives::DynamicDecouplingType::IMPEDANCE);
+	//double kp_gripper = 5e3;
+	//double kv_gripper = 1e2;
+	//gripper_task->setGains(kp_gripper, kv_gripper, 0);
+	//gripper_task->setGains(kp_gripper, kv_gripper, 0);
 
 	// joint task
 	auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
-	joint_task->setGains(400, 40, 0);
+	joint_task->setGains(400, 40, 2);
 
 	VectorXd q_desired(dof);
-	//q_desired.head(7) << -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
-	//q_desired.head(7) *= M_PI / 180.0;
-	//q_desired.tail(2) << 0.04, -0.04;
-	//joint_task->setGoalPosition(q_desired);
+	q_desired.head(7) << 0, 0, 0, 0, 0, 0, 90;
+	q_desired.head(7) *= M_PI / 180.0;
+	//cout << q_desired.transpose() << endl;;
+	joint_task->setGoalPosition(q_desired);
 
 	// create a loop timer
 	runloop = true;
@@ -110,20 +110,23 @@ int main() {
 			N_prec.setIdentity();
 			joint_task->updateTaskModel(N_prec);
 
+			//cout << "joint_task " << joint_task.transpose() << endl;
 			command_torques = joint_task->computeTorques();
-
-			if ((robot->q() - q_desired).norm() < 1e-2) {
+			//cout << "command_torques " << command_torques.transpose() << endl;
+			//cout << (robot->q() - q_desired).transpose() << endl;
+			if ((robot->q() - q_desired).norm() < 1e-1) {
 				cout << "Posture To Motion" << endl;
 				pose_task->reInitializeTask();
-				gripper_task->reInitializeTask();
+				//gripper_task->reInitializeTask();
 				joint_task->reInitializeTask();
 
 				ee_pos = robot->position(control_link, control_point);
+				cout << ee_pos << endl;
 				ee_ori = robot->rotation(control_link);
 
-				pose_task->setGoalPosition(ee_pos - Vector3d(-0.1, -0.1, 0.1));
-				pose_task->setGoalOrientation(AngleAxisd(M_PI / 6, Vector3d::UnitX()).toRotationMatrix() * ee_ori);
-				gripper_task->setGoalPosition(Vector2d(0.02, -0.02));
+				pose_task->setGoalPosition(ee_pos + Vector3d(.5, .5, 0));
+				pose_task->setGoalOrientation(AngleAxisd(M_PI / 2, Vector3d::UnitZ()).toRotationMatrix() * ee_ori);
+				//gripper_task->setGoalPosition(Vector2d(0.02, -0.02));
 
 				state = MOTION;
 			}
@@ -133,10 +136,14 @@ int main() {
 			// update task model
 			N_prec.setIdentity();
 			pose_task->updateTaskModel(N_prec);
-			gripper_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
-			joint_task->updateTaskModel(gripper_task->getTaskAndPreviousNullspace());
+			//gripper_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
+			joint_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
 
-			command_torques = pose_task->computeTorques() + gripper_task->computeTorques() + joint_task->computeTorques();
+			command_torques = pose_task->computeTorques() + joint_task->computeTorques();// + gripper_task->computeTorques() +;
+			//cout << (robot->position(control_link, control_point) -(ee_pos + Vector3d(.5, .5, 0))).norm() << endl;
+			if ((robot->position(control_link, control_point) - (ee_pos + Vector3d(.5, .5, 0))).norm() < 1e-1){
+				//cout << "reached new pos" << endl;
+			}
 		}
 
 		// execute redis write callback
