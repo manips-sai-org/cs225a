@@ -42,10 +42,10 @@ static const string robot_name = "panda_arm_bat";
 static const string camera_name = "camera_fixed";
 
 // dynamic objects information
-const vector<std::string> object_names = {"cup"};
-vector<Affine3d> object_poses;
-vector<VectorXd> object_velocities;
-const int n_objects = object_names.size();
+//const vector<std::string> object_names = {"cup"};
+//vector<Affine3d> object_poses;
+//vector<VectorXd> object_velocities;
+//const int n_objects = object_names.size();
 
 // simulation thread
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
@@ -68,9 +68,11 @@ int main() {
 	// load graphics scene
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, camera_name, false);
 	graphics->setBackgroundColor(66.0/255, 135.0/255, 245.0/255);  // set blue background 	
-	// graphics->showLinkFrame(true, robot_name, "link7", 0.15);  // can add frames for different links
+	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  // can add frames for different links
+	graphics->showLinkFrame(true, robot_name, "link0", 0.25);
+	graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
-	//graphics->addUIForceInteraction(robot_name);
+	graphics->addUIForceInteraction(robot_name);
 
 	// load robots
 	auto robot = std::make_shared<Sai2Model::Sai2Model>(robot_file, false);
@@ -85,10 +87,10 @@ int main() {
 	sim->setJointVelocities(robot_name, robot->dq());
 
 	// fill in object information 
-	for (int i = 0; i < n_objects; ++i) {
-		object_poses.push_back(sim->getObjectPose(object_names[i]));
-		object_velocities.push_back(sim->getObjectVelocity(object_names[i]));
-	}
+	//for (int i = 0; i < n_objects; ++i) {
+	//	object_poses.push_back(sim->getObjectPose(object_names[i]));
+	//	object_velocities.push_back(sim->getObjectVelocity(object_names[i]));
+	//}
 
     // set co-efficient of restition to zero for force control
     sim->setCollisionRestitution(0.0);
@@ -111,9 +113,9 @@ int main() {
         graphics->updateRobotGraphics(robot_name, redis_client.getEigen(JOINT_ANGLES_KEY));
 		{
 			lock_guard<mutex> lock(mutex_update);
-			for (int i = 0; i < n_objects; ++i) {
-				graphics->updateObjectGraphics(object_names[i], object_poses[i]);
-			}
+			//for (int i = 0; i < n_objects; ++i) {
+			//	graphics->updateObjectGraphics(object_names[i], object_poses[i]);
+			//}
 		}
 		graphics->renderGraphicsWorld();
 		{
@@ -159,10 +161,10 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 		// update object information 
 		{
 			lock_guard<mutex> lock(mutex_update);
-			for (int i = 0; i < n_objects; ++i) {
-				object_poses[i] = sim->getObjectPose(object_names[i]);
-				object_velocities[i] = sim->getObjectVelocity(object_names[i]);
-			}
+			//for (int i = 0; i < n_objects; ++i) {
+			//	object_poses[i] = sim->getObjectPose(object_names[i]);
+			//	object_velocities[i] = sim->getObjectVelocity(object_names[i]);
+			//}
 		}
 	}
 	timer.stop();

@@ -26,7 +26,7 @@
 	    </collision>
 	</static_object>
 
-	<dynamic_object name="cup">
+	<!--dynamic_object name="cup">
 		<origin xyz="1.0 0.0 1.0" rpy="0 0 0" />
 		<inertial>
         	<origin xyz="0 0 0" rpy="0 0 0" />
@@ -57,7 +57,7 @@
 	            <box size="0.1 0.1 0.15" />
 	        </geometry>
 	    </collision>
-	</dynamic_object>
+	</dynamic_object-->
 
 	<light name="light1" type="directional">
 		<position xyz="2.0 -2.0 2.0" />
