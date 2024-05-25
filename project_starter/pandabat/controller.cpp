@@ -62,10 +62,39 @@ int main() {
 	Affine3d compliant_frame = Affine3d::Identity();
 	compliant_frame.translation() = control_point;
 	auto pose_task = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_link, compliant_frame);
-	pose_task->setPosControlGains(400, 40, 2);
-	pose_task->setOriControlGains(400, 40, 2);
-	MatrixXd startOrientation = robot->rotation(control_link);
+	pose_task->setPosControlGains(1000, 0, 0);
+	pose_task->setOriControlGains(400, 0, 0);
+	MatrixXd startOrientation;
+	MatrixXd endOrientation;
+	
+	Vector3d startPosition;
+	Vector3d startVelocity =Vector3d(0,0,0);
 	Vector3d desired_endPosition;
+	Vector3d desired_endVelocity;
+	Vector3d trajectory;
+
+
+	Vector3d axis;
+	double thetaFinal;
+	double tSwing = 1.0;
+	double startTime;
+	double curTime;
+	MatrixXd traj = MatrixXd::Identity(12,12);
+	traj << 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+			1, 0, 0, tSwing, 0, 0, tSwing*tSwing, 0, 0, tSwing*tSwing*tSwing, 0, 0,
+			0, 1, 0, 0, tSwing, 0, 0, tSwing*tSwing, 0, 0, tSwing*tSwing*tSwing, 0,
+			0, 0, 1, 0, 0, tSwing, 0, 0, tSwing*tSwing, 0, 0, tSwing*tSwing*tSwing, 
+			0, 0, 0, 1, 0, 0, 2*tSwing, 0, 0, 3*tSwing*tSwing, 0, 0,
+			0, 0, 0, 0, 1, 0, 0, 2*tSwing, 0, 0, 3*tSwing*tSwing, 0, 
+			0, 0, 0, 0, 0, 1, 0, 0, 2*tSwing, 0, 0, 3*tSwing*tSwing;
+	
+	//cout << traj << endl;
+
 
 	// joint task
 	auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
@@ -77,7 +106,7 @@ int main() {
 	q_desired = q_initial;
 	q_desired(0) = -M_PI/2;
 	joint_task->setGoalPosition(q_desired);
-	cout << robot->position(control_link,control_point).transpose() << endl;
+	//cout << robot->rotation(control_link);
 	
 	// create a loop timer
 	runloop = true;
@@ -98,36 +127,52 @@ int main() {
 			// update task model 
 			N_prec.setIdentity();
 			joint_task->updateTaskModel(N_prec);
-
-			//cout << "joint_task " << joint_task.transpose() << endl;
 			command_torques = joint_task->computeTorques();
-			//cout << "command_torques " << command_torques.transpose() << endl;
-			//cout << (robot->q() - q_desired).transpose() << endl;
-			if ((robot->q() - q_desired).norm() < 1e-1) {
-				
-				cout << "Posture To Motion" << endl;
-				desired_endPosition = Vector3d(1.2, 0, .4);
-				Vector3d desired_direction = Vector3d(1.0, 0, 0).normalized();
-				Vector3d current_z_axis = Vector3d(0.0, 0.0, 1.0); // World Frame, Link 0 z axis
-				Quaterniond rotation_quat = Quaterniond::FromTwoVectors(current_z_axis, desired_direction);
-				Matrix3d desired_orientation = rotation_quat.toRotationMatrix();
-				pose_task->reInitializeTask();
-				joint_task->reInitializeTask();
-				pose_task->setGoalPosition(desired_endPosition);
-				pose_task->setGoalOrientation(startOrientation);
 
+			if ((robot->q() - q_desired).norm() < 1e-2) {
+				
+				cout << "Reached Start Position" << endl;
+				startPosition = robot->position(control_link,control_point);
+				startOrientation = robot->rotation(control_link);
+				endOrientation = MatrixXd::Zero(3,3);
+				endOrientation(0,2) = 1;
+				endOrientation(1,1) = -1;
+				endOrientation(2,0) = 1;
+				MatrixXd intermediateMatrix = startOrientation.transpose()*endOrientation;
+				thetaFinal = acos((intermediateMatrix(0,0)+intermediateMatrix(1,1)+intermediateMatrix(1,1)-1)/2);
+				axis = 1/(2*sin(thetaFinal))*Vector3d((intermediateMatrix(2,1) - intermediateMatrix(1,2)),(intermediateMatrix(0,2) - intermediateMatrix(2,0)),(intermediateMatrix(1,0) - intermediateMatrix(0,1)));
+				//cout << thetaFinal << endl;
+				//cout << axis.transpose() << endl;
+				//cout << robot->rotation(control_link)*desired_orientation << endl;
+				MatrixXd test = startOrientation * AngleAxisd(thetaFinal, axis).toRotationMatrix();
+				cout << test << endl;
 				state = MOTION;
+				startTime = time;
 			}
 		} else if (state == MOTION) {
 			// update goal position and orientation
-
+			curTime = time;
+			desired_endPosition = Vector3d(1.2, 0, .4);
+			desired_endVelocity = Vector3d(0, 5, 1);
+			VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
+			conditions << startPosition, startVelocity, desired_endPosition, desired_endVelocity;
+			VectorXd a = traj.lu().solve(conditions);
+			double dt = curTime - startTime;
+			trajectory << a(0) + a(3)*dt + a(6)*dt*dt + a(9)*dt*dt*dt,
+						  a(1) + a(4)*dt + a(7)*dt*dt + a(10)*dt*dt*dt,
+						  a(2) + a(5)*dt + a(8)*dt*dt + a(11)*dt*dt*dt;
+			cout << trajectory.transpose() << " " << dt << endl;
+			pose_task->reInitializeTask();
+			joint_task->reInitializeTask();
+			pose_task->setGoalPosition(trajectory);
+			pose_task->setGoalOrientation(endOrientation);
+				
 			// update task model
 			N_prec.setIdentity();
 			pose_task->updateTaskModel(N_prec);
 			joint_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
 
-			command_torques = pose_task->computeTorques() + joint_task->computeTorques();// + gripper_task->computeTorques() +;
-			//cout << (robot->position(control_link, control_point).transpose()) << endl;
+			command_torques = pose_task->computeTorques() + joint_task->computeTorques();
 			if ((robot->position(control_link, control_point) - desired_endPosition).norm() < 1e-1){
 				cout << "reached new pos" << endl;
 			}
