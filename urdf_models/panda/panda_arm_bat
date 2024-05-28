@@ -171,7 +171,7 @@
 		<child link="link1"/>
 		<axis xyz="0 0 1"/>
 		<calibration falling="0.0" />
-		<limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+		<!--limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/-->
 	</joint>
 	<joint name="joint2" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-1.7628" soft_upper_limit="1.7628"/>
@@ -180,7 +180,7 @@
 		<child link="link2"/>
 		<axis xyz="0 0 1"/>
 		<calibration falling="-25.0" />
-		<limit effort="87" lower="-1.7628" upper="1.7628" velocity="2.1750"/>
+		<!--limit effort="87" lower="-1.7628" upper="1.7628" velocity="2.1750"/-->
 	</joint>
 	<joint name="joint3" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
@@ -188,7 +188,7 @@
 		<parent link="link2"/>
 		<child link="link3"/>
 		<axis xyz="0 0 1"/>
-		<limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+		<!--limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750"/!-->
 	</joint>
 	<joint name="joint4" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.0718" soft_upper_limit="-0.0698"/>
@@ -197,7 +197,7 @@
 		<child link="link4"/>
 		<axis xyz="0 0 1"/>
 		<calibration falling="-135.0" />
-		<limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750"/>
+		<!--limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750"/-->
 	</joint>
 	<joint name="joint5" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
@@ -206,7 +206,7 @@
 		<child link="link5"/>
 		<axis xyz="0 0 1"/>
 		<calibration falling="0.0" />
-		<limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+		<!--limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/-->
 	</joint>
 	<joint name="joint6" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-0.0175" soft_upper_limit="3.7525"/>
@@ -215,7 +215,7 @@
 		<child link="link6"/>
 		<axis xyz="0 0 1"/>
 		<calibration falling="105.0" />
-		<limit effort="12" lower="-0.0175" upper="3.7525" velocity="2.6100"/>
+		<!--limit effort="12" lower="-0.0175" upper="3.7525" velocity="2.6100"/-->
 	</joint>
 	<joint name="joint7" type="revolute">
 		<safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
@@ -223,7 +223,7 @@
 		<parent link="link6"/>
 		<child link="link7"/>
 		<axis xyz="0 0 1"/>
-		<limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+		<!--limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100"/-->
 	</joint>
 	<joint name="joint_ee" type="fixed">
 		<origin rpy="0 1.5708 0" xyz="0.2 0 0.13"/> 
