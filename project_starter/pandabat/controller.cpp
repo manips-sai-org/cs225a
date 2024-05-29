@@ -27,8 +27,8 @@ enum State {
 	POSTURE = 0, 
 	MOTION,
 	FOLLOWTHROUGH,
-	RESET1,
-	RESET2
+	RESET,
+	WAITING
 };
 
 void orthonormalize(Eigen::Matrix3d &rot) {
@@ -158,8 +158,8 @@ int main() {
 	Vector3d axis;
 	double thetaFinal;
 	double tSwing = 0.5;
-	double tReset = 3;
-	double tFollow = 3;
+	double tReset = 5;
+	double tFollow = 2;
 	double startTime;
 	double curTime;
 	
@@ -203,6 +203,11 @@ int main() {
 			command_torques = joint_task->computeTorques();
 			if ((robot->q() - q_desired).norm() < 1e-2) {	
 				cout << "Reached Start Position" << endl;
+				state = WAITING;
+				
+			}
+		} else if(state == WAITING){
+			if (true){		//Need to change condition to when ball position is determined in zone and we are less than tSwing seconds from intesection
 				//Update Starting Position and Velocity
 				startPosition = robot->position(control_link,control_point);
 				start = startPosition;
@@ -298,7 +303,66 @@ int main() {
 			pose_task->updateTaskModel(N_prec);
 			joint_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
 			command_torques = pose_task->computeTorques() + joint_task->computeTorques();
+			/**/
 			if (dt>tFollow){
+				cout << tFollow << " seconds passed" << endl;
+				//Update Starting Orienation and calculate axis of rotation for next state
+				startOrientation = robot->rotation(control_link);
+				MatrixXd intermediateMatrix = startOrientation.transpose()*negY;
+				thetaFinal = acos((intermediateMatrix(0,0)+intermediateMatrix(1,1)+intermediateMatrix(1,1)-1)/2);
+				axis = computeAxis(thetaFinal,intermediateMatrix);
+				state = RESET;
+				startTime = time;
+			}
+		} else if (state == RESET){
+			curTime = time;
+			double dt = curTime - startTime;
+			trajectory = Vector3d(1.2*sin(M_PI*dt/tReset), 1.2*cos(M_PI*dt/tReset), .4);
+			velocity = Vector3d(1.2*M_PI/tReset*cos(M_PI*dt/tReset), -1.2*M_PI*dt/tReset*sin(M_PI*dt/tReset), .4);
+			acceleration = Vector3d(-1.2*M_PI*M_PI/tReset/tReset*sin(M_PI*dt/tReset), -1.2*M_PI*M_PI/tReset/tReset*cos(M_PI*dt/tReset), .4);
+			pose_task->setGoalPosition(trajectory);
+			pose_task->setGoalLinearVelocity(velocity);
+			pose_task->setGoalLinearAcceleration(acceleration);
+			// update goal orientation:
+			desired_orientation = startOrientation * AngleAxisd(thetaFinal*dt/tReset, axis).toRotationMatrix();
+			orthonormalize(desired_orientation);
+			pose_task->setGoalOrientation(desired_orientation);
+			// update joint position to avoid joint limits
+			q_desired (0) = M_PI/2 - M_PI*dt/tReset;
+			joint_task->setGoalPosition(q_desired);
+			N_prec.setIdentity();
+			pose_task->updateTaskModel(N_prec);
+			joint_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
+			//turn off velocity saturation and internal trajectory generation
+			pose_task->disableInternalOtg();
+			pose_task->disableVelocitySaturation();
+			// update task model
+			N_prec.setIdentity();
+			pose_task->updateTaskModel(N_prec);
+			joint_task->updateTaskModel(pose_task->getTaskAndPreviousNullspace());
+			command_torques = pose_task->computeTorques() + joint_task->computeTorques();
+			if (dt>tReset) {
+				cout << "full cycle complete!" << endl;
+				state = POSTURE;
+			}
+		} 
+
+		// execute redis write callback
+		redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, command_torques);
+		
+	}
+	trajectoryData.close();
+
+	timer.stop();
+	cout << "\nSimulation loop timer stats:\n";
+	timer.printInfoPostRun();
+	redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, 0 * command_torques);  // back to floating
+
+	return 0;
+}
+
+/*
+if (dt>tFollow){
 				cout << tFollow << " seconds passed" << endl;
 				//Update Starting Position and Velocity
 				startPosition = robot->position(control_link,control_point);
@@ -309,7 +373,7 @@ int main() {
 				thetaFinal = acos((intermediateMatrix(0,0)+intermediateMatrix(1,1)+intermediateMatrix(1,1)-1)/2);
 				axis = computeAxis(thetaFinal,intermediateMatrix);
 				//Update desired end position and velocity of next state
-				desired_endPosition = Vector3d(1.2, 0, .4);
+				desired_endPosition = Vector3d(1.3, 0, .4);
 				desired_endVelocity = Vector3d(0, -.3, 0);
 				VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
 				conditions << startPosition, startVelocity, desired_endPosition, desired_endVelocity;
@@ -395,21 +459,9 @@ int main() {
 			command_torques = pose_task->computeTorques() + joint_task->computeTorques();
 			if ((robot->position(control_link,control_point) - start).norm() < 1e-2) {
 				cout << "full cycle complete!" << endl;
+				pose_task->reInitializeTask();
+				joint_task->reInitializeTask();
 				break;
 			}
 		}
-
-		// execute redis write callback
-		redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, command_torques);
-		
-	}
-	trajectoryData.close();
-
-	timer.stop();
-	cout << "\nSimulation loop timer stats:\n";
-	timer.printInfoPostRun();
-	redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, 0 * command_torques);  // back to floating
-
-	return 0;
-}
-
+*/
