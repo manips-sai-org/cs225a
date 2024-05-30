@@ -218,7 +218,7 @@ int main() {
 				thetaFinal = acos((intermediateMatrix(0,0)+intermediateMatrix(1,1)+intermediateMatrix(1,1)-1)/2);
 				axis = computeAxis(thetaFinal,intermediateMatrix);
 				//Update desired end position and velocity of next state
-				desired_endPosition = Vector3d(1.2, 0, .4);
+				desired_endPosition = Vector3d(1.15, 0, .45);
 				desired_endVelocity = Vector3d(0, 4, 1);
 				VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
 				conditions << startPosition, startVelocity, desired_endPosition, desired_endVelocity; 

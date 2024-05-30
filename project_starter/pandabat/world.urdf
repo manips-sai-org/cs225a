@@ -26,6 +26,60 @@
 	    </collision>
 	</static_object>
 
+	<static_object name="StrikeZoneTop">
+		<origin xyz="1.2 0.0 0.65" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
+	        <geometry>
+				<box size="0.4 0 0.01" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1.0 0 0 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+	<static_object name="StrikeZoneBottom">
+		<origin xyz="1.2 0.0 0.15" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
+	        <geometry>
+				<box size="0.4 0 0.01" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1.0 0 0 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+	<static_object name="StrikeZoneLeft">
+		<origin xyz="1.0 0.0 0.4" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
+	        <geometry>
+				<box size="0.01 0 0.5" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1.0 0 0 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+	<static_object name="StrikeZoneRight">
+		<origin xyz="1.4 0.0 0.4" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
+	        <geometry>
+				<box size="0.01 0 0.5" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1.0 0 0 1.0" />
+	        </material>
+	    </visual>
+	</static_object>
+
+
+
 	<!--dynamic_object name="cup">
 		<origin xyz="1.0 0.0 1.0" rpy="0 0 0" />
 		<inertial>
