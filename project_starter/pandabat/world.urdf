@@ -12,17 +12,19 @@
 	    <visual>
 	        <origin xyz="0.0 0.0 -0.00635" rpy="0 0 0" />
 	        <geometry>
-				<box size="5 5 0.0127" />
+				<!--mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/BaseballField.obj" scale="1 1 1"/-->
+				<box size="100 100 0.0127" />
 	        </geometry>
 	        <material name="material">
-		        <color rgba="0.1 0.1 0.1 1.0" />
+		        <color rgba="0 0.60 0.2 0.8" />
 	        </material>
 	    </visual>
 		<collision>
 	        <origin xyz="0.0 0.0 -0.00635" rpy="0 0 0" />
 	        <geometry>
-	            <box size="5 5 0.0127" />
+	            <box size="100 100 0.0127" />
 	        </geometry>
+			
 	    </collision>
 	</static_object>
 

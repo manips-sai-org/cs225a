@@ -31,6 +31,14 @@ enum State {
 	WAITING
 };
 
+Eigen::Matrix3d orthogonalize(Eigen::Matrix3d& mat) {
+    // Perform SVD decomposition
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(mat, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    // Get the U matrix, which has orthogonal columns
+    return svd.matrixU() * svd.matrixV().transpose();
+}
+
+
 void orthonormalize(Eigen::Matrix3d &rot) {
   Vector3d x = rot.col(0);
   Vector3d y = rot.col(1);
@@ -241,7 +249,8 @@ int main() {
 			pose_task->setGoalLinearAcceleration(acceleration);
 			// update goal orientation:
 			desired_orientation = startOrientation * AngleAxisd(thetaFinal*dt/tSwing, axis).toRotationMatrix();
-			orthonormalize(desired_orientation);
+			//orthonormalize(desired_orientation);
+			desired_orientation = orthogonalize(desired_orientation);
 			pose_task->setGoalOrientation(desired_orientation);
 			// update joint position to avoid joint limits
 			q_desired (0) = M_PI/2*dt/tSwing - M_PI/2;
@@ -289,7 +298,8 @@ int main() {
 			pose_task->setGoalLinearAcceleration(acceleration);
 			// update goal orientation:
 			desired_orientation = startOrientation * AngleAxisd(thetaFinal*dt/tFollow, axis).toRotationMatrix();
-			orthonormalize(desired_orientation);
+			//orthonormalize(desired_orientation);
+			desired_orientation = orthogonalize(desired_orientation);
 			pose_task->setGoalOrientation(desired_orientation);
 			// update joint position to avoid joint limits
 			q_desired (0) = M_PI/2*dt/tFollow;
@@ -325,7 +335,8 @@ int main() {
 			pose_task->setGoalLinearAcceleration(acceleration);
 			// update goal orientation:
 			desired_orientation = startOrientation * AngleAxisd(thetaFinal*dt/tReset, axis).toRotationMatrix();
-			orthonormalize(desired_orientation);
+			//orthonormalize(desired_orientation);
+			desired_orientation = orthogonalize(desired_orientation);
 			pose_task->setGoalOrientation(desired_orientation);
 			// update joint position to avoid joint limits
 			q_desired (0) = M_PI/2 - M_PI*dt/tReset;
