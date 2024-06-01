@@ -16,6 +16,7 @@
 #include <vector>
 #include <typeinfo>
 #include <random>
+#include <sstream> 
 
 #include "Sai2Graphics.h"
 #include "Sai2Model.h"
@@ -25,8 +26,10 @@
 #include "timer/LoopTimer.h"
 #include "logger/Logger.h"
 
-bool fSimulationRunning = true;
-void sighandler(int){fSimulationRunning = false;}
+std::atomic<bool> fSimulationRunning = true;
+void sighandler(int signum) {
+    fSimulationRunning = false;
+}
 
 #include "redis_keys.h"
 
@@ -37,18 +40,25 @@ using namespace std;
 VectorXd ui_torques;
 mutex mutex_torques, mutex_update;
 
+// Global variables
+mutex ball_mutex;
+bool new_ball_ready = false;
+Eigen::Vector3d new_ball_position;
+Eigen::Vector3d new_ball_velocity;
+
 // specify urdf and robots 
 static const string robot_name = "panda_arm_bat";
-static const string camera_name = "camera_fixed";
 
 // dynamic objects information
-//const vector<std::string> object_names = {"cup"};
-//vector<Affine3d> object_poses;
-//vector<VectorXd> object_velocities;
-//const int n_objects = object_names.size();
+const vector<std::string> object_names = {"baseball"};
+vector<Affine3d> object_poses;
+vector<VectorXd> object_velocities;
+const int n_objects = object_names.size();
 
-// simulation thread
+// simulation thread + function prototypes
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity);
+void handleUserInput();
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -66,9 +76,9 @@ int main() {
 	signal(SIGINT, &sighandler);
 
 	// load graphics scene
-	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, camera_name, false);
+	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, "Baseball Panda", false);
 	graphics->setBackgroundColor(66.0/255, 135.0/255, 245.0/255);  // set blue background 	
-	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  // can add frames for different links
+	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
 	graphics->showLinkFrame(true, robot_name, "link0", 0.25);
 	graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
@@ -87,10 +97,35 @@ int main() {
 	sim->setJointVelocities(robot_name, robot->dq());
 
 	// fill in object information 
-	//for (int i = 0; i < n_objects; ++i) {
-	//	object_poses.push_back(sim->getObjectPose(object_names[i]));
-	//	object_velocities.push_back(sim->getObjectVelocity(object_names[i]));
-	//}
+	for (int i = 0; i < n_objects; ++i) {
+		object_poses.push_back(sim->getObjectPose(object_names[i]));
+		object_velocities.push_back(sim->getObjectVelocity(object_names[i]));
+	}
+
+	/*------- Set up baseball ball -------*/
+	// std::string input_line;  // To store the whole input line
+	// double x, y, z;          // Variables to store user input coordinates for position
+	// std::cout << "Enter initial position of " << object_names[0] << " (x y z): ";
+	// std::getline(std::cin, input_line);  // Read the whole line of input
+	// std::istringstream iss_pos(input_line);  // Use istringstream to process the line
+	// iss_pos >> x >> y >> z;  // Extract position coordinates from the line
+
+	// Eigen::Affine3d new_pose;
+	// new_pose.translation() = Eigen::Vector3d(x, y, z);
+	// sim->setObjectPose(object_names[0], new_pose);
+	// object_poses[0] = new_pose; // Update the pose in the global vector
+
+	// double vx, vy, vz;       // Variables to store user input coordinates for velocity
+	// std::cout << "Enter initial velocity of " << object_names[0] << " (vx vy vz): ";
+	// std::getline(std::cin, input_line);  // Read the whole line of input for velocity
+	// std::istringstream iss_vel(input_line);  // Process the line for velocity
+	// iss_vel >> vx >> vy >> vz;  // Extract velocity coordinates
+
+	// // Set the velocity with zero angular components
+	// Eigen::VectorXd initial_velocity(6);
+	// initial_velocity << vx, vy, vz, 0, 0, 0;  // No angular velocity
+	// sim->setObjectVelocity(object_names[0], initial_velocity);
+	// object_velocities[0] = initial_velocity; // Update the velocity in the global vector
 
     // set co-efficient of restition to zero for force control
     sim->setCollisionRestitution(0.0);
@@ -108,14 +143,17 @@ int main() {
 	// start simulation thread
 	thread sim_thread(simulation, sim);
 
+	// Start the user input thread
+    thread input_thread(handleUserInput);
+
 	// while window is open:
-	while (graphics->isWindowOpen() && fSimulationRunning) {
+	while (graphics->isWindowOpen() && fSimulationRunning) {		
         graphics->updateRobotGraphics(robot_name, redis_client.getEigen(JOINT_ANGLES_KEY));
 		{
 			lock_guard<mutex> lock(mutex_update);
-			//for (int i = 0; i < n_objects; ++i) {
-			//	graphics->updateObjectGraphics(object_names[i], object_poses[i]);
-			//}
+			for (int i = 0; i < n_objects; ++i) {
+				graphics->updateObjectGraphics(object_names[i], object_poses[i]);
+			}
 		}
 		graphics->renderGraphicsWorld();
 		{
@@ -126,7 +164,12 @@ int main() {
 
     // stop simulation
 	fSimulationRunning = false;
-	sim_thread.join();
+	if (input_thread.joinable()) {
+		input_thread.join();
+	}
+	if (sim_thread.joinable()) {
+		sim_thread.join();
+	}
 
 	return 0;
 }
@@ -154,6 +197,16 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 			lock_guard<mutex> lock(mutex_torques);
 			sim->setJointTorques(robot_name, control_torques + ui_torques);
 		}
+
+		if (new_ball_ready) {
+			lock_guard<mutex> lock(ball_mutex);
+			sim->setObjectPose("baseball", Affine3d(Translation3d(new_ball_position)));
+			Eigen::VectorXd velocity(6);
+			velocity << 0, new_ball_velocity.y(), 0, 0, 0, 0;  // Set linear velocity, no angular
+			sim->setObjectVelocity("baseball", velocity);
+			new_ball_ready = false;
+		}
+
 		sim->integrate();
         redis_client.setEigen(JOINT_ANGLES_KEY, sim->getJointPositions(robot_name));
         redis_client.setEigen(JOINT_VELOCITIES_KEY, sim->getJointVelocities(robot_name));
@@ -161,13 +214,76 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 		// update object information 
 		{
 			lock_guard<mutex> lock(mutex_update);
-			//for (int i = 0; i < n_objects; ++i) {
-			//	object_poses[i] = sim->getObjectPose(object_names[i]);
-			//	object_velocities[i] = sim->getObjectVelocity(object_names[i]);
-			//}
+			for (int i = 0; i < n_objects; ++i) {
+				object_poses[i] = sim->getObjectPose(object_names[i]);
+				object_velocities[i] = sim->getObjectVelocity(object_names[i]);
+			}
 		}
 	}
 	timer.stop();
 	cout << "\nSimulation loop timer stats:\n";
 	timer.printInfoPostRun();
+}
+
+// NOTE: Sperate thread is running this, and cin does not understand when the input has been closed so killing the simulation
+// will leave the window hanging. Need to kill the terminal too so that the simulation actually stops since it waits for the
+// input_thread to join. To do this, just do CTR+D in the terminal or just hit enter.
+void handleUserInput() {
+    string input_line;
+    double x, z, vy = -7.0;  // Preset negative y velocity
+    cout << "Enter 'x z' coordinates for the new ball: ";
+    while (fSimulationRunning) {
+        if (getline(cin, input_line)) {
+            istringstream iss(input_line);
+            if (iss >> x >> z) {
+                lock_guard<mutex> lock(ball_mutex);
+                new_ball_position = Eigen::Vector3d(x, 3.0, z);
+                new_ball_velocity = Eigen::Vector3d(0, vy, 0);
+                new_ball_ready = true;
+                cout << "New ball placed." << endl;
+
+                // Calculate and announce the crossing position
+                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity);
+
+                // Prompt for the next set of coordinates
+                cout << endl << "Enter 'x z' coordinates for the next ball: ";
+            }
+        }
+    }
+}
+
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity) {
+    double g = -9.81;
+    double y0 = position.y();  // Initial y-coordinate
+    double vy = velocity.y();  // Initial velocity in the y-direction
+    double z0 = position.z();  // Initial z-coordinate
+    double x = position.x();   // Initial x-coordinate (unchanged during flight atm, change later with 3d input)
+
+    // Calculating time to reach y = 0
+    if (vy == 0) {
+        cout << "Velocity in y-direction is zero, ball will not reach y = 0." << endl;
+        return;
+    }
+
+    double t = -y0 / vy; // Time to reach y = 0, assuming vy is not zero
+
+    if (t < 0) {
+        cout << "The ball will not reach y = 0 in positive time." << endl;
+        return;
+    }
+
+    // Calculate z at time t using the kinematic equation: z = z0 + 0.5 * g * t^2
+    double z = z0 + 0.5 * g * t * t; // Since initial velocity in z-direction (vz) is 0
+
+    // Strike Zone bounds
+    double strikeZoneBottom = 0.15;
+    double strikeZoneTop = 0.65;
+    double strikeZoneLeft = 1.0;
+    double strikeZoneRight = 1.4;
+
+    if (x >= strikeZoneLeft && x <= strikeZoneRight && z >= strikeZoneBottom && z <= strikeZoneTop) {
+        cout << "The ball will cross the strike zone at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
+    } else {
+        cout << "The ball will miss the strike zone, crossing at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
+    }
 }

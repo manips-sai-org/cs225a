@@ -94,5 +94,5 @@ add_definitions(-DCS225A_URDF_FOLDER="${URDF_MODELS_FOLDER}")
 
 set(CS225A_BINARY_DIR ${PROJECT_SOURCE_DIR}/bin)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/homework)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/homework)
 add_subdirectory(${PROJECT_SOURCE_DIR}/project_starter)
