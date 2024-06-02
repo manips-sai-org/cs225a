@@ -8,29 +8,43 @@
 	</robot>
 
 	<static_object name="Base">
-        <origin xyz="0.0 0.0 0.0" rpy="0 0  0" />
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <visual>
-            <origin xyz="1.1 7.2 -0.03" rpy="1.5708  0 0" />
+            <origin xyz="1 9.7 -0.03" rpy="1.5708  0 0" />
             <geometry>
-                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Baseball_Field.obj" scale="1 1 1"/>
+                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Baseball_Field.obj" scale="1.3 1.3 1.3"/>
             </geometry>
-            <!-- <material name="material">
-                <color rgba="0 0.60 0.2 0.8" />
-            </material> -->
         </visual>
         <collision>
-            <origin xyz="0.0 0.0 -0.01" rpy="0 0 0" />
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
             <geometry>
-                <box size="100 100 0.0127" />
+                <box size="100 100 0.02" />
             </geometry>
         </collision>
     </static_object>
+
+	<static_object name="Stadium">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <visual>
+            <origin xyz="13.1 11 -0.35" rpy="0 0 0" />
+			<geometry>
+                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Stadium.obj" scale=".22 .22 .22"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 -7 0" rpy="1.5708 0 0" />
+            <geometry>
+                <box size="10 50 0.01" />		
+            </geometry>
+        </collision>
+    </static_object>
+
 
 	<dynamic_object name="baseball">
 		<origin xyz="1.0 0.0 1.0" rpy="0 0 0" />
 		<inertial>
 			<origin xyz="0 0 0" rpy="0 0 0" />
-			<mass value="0.145" />  
+			<mass value="0.1" />  
 			<inertia ixx="0.000071" iyy="0.000071" izz="0.000071" ixy="0" ixz="0" iyz="0" /> 
 		</inertial>
 
@@ -39,9 +53,6 @@
 			<geometry>
 				<mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Baseball_ball.obj" scale="1 1 1"/>
 			</geometry>
-			<!-- <material name="material">
-				<color rgba="1 0.85 0.75 1.0" />
-			</material> -->
 		</visual>
 
 		<collision>
@@ -52,6 +63,18 @@
 		</collision>
 	</dynamic_object>
 
+	<!-- <static_object name="PitcherPosVisualizer">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+	    <visual>
+	        <origin xyz="0.0 10.0 0.0" rpy="0 0 0" />
+	        <geometry>
+				<sphere radius="0.5" />
+	        </geometry>
+	        <material name="material">
+		        <color rgba="1.0 0 0 1.0" />
+	        </material>
+	    </visual>
+	</static_object> -->
 
 	<static_object name="StrikeZoneTop">
 		<origin xyz="1.2 0.0 0.65" rpy="0 0 0" />
@@ -105,53 +128,23 @@
 	    </visual>
 	</static_object>
 
-
-
-	<!--dynamic_object name="cup">
-		<origin xyz="1.0 0.0 1.0" rpy="0 0 0" />
-		<inertial>
-        	<origin xyz="0 0 0" rpy="0 0 0" />
-        	<mass value="10" />
-        	<inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0" />
-      	</inertial>
-
-	    <visual>
-	        <origin xyz="0 0 0" rpy="0 0 0" />
-			<geometry>
-	            <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/cup.obj" />
-	        </geometry>
-	    </visual>
-
-		<visual>
-	        <origin xyz="0 0 0.06" rpy="0 0 0" />
-	        <geometry>
-	            <box size="0.1 0.1 0.15" />
-	        </geometry>
-	        <material name="material">
-		        <color rgba="1 1 1 1.0" />
-	        </material>
-	    </visual>
-
-	    <collision>
-	        <origin xyz="0 0 0.06" rpy="0 0 0" />
-	        <geometry>
-	            <box size="0.1 0.1 0.15" />
-	        </geometry>
-	    </collision>
-	</dynamic_object-->
-
 	<light name="light1" type="directional">
-		<position xyz="3.0 3.0 3.0" />
-		<lookat xyz="0.0 0.0 0.0" />
+		<position xyz="0.0 5.0 5.0" />
+		<lookat xyz="0.0 -3.0 1.0" />
 	</light>
 
 	<light name="light2" type="directional">
-		<position xyz="5.0 -5.0 5.0" />
-		<lookat xyz="0.0 0.0 0.0" />
+		<position xyz="0.0 -5.0 5.0" />
+		<lookat xyz="0.0 3.0 5.0" />
+	</light>
+
+	<light name="light3" type="directional">
+		<position xyz="0.0 2.0 10.0" />
+		<lookat xyz="0.0 -1.0 2.0" />
 	</light>
 
 	<camera name="camera_A_fixed">
-		<position xyz="2.5 5.5 2.0" /> 
+		<position xyz="3.5 7 2" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
 		<lookat xyz="1.0 0 0.5" /> 
 	</camera>
@@ -163,7 +156,7 @@
 	</camera>
 
 	<camera name="camera_C_side">
-		<position xyz="2.0 -1 1" />
+		<position xyz="2.5 -1.5 1" />
 		<vertical xyz="0.0 0.0 1.0" />
 		<lookat xyz="1.0 0 0.5" />
 	</camera>

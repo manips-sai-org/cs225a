@@ -57,7 +57,7 @@ const int n_objects = object_names.size();
 
 // simulation thread + function prototypes
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
-void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity);
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client);
 void handleUserInput();
 
 int main() {
@@ -77,7 +77,7 @@ int main() {
 
 	// load graphics scene
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, "Baseball Panda", false);
-	graphics->setBackgroundColor(66.0/255, 135.0/255, 245.0/255);  // set blue background 	
+	graphics->setBackgroundColor(135.0/255, 206.0/255, 235.0/255);  // set blue background 	
 	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
 	graphics->showLinkFrame(true, robot_name, "link0", 0.25);
 	graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
@@ -139,6 +139,8 @@ int main() {
 	redis_client.setEigen(JOINT_ANGLES_KEY, robot->q()); 
 	redis_client.setEigen(JOINT_VELOCITIES_KEY, robot->dq()); 
 	redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, 0 * robot->q());
+	redis_client.set(BALL_TRAJECTORY, "");
+	redis_client.setBool(NEW_BALL_SIGNAL, false);
 
 	// start simulation thread
 	thread sim_thread(simulation, sim);
@@ -229,61 +231,68 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 // will leave the window hanging. Need to kill the terminal too so that the simulation actually stops since it waits for the
 // input_thread to join. To do this, just do CTR+D in the terminal or just hit enter.
 void handleUserInput() {
+
+    // create redis client
+    auto redis_client = Sai2Common::RedisClient();
+    redis_client.connect();
+
     string input_line;
-    double x, z, vy = -7.0;  // Preset negative y velocity
-    cout << "Enter 'x z' coordinates for the new ball: ";
+    double x, z, vy = -22.0;  // Preset negative y velocity
+	cout << endl << "Enter 'x z' coordinates for the new ball: ";
     while (fSimulationRunning) {
+		// Prompt for the next set of coordinates
+		
         if (getline(cin, input_line)) {
             istringstream iss(input_line);
             if (iss >> x >> z) {
                 lock_guard<mutex> lock(ball_mutex);
-                new_ball_position = Eigen::Vector3d(x, 3.0, z);
+                new_ball_position = Eigen::Vector3d(x, 10.0, z);
                 new_ball_velocity = Eigen::Vector3d(0, vy, 0);
                 new_ball_ready = true;
                 cout << "New ball placed." << endl;
 
                 // Calculate and announce the crossing position
-                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity);
+                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
 
-                // Prompt for the next set of coordinates
-                cout << endl << "Enter 'x z' coordinates for the next ball: ";
+				cout << endl << "Enter 'x z' coordinates for the new ball: ";
             }
         }
     }
 }
 
-void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity) {
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client) {
     double g = -9.81;
     double y0 = position.y();  // Initial y-coordinate
     double vy = velocity.y();  // Initial velocity in the y-direction
     double z0 = position.z();  // Initial z-coordinate
     double x = position.x();   // Initial x-coordinate (unchanged during flight atm, change later with 3d input)
 
-    // Calculating time to reach y = 0
     if (vy == 0) {
         cout << "Velocity in y-direction is zero, ball will not reach y = 0." << endl;
         return;
     }
 
-    double t = -y0 / vy; // Time to reach y = 0, assuming vy is not zero
+    double t = -y0 / vy;
 
     if (t < 0) {
         cout << "The ball will not reach y = 0 in positive time." << endl;
         return;
     }
 
-    // Calculate z at time t using the kinematic equation: z = z0 + 0.5 * g * t^2
-    double z = z0 + 0.5 * g * t * t; // Since initial velocity in z-direction (vz) is 0
+    double z = z0 + 0.5 * g * t * t; // Calculating z at time t
 
-    // Strike Zone bounds
     double strikeZoneBottom = 0.15;
     double strikeZoneTop = 0.65;
     double strikeZoneLeft = 1.0;
     double strikeZoneRight = 1.4;
 
-    if (x >= strikeZoneLeft && x <= strikeZoneRight && z >= strikeZoneBottom && z <= strikeZoneTop) {
-        cout << "The ball will cross the strike zone at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
-    } else {
-        cout << "The ball will miss the strike zone, crossing at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
-    }
+	if (x >= strikeZoneLeft && x <= strikeZoneRight && z >= strikeZoneBottom && z <= strikeZoneTop) {
+		cout << "The ball will cross the strike zone at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
+		std::stringstream message;
+		message << x << " " << z << " " << t;
+		redis_client.set(BALL_TRAJECTORY, message.str());
+		redis_client.setBool(NEW_BALL_SIGNAL, true);
+	} else {
+		cout << "The ball will miss the strike zone, crossing at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
+	}
 }
