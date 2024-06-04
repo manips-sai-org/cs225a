@@ -1,102 +1,90 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 13.09.2015 16:55:06
+# File Created: 10.01.2013 14:39:06
 
-newmtl wire_134006006
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.5255 0.0235 0.0235
-	Kd 0.5255 0.0235 0.0235
-	Ks 0.3500 0.3500 0.3500
+# Benches for players
+newmtl Metal_Galvanized
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.45 0.45 0.50
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_224198087
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.8784 0.7765 0.3412
-	Kd 0.8784 0.7765 0.3412
-	Ks 0.3500 0.3500 0.3500
+# Field Color
+newmtl 01___Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.45 0.25 0.11  # Brown
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_006134006
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.0235 0.5255 0.0235
-	Kd 0.0235 0.5255 0.0235
-	Ks 0.3500 0.3500 0.3500
+# Surrounding ground and bases
+newmtl 07___Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.94 0.94 0.94
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_177028149
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.6941 0.1098 0.5843
-	Kd 0.6941 0.1098 0.5843
-	Ks 0.3500 0.3500 0.3500
+# Fencing around the field
+newmtl SFX_ChainLink
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.58 0.58 0.58
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_028089177
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.1098 0.3490 0.6941
-	Kd 0.1098 0.3490 0.6941
-	Ks 0.3500 0.3500 0.3500
+# Bleachers, Keep blue!
+newmtl 15___Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.23 0.26 0.89
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_134110008
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.5255 0.4314 0.0314
-	Kd 0.5255 0.4314 0.0314
-	Ks 0.3500 0.3500 0.3500
+# This is the big fence
+newmtl 20___Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.58 0.58 0.58
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_229166215
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.8980 0.6510 0.8431
-	Kd 0.8980 0.6510 0.8431
-	Ks 0.3500 0.3500 0.3500
+# Some of the ladders for some reason
+newmtl 21___Default
+Ns 0.000000
+Ka 0.075 0.075 0.000
+Kd 1.00 0.96 0.00
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 
-newmtl wire_143224087
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.5608 0.8784 0.3412
-	Kd 0.5608 0.8784 0.3412
-	Ks 0.3500 0.3500 0.3500
-
-newmtl wire_224086086
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.8784 0.3373 0.3373
-	Kd 0.8784 0.3373 0.3373
-	Ks 0.3500 0.3500 0.3500
-
-newmtl wire_087224198
-	Ns 32
-	d 1
-	Tr 0
-	Tf 1 1 1
-	illum 2
-	Ka 0.3412 0.8784 0.7765
-	Kd 0.3412 0.8784 0.7765
-	Ks 0.3500 0.3500 0.3500
+# Also ladders, but also the ground and fence behind the bat and some floors
+newmtl 09___Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.05 0.62 0.02
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2

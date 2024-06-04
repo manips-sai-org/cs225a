@@ -58,7 +58,7 @@ const int n_objects = object_names.size();
 // simulation thread + function prototypes
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client);
-void handleUserInput();
+void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -77,7 +77,7 @@ int main() {
 
 	// load graphics scene
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, "Baseball Panda", false);
-	graphics->setBackgroundColor(135.0/255, 206.0/255, 235.0/255);  // set blue background 	
+	graphics->setBackgroundColor(25.0/255, 189.0/255, 255.0/255);  // set blue background 	
 	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
 	graphics->showLinkFrame(true, robot_name, "link0", 0.25);
 	graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
@@ -110,10 +110,10 @@ int main() {
 	// std::istringstream iss_pos(input_line);  // Use istringstream to process the line
 	// iss_pos >> x >> y >> z;  // Extract position coordinates from the line
 
-	// Eigen::Affine3d new_pose;
-	// new_pose.translation() = Eigen::Vector3d(x, y, z);
-	// sim->setObjectPose(object_names[0], new_pose);
-	// object_poses[0] = new_pose; // Update the pose in the global vector
+	Eigen::Affine3d new_pose;
+	new_pose.translation() = Eigen::Vector3d(1.2, 1.0, 1.0);
+	sim->setObjectPose(object_names[0], new_pose);
+	object_poses[0] = new_pose; // Update the pose in the global vector
 
 	// double vx, vy, vz;       // Variables to store user input coordinates for velocity
 	// std::cout << "Enter initial velocity of " << object_names[0] << " (vx vy vz): ";
@@ -141,12 +141,14 @@ int main() {
 	redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, 0 * robot->q());
 	redis_client.set(BALL_TRAJECTORY, "");
 	redis_client.setBool(NEW_BALL_SIGNAL, false);
+	redis_client.setEigen(BALL_POS, Eigen::Vector3d(1.2, 10.0, 1.0));
+	redis_client.setEigen(BALL_VEL, Eigen::Vector3d(1.2, 10.0, 1.0));
 
 	// start simulation thread
 	thread sim_thread(simulation, sim);
 
 	// Start the user input thread
-    thread input_thread(handleUserInput);
+    thread input_thread(handleUserInput, sim);
 
 	// while window is open:
 	while (graphics->isWindowOpen() && fSimulationRunning) {		
@@ -230,33 +232,38 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 // NOTE: Sperate thread is running this, and cin does not understand when the input has been closed so killing the simulation
 // will leave the window hanging. Need to kill the terminal too so that the simulation actually stops since it waits for the
 // input_thread to join. To do this, just do CTR+D in the terminal or just hit enter.
-void handleUserInput() {
+void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 
     // create redis client
     auto redis_client = Sai2Common::RedisClient();
     redis_client.connect();
 
     string input_line;
-    double x, z, vy = -22.0;  // Preset negative y velocity
+    double x, z, vy = -9.8;  // Preset negative y velocity
 	cout << endl << "Enter 'x z' coordinates for the new ball: ";
     while (fSimulationRunning) {
 		// Prompt for the next set of coordinates
-		
-        if (getline(cin, input_line)) {
-            istringstream iss(input_line);
-            if (iss >> x >> z) {
-                lock_guard<mutex> lock(ball_mutex);
-                new_ball_position = Eigen::Vector3d(x, 10.0, z);
-                new_ball_velocity = Eigen::Vector3d(0, vy, 0);
-                new_ball_ready = true;
-                cout << "New ball placed." << endl;
+		Vector3d OS_X = redis_client.getEigen(BALL_POS);
+		Eigen::Affine3d new_pose;
+		new_pose.translation() = OS_X;
+		sim->setObjectPose(object_names[0], new_pose);
+		object_poses[0] = new_pose;
 
-                // Calculate and announce the crossing position
-                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+        // if (getline(cin, input_line)) {
+        //     istringstream iss(input_line);
+        //     if (iss >> x >> z) {
+        //         lock_guard<mutex> lock(ball_mutex);
+        //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
+        //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
+        //         new_ball_ready = true;
+        //         cout << "New ball placed." << endl;
 
-				cout << endl << "Enter 'x z' coordinates for the new ball: ";
-            }
-        }
+        //         // Calculate and announce the crossing position
+        //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+
+		// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
+        //     }
+        // }
     }
 }
 

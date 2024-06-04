@@ -17,3 +17,6 @@ const std::string RIGID_BODY_ORI = "sai2::optitrack::rigid_body_ori::1";
 
 const std::string BALL_TRAJECTORY = "sai2::sim::panda_bat::dynamic_object::ball_trajectory";
 const std::string NEW_BALL_SIGNAL = "sai2::sim::panda_bat::dynamic_object::new_ball_signal";
+
+const std::string BALL_POS = "sai2::sim::panda_bat::dynamic_object::ball_pos";
+const std::string BALL_VEL = "sai2::sim::panda_bat::dynamic_object::ball_vel";

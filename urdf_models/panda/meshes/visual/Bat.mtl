@@ -2,22 +2,21 @@
 # Material Count: 2
 
 newmtl Wood_Black_UA
-Ns 250.000000
-Ka 0.200000 0.200000 0.200000  // Reduced ambient reflectivity
-Kd 0.40 0.40 0.40             // Reduced diffuse reflectivity to make it less bright
-Ks 0.25 0.25 0.25             // Reduced specular reflectivity to make it less shiny
+Ns 0.000000
+Ka 0.075 0.075 0.075       
+Kd 0.3 0.3 0.3          
+Ks 0.075 0.075 0.075       
 Ke 0.000000 0.000000 0.000000
-Ni 1.450000
+Ni 1.500000
 d 1.000000
 illum 2
-// Texture maps can be specified here if needed, ensure paths are accessible by your simulation software
 
 newmtl Spruce_Wood
-Ns 250.000000
-Ka 0.200000 0.200000 0.200000
-Kd 0.50 0.40 0.35            // Adjusted for a more realistic wood appearance
-Ks 0.25 0.25 0.25
+Ns 0.000000
+Ka 0.075 0.075 0.075       
+Kd 0.3 0.3 0.3          
+Ks 0.075 0.075 0.075       
 Ke 0.000000 0.000000 0.000000
-Ni 1.450000
+Ni 1.500000
 d 1.000000
 illum 2

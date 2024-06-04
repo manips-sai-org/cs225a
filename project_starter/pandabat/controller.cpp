@@ -148,6 +148,7 @@ int main() {
     robot->setQ(redis_client.getEigen(JOINT_ANGLES_KEY));
     robot->setDq(redis_client.getEigen(JOINT_VELOCITIES_KEY));
     robot->updateModel();
+    redis_client.setBool(NEW_BALL_SIGNAL, false);
 
     // prepare controller
     int dof = robot->dof();
@@ -160,8 +161,10 @@ int main() {
     Affine3d compliant_frame = Affine3d::Identity();
     compliant_frame.translation() = control_point;
     auto pose_task = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_link, compliant_frame);
-    pose_task->setPosControlGains(400, 40, 0);
-    pose_task->setOriControlGains(400, 40, 0);
+    // pose_task->setPosControlGains(400, 40, 0);
+    // pose_task->setOriControlGains(400, 40, 0);
+    pose_task->setPosControlGains(500, 30, 0);
+    pose_task->setOriControlGains(150, 30, 0);
     MatrixXd startOrientation;
     MatrixXd endOrientation;
     Matrix3d desired_orientation;
@@ -202,7 +205,8 @@ int main() {
 
     // joint task
     auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
-    joint_task->setGains(400, 40, 0);
+    // joint_task->setGains(400, 40, 0);
+    joint_task->setGains(500, 30, 0);
 
     VectorXd q_desired(dof);
     VectorXd q_initial(dof);
@@ -214,7 +218,31 @@ int main() {
     // create a loop timer
     runloop = true;
     double control_freq = 1000;
+    double data_freq = 120;       // Position data frequency in Hz
     Sai2Common::LoopTimer timer(control_freq, 1e6);
+    deque<Vector3d> position_history;
+	deque<double> time_history;
+
+    long long int data_counter = 0;
+    int data_interval = static_cast<int>(control_freq / data_freq);
+
+    // Step 1: Calibration
+	// Vector3d OS_X_0 = robot->position(control_link, control_point) + (Vector3d)(0.0, 10.0, 0.0);
+
+	Vector3d OS_X_0 = Eigen::Vector3d(1.2, 5.0, 1.0);
+	Matrix3d OS_R_0 = robot->rotation(control_link);
+
+	Matrix3d OS_R_OT;
+	OS_R_OT << -1, 0, 0,
+				0, 0, 1,
+				0, 1, 0;
+	OS_R_OT = AngleAxisd(M_PI, Vector3d (0,0,1)).toRotationMatrix() * OS_R_OT;
+	
+	Vector3d OT_X_0 = redis_client.getEigen(RIGID_BODY_POS);
+	Vector4d OT_Q_0 = redis_client.getEigen(RIGID_BODY_ORI);
+	Quaterniond quaternion(OT_Q_0[3], OT_Q_0[0], OT_Q_0[1], OT_Q_0[2]);
+	Matrix3d OT_R_0 = quaternion.toRotationMatrix(); 	// Convert the quaternion to a rotation matrix
+
 
     ofstream trajectoryData;
     trajectoryData.open("../../project_starter/pandabat/trajectoryData.txt");
@@ -227,6 +255,64 @@ int main() {
         robot->setQ(redis_client.getEigen(JOINT_ANGLES_KEY));
         robot->setDq(redis_client.getEigen(JOINT_VELOCITIES_KEY));
         robot->updateModel();
+
+        Vector3d OS_Xd;
+		Matrix3d OS_Rd;
+
+
+		if (data_counter % data_interval == 0 ) {
+
+			// Step 2: relative position and orientation read 
+			Vector3d pos = redis_client.getEigen(RIGID_BODY_POS);
+			Vector3d OT_X = pos;
+
+			Vector4d quat = redis_client.getEigen(RIGID_BODY_ORI);
+			Quaterniond quatObj(quat[3], quat[0], quat[1], quat[2]);
+			Matrix3d OT_R = quatObj.toRotationMatrix();
+
+			Vector3d OT_X_rel = OT_X - OT_X_0;
+			Matrix3d OT_R_rel = OT_R.transpose() * OT_R_0;
+
+			// Step 3: tracking position and orientation in OpenSai Frame
+			Vector3d OS_X = OS_X_0 + OS_R_OT * OT_X_rel;
+			Matrix3d OS_R = OS_R_OT * OT_R_rel * OS_R_OT.transpose() * OS_R_0;
+
+			OS_Xd = OS_X;
+			OS_Rd = OS_R;
+
+			//debugging prints
+			cout << OS_X << endl;
+
+			// Add position and time to history
+			position_history.push_back(OS_X);
+			time_history.push_back(time);
+
+			// Ensure we have enough data points to compute the velocity
+			if (position_history.size() > 1) {
+				// Compute the finite difference for velocity
+				Vector3d pos_prev = position_history[position_history.size() - 2];
+				double time_prev = time_history[time_history.size() - 2];
+
+				double dt = time - time_prev;
+				
+				Vector3d velocity = (OS_X - pos_prev) / dt;
+
+				// Print the smoothed velocity
+				cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
+
+                redis_client.setEigen(BALL_POS,OS_X);
+                redis_client.setEigen(BALL_VEL, velocity);
+
+			// Keep only the latest 2 positions and times
+			if (position_history.size() > 2) {
+				position_history.pop_front();
+				time_history.pop_front();
+			}
+        }
+		}
+
+        data_counter++;
+
 
         // Print state name only on state change
         if (state != last_state) {
@@ -276,8 +362,8 @@ int main() {
 				axis = computeAxis(thetaFinal, intermediateMatrix);
 
 				// Prepare conditions for motion trajectory
-				desired_endPosition = Vector3d(ball_position.x(), 0.0, ball_position.z()); 
-				desired_endVelocity = Vector3d(0, 10, 1.5);  // Trying out increasing the velocity since right now the hit is very weak
+				desired_endPosition = Vector3d(ball_position.x(), 0, ball_position.z()); 
+				desired_endVelocity = Vector3d(-3, 15, 1.5);  // Trying out increasing the velocity since right now the hit is very weak
 				VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
 				conditions << start, startVelocity, desired_endPosition, desired_endVelocity;
 				traj = computeTrajMatrix(tSwing);

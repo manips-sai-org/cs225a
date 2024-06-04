@@ -59,7 +59,7 @@ int main() {
 
 	// arm task
 	const string control_link = "end-effector";
-	const Vector3d control_point = Vector3d(0, 0, 0.4); // control point is at the end of the end-effector
+	const Vector3d control_point = Vector3d(0, 0, 0.5); // control point is at the end of the end-effector
 	Affine3d compliant_frame = Affine3d::Identity();
 	compliant_frame.translation() = control_point;
 	auto pose_task = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_link, compliant_frame);

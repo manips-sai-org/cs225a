@@ -4,7 +4,7 @@
 
 	<robot name="panda_arm_bat">
 		<model dir="${CS225A_URDF_FOLDER}/panda" path="panda_arm_bat.urdf" name="panda_arm_bat" />
-		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+		<origin xyz="0.1 -0.3 0.0" rpy="0 0 0" />
 	</robot>
 
 	<static_object name="Base">
@@ -23,16 +23,29 @@
         </collision>
     </static_object>
 
+	<static_object name="Base2">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <visual>
+            <origin xyz="0 0 -0.06" rpy="0 0 0" />
+            <geometry>
+                <box size="85 85 0.02" />
+            </geometry>
+			<material name="material">
+		        <color rgba="0.09 0.315 0.045 1.0" />
+	        </material>
+        </visual>
+    </static_object>
+
 	<static_object name="Stadium">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <visual>
-            <origin xyz="13.1 11 -0.35" rpy="0 0 0" />
+            <origin xyz="-1.6 8.8 -0.04" rpy="1.5708 0 0.785398" />
 			<geometry>
-                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Stadium.obj" scale=".22 .22 .22"/>
+                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/NewStadium.obj" scale="2.9 6 2.9"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="0 -7 0" rpy="1.5708 0 0" />
+            <origin xyz="0 -5 0" rpy="1.5708 0 0" />
             <geometry>
                 <box size="10 50 0.01" />		
             </geometry>
@@ -143,6 +156,11 @@
 		<lookat xyz="0.0 -1.0 2.0" />
 	</light>
 
+	<!-- <light name="light1" type="spot">
+		<position xyz="0.0 -10 4.0" />
+		<lookat xyz="0.0 -10 1.0" />
+	</light> -->
+
 	<camera name="camera_A_fixed">
 		<position xyz="3.5 7 2" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
@@ -165,6 +183,12 @@
 		<position xyz="2 -3 1.0" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
 		<lookat xyz="1.0 0 0.5" /> 
+	</camera>
+
+	<camera name="camera_E_Pitcher">
+		<position xyz="1.2 11 1.5" /> 
+		<vertical xyz="0.0 0.0 1.0" /> 
+		<lookat xyz="1.2 0 1.5" /> 
 	</camera>
 
 </world>
