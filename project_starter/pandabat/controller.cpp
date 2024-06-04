@@ -215,7 +215,7 @@ int main() {
     q_desired(0) = -M_PI / 2;
     joint_task->setGoalPosition(q_desired);
 
-    // create a loop timer
+    // create a loop timer`
     runloop = true;
     double control_freq = 1000;
     double data_freq = 120;       // Position data frequency in Hz

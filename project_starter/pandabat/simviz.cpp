@@ -243,27 +243,27 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 	cout << endl << "Enter 'x z' coordinates for the new ball: ";
     while (fSimulationRunning) {
 		// Prompt for the next set of coordinates
-		Vector3d OS_X = redis_client.getEigen(BALL_POS);
-		Eigen::Affine3d new_pose;
-		new_pose.translation() = OS_X;
-		sim->setObjectPose(object_names[0], new_pose);
-		object_poses[0] = new_pose;
+		// Vector3d OS_X = redis_client.getEigen(BALL_POS);
+		// Eigen::Affine3d new_pose;
+		// new_pose.translation() = OS_X;
+		// sim->setObjectPose(object_names[0], new_pose);
+		// object_poses[0] = new_pose;
 
-        // if (getline(cin, input_line)) {
-        //     istringstream iss(input_line);
-        //     if (iss >> x >> z) {
-        //         lock_guard<mutex> lock(ball_mutex);
-        //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
-        //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
-        //         new_ball_ready = true;
-        //         cout << "New ball placed." << endl;
+        if (getline(cin, input_line)) {
+            istringstream iss(input_line);
+            if (iss >> x >> z) {
+                lock_guard<mutex> lock(ball_mutex);
+                new_ball_position = Eigen::Vector3d(x, 5.0, z);
+                new_ball_velocity = Eigen::Vector3d(0, vy, 0);
+                new_ball_ready = true;
+                cout << "New ball placed." << endl;
 
-        //         // Calculate and announce the crossing position
-        //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+                // Calculate and announce the crossing position
+                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
 
-		// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
-        //     }
-        // }
+				cout << endl << "Enter 'x z' coordinates for the new ball: ";
+            }
+        }
     }
 }
 
