@@ -186,7 +186,7 @@
 	</camera>
 
 	<camera name="camera_E_Pitcher">
-		<position xyz="1.2 11 1.5" /> 
+		<position xyz="1.2 7 1.5" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
 		<lookat xyz="1.2 0 1.5" /> 
 	</camera>

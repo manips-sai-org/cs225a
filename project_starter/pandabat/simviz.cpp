@@ -78,9 +78,9 @@ int main() {
 	// load graphics scene
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, "Baseball Panda", false);
 	graphics->setBackgroundColor(25.0/255, 189.0/255, 255.0/255);  // set blue background 	
-	graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
-	graphics->showLinkFrame(true, robot_name, "link0", 0.25);
-	graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
+	//graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
+	//graphics->showLinkFrame(true, robot_name, "link0", 0.25);
+	//graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
 	graphics->addUIForceInteraction(robot_name);
 
@@ -143,6 +143,7 @@ int main() {
 	redis_client.setBool(NEW_BALL_SIGNAL, false);
 	redis_client.setEigen(BALL_POS, Eigen::Vector3d(1.2, 10.0, 1.0));
 	redis_client.setEigen(BALL_VEL, Eigen::Vector3d(1.2, 10.0, 1.0));
+	redis_client.set(BUTTON_LAST_STATE, "false") ;
 
 	// start simulation thread
 	thread sim_thread(simulation, sim);
@@ -249,20 +250,32 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 		// sim->setObjectPose(object_names[0], new_pose);
 		// object_poses[0] = new_pose;
 
-        if (getline(cin, input_line)) {
-            istringstream iss(input_line);
-            if (iss >> x >> z) {
-                lock_guard<mutex> lock(ball_mutex);
-                new_ball_position = Eigen::Vector3d(x, 5.0, z);
-                new_ball_velocity = Eigen::Vector3d(0, vy, 0);
-                new_ball_ready = true;
-                cout << "New ball placed." << endl;
+        // if (getline(cin, input_line)) {
+        //     istringstream iss(input_line);
+        //     if (iss >> x >> z) {
+        //         lock_guard<mutex> lock(ball_mutex);
+        //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
+        //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
+        //         new_ball_ready = true;
+        //         cout << "New ball placed." << endl;
 
-                // Calculate and announce the crossing position
-                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+        //         // Calculate and announce the crossing position
+        //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
 
-				cout << endl << "Enter 'x z' coordinates for the new ball: ";
-            }
+		// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
+        //     }
+        // }
+
+        if (redis_client.get(BUTTON_LAST_STATE) == "true") {  // Check if the button state is true
+            cout << "Button press detected, launching new ball." << endl;
+
+            lock_guard<mutex> lock(ball_mutex);
+            new_ball_position = Eigen::Vector3d(1.2, 5.0, 1.5);  	// Set new position
+            new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  		// Set new velocity
+            new_ball_ready = true;
+            
+            computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+            redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
         }
     }
 }

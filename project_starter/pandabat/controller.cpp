@@ -256,62 +256,62 @@ int main() {
         robot->setDq(redis_client.getEigen(JOINT_VELOCITIES_KEY));
         robot->updateModel();
 
-        Vector3d OS_Xd;
-		Matrix3d OS_Rd;
+        // Vector3d OS_Xd;
+		// Matrix3d OS_Rd;
 
 
-		if (data_counter % data_interval == 0 ) {
+		// if (data_counter % data_interval == 0 ) {
 
-			// Step 2: relative position and orientation read 
-			Vector3d pos = redis_client.getEigen(RIGID_BODY_POS);
-			Vector3d OT_X = pos;
+		// 	// Step 2: relative position and orientation read 
+		// 	Vector3d pos = redis_client.getEigen(RIGID_BODY_POS);
+		// 	Vector3d OT_X = pos;
 
-			Vector4d quat = redis_client.getEigen(RIGID_BODY_ORI);
-			Quaterniond quatObj(quat[3], quat[0], quat[1], quat[2]);
-			Matrix3d OT_R = quatObj.toRotationMatrix();
+		// 	Vector4d quat = redis_client.getEigen(RIGID_BODY_ORI);
+		// 	Quaterniond quatObj(quat[3], quat[0], quat[1], quat[2]);
+		// 	Matrix3d OT_R = quatObj.toRotationMatrix();
 
-			Vector3d OT_X_rel = OT_X - OT_X_0;
-			Matrix3d OT_R_rel = OT_R.transpose() * OT_R_0;
+		// 	Vector3d OT_X_rel = OT_X - OT_X_0;
+		// 	Matrix3d OT_R_rel = OT_R.transpose() * OT_R_0;
 
-			// Step 3: tracking position and orientation in OpenSai Frame
-			Vector3d OS_X = OS_X_0 + OS_R_OT * OT_X_rel;
-			Matrix3d OS_R = OS_R_OT * OT_R_rel * OS_R_OT.transpose() * OS_R_0;
+		// 	// Step 3: tracking position and orientation in OpenSai Frame
+		// 	Vector3d OS_X = OS_X_0 + OS_R_OT * OT_X_rel;
+		// 	Matrix3d OS_R = OS_R_OT * OT_R_rel * OS_R_OT.transpose() * OS_R_0;
 
-			OS_Xd = OS_X;
-			OS_Rd = OS_R;
+		// 	OS_Xd = OS_X;
+		// 	OS_Rd = OS_R;
 
-			//debugging prints
-			cout << OS_X << endl;
+		// 	//debugging prints
+		// 	cout << OS_X << endl;
 
-			// Add position and time to history
-			position_history.push_back(OS_X);
-			time_history.push_back(time);
+		// 	// Add position and time to history
+		// 	position_history.push_back(OS_X);
+		// 	time_history.push_back(time);
 
-			// Ensure we have enough data points to compute the velocity
-			if (position_history.size() > 1) {
-				// Compute the finite difference for velocity
-				Vector3d pos_prev = position_history[position_history.size() - 2];
-				double time_prev = time_history[time_history.size() - 2];
+		// 	// Ensure we have enough data points to compute the velocity
+		// 	if (position_history.size() > 1) {
+		// 		// Compute the finite difference for velocity
+		// 		Vector3d pos_prev = position_history[position_history.size() - 2];
+		// 		double time_prev = time_history[time_history.size() - 2];
 
-				double dt = time - time_prev;
+		// 		double dt = time - time_prev;
 				
-				Vector3d velocity = (OS_X - pos_prev) / dt;
+		// 		Vector3d velocity = (OS_X - pos_prev) / dt;
 
-				// Print the smoothed velocity
-				cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
+		// 		// Print the smoothed velocity
+		// 		cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
 
-                redis_client.setEigen(BALL_POS,OS_X);
-                redis_client.setEigen(BALL_VEL, velocity);
+        //         redis_client.setEigen(BALL_POS,OS_X);
+        //         redis_client.setEigen(BALL_VEL, velocity);
 
-			// Keep only the latest 2 positions and times
-			if (position_history.size() > 2) {
-				position_history.pop_front();
-				time_history.pop_front();
-			}
-        }
-		}
+		// 	// Keep only the latest 2 positions and times
+		// 	if (position_history.size() > 2) {
+		// 		position_history.pop_front();
+		// 		time_history.pop_front();
+		// 	}
+        // }
+		// }
 
-        data_counter++;
+        // data_counter++;
 
 
         // Print state name only on state change

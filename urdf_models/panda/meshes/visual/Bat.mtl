@@ -1,21 +1,11 @@
-# Blender MTL File: 'baseball.blend'
-# Material Count: 2
+# Blender 4.1.1 MTL File: 'None'
+# www.blender.org
 
 newmtl Wood_Black_UA
 Ns 0.000000
-Ka 0.075 0.075 0.075       
-Kd 0.3 0.3 0.3          
-Ks 0.075 0.075 0.075       
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 2
-
-newmtl Spruce_Wood
-Ns 0.000000
-Ka 0.075 0.075 0.075       
-Kd 0.3 0.3 0.3          
-Ks 0.075 0.075 0.075       
+Ka 0.075 0.075 0.075
+Kd 0.45 0.25 0.11  # Brown
+Ks 0.075 0.075 0.075
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
