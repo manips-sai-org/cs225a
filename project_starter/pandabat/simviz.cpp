@@ -45,6 +45,9 @@ mutex ball_mutex;
 bool new_ball_ready = false;
 Eigen::Vector3d new_ball_position;
 Eigen::Vector3d new_ball_velocity;
+bool ball_launched = false;
+bool strike_thrown = false;
+Eigen::Vector3d last_ball_pose;
 
 // specify urdf and robots 
 static const string robot_name = "panda_arm_bat";
@@ -59,6 +62,7 @@ const int n_objects = object_names.size();
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
 void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client);
 void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
+Eigen::Vector3d mapVelocity(double input_vy);
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -143,7 +147,8 @@ int main() {
 	redis_client.setBool(NEW_BALL_SIGNAL, false);
 	redis_client.setEigen(BALL_POS, Eigen::Vector3d(1.2, 10.0, 1.0));
 	redis_client.setEigen(BALL_VEL, Eigen::Vector3d(1.2, 10.0, 1.0));
-	redis_client.set(BUTTON_LAST_STATE, "false") ;
+	redis_client.set(BUTTON_LAST_STATE, "false");
+	redis_client.set(CONTROLLER_STATE, "");
 
 	// start simulation thread
 	thread sim_thread(simulation, sim);
@@ -241,41 +246,83 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 
     string input_line;
     double x, z, vy = -9.8;  // Preset negative y velocity
-	cout << endl << "Enter 'x z' coordinates for the new ball: ";
-    while (fSimulationRunning) {
-		// Prompt for the next set of coordinates
-		// Vector3d OS_X = redis_client.getEigen(BALL_POS);
-		// Eigen::Affine3d new_pose;
-		// new_pose.translation() = OS_X;
-		// sim->setObjectPose(object_names[0], new_pose);
-		// object_poses[0] = new_pose;
+	// cout << endl << "Enter 'x z' coordinates for the new ball: ";
+    // while (fSimulationRunning) {
+	// 	// Prompt for the next set of coordinates
+	// 	if (ball_launched == false) {
+	// 		Vector3d OS_X = redis_client.getEigen(BALL_POS);
+	// 		Eigen::Affine3d new_pose;
+	// 		new_pose.translation() = OS_X;
+	// 		last_ball_pose = OS_X;
+	// 		sim->setObjectPose(object_names[0], new_pose);
+	// 		object_poses[0] = new_pose;
+	// 	}
+		
 
-        // if (getline(cin, input_line)) {
-        //     istringstream iss(input_line);
-        //     if (iss >> x >> z) {
-        //         lock_guard<mutex> lock(ball_mutex);
-        //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
-        //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
-        //         new_ball_ready = true;
-        //         cout << "New ball placed." << endl;
+    //     // if (getline(cin, input_line)) {
+    //     //     istringstream iss(input_line);
+    //     //     if (iss >> x >> z) {
+    //     //         lock_guard<mutex> lock(ball_mutex);
+    //     //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
+    //     //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
+    //     //         new_ball_ready = true;
+    //     //         cout << "New ball placed." << endl;
 
-        //         // Calculate and announce the crossing position
-        //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+    //     //         // Calculate and announce the crossing position
+    //     //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
 
-		// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
-        //     }
-        // }
+	// 	// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
+    //     //     }
+    //     // }
 
-        if (redis_client.get(BUTTON_LAST_STATE) == "true") {  // Check if the button state is true
-            cout << "Button press detected, launching new ball." << endl;
+    //     if (redis_client.get(BUTTON_LAST_STATE) == "true") {  // Check if the button state is true
+    //         cout << "Button press detected, launching new ball." << endl;
 
-            lock_guard<mutex> lock(ball_mutex);
-            new_ball_position = Eigen::Vector3d(1.2, 5.0, 1.5);  	// Set new position
-            new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  		// Set new velocity
-            new_ball_ready = true;
-            
-            computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
-            redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
+    //         lock_guard<mutex> lock(ball_mutex);
+    //         new_ball_position = last_ball_pose;  	// Set new position
+	// 		Eigen::Vector3d velocityLast = redis_client.getEigen(BALL_VEL);
+    //         new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  		// Set new velocity
+    //         new_ball_ready = true;
+    //         ball_launched = true;
+    //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+    //         redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
+    //     }
+    // }
+
+	while (fSimulationRunning) {
+        string controllerState = redis_client.get(CONTROLLER_STATE);
+
+        if (controllerState == "WAITING1" && ball_launched == false) {
+            // Update ball's position continuously in WAITING1 state
+			Vector3d currentPosition = redis_client.getEigen(BALL_POS);
+			Eigen::Affine3d new_pose;
+			new_pose.translation() = currentPosition;
+			sim->setObjectPose(object_names[0], new_pose);
+			object_poses[0] = new_pose;
+			cout << "Pos updated." << endl;
+		
+
+            // Check if the button is pressed to launch the ball
+            if (redis_client.get(BUTTON_LAST_STATE) == "true") {
+
+                cout << "Button press detected in WAITING1 state, launching new ball." << endl;
+
+                lock_guard<mutex> lock(ball_mutex);
+                new_ball_position = currentPosition;  // Use the current position
+
+				// Get y-component of velocity from Redis, map it, and set x, z to zero
+                // double input_vy = redis_client.getEigen(BALL_VEL).y();
+                // new_ball_velocity = mapVelocity(input_vy);  // Use mapped velocity
+                new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  // Use predefined velocity
+				
+				ball_launched = true;
+                new_ball_ready = true;
+                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
+                redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
+            }
+        } else if (controllerState == "POSTURE") {
+            // Reset the ball_launched flag when in POSTURE state
+            ball_launched = false;
         }
     }
 }
@@ -312,7 +359,27 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 		message << x << " " << z << " " << t;
 		redis_client.set(BALL_TRAJECTORY, message.str());
 		redis_client.setBool(NEW_BALL_SIGNAL, true);
+		ball_launched = true;
+		strike_thrown = true;
 	} else {
+		ball_launched = true;
+		strike_thrown = false;
 		cout << "The ball will miss the strike zone, crossing at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
 	}
 }
+
+
+// Eigen::Vector3d mapVelocity(double input_vy) {
+//     // Map from [0, -5] to [-5, -10]
+//     double mapped_vy = -5 - input_vy;
+
+//     // Clipping the mapped y-velocity to ensure it remains within the new bounds
+//     if (mapped_vy < -10) {
+//         mapped_vy = -10;
+//     } else if (mapped_vy > -5) {
+//         mapped_vy = -5;
+//     }
+
+//     // Return the new velocity vector with x and z set to zero
+//     return Eigen::Vector3d(0, mapped_vy, 0);
+// }

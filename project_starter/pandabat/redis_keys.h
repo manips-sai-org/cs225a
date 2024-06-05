@@ -22,3 +22,4 @@ const std::string BALL_POS = "sai2::sim::panda_bat::dynamic_object::ball_pos";
 const std::string BALL_VEL = "sai2::sim::panda_bat::dynamic_object::ball_vel";
 
 const std::string BUTTON_LAST_STATE = "sai2::sim::panda_bat::dynamic_object::ball_button";
+const std::string CONTROLLER_STATE = "sai2::sim::panda_bat::dynamic_object::controller_state";

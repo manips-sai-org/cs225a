@@ -1,3 +1,7 @@
+
+
+
+
 /**
  * @file controller.cpp
  * @brief Controller file
@@ -31,10 +35,11 @@ enum State {
     MOTION,
     FOLLOWTHROUGH,
     RESET,
-    WAITING
+    WAITING1,
+    WAITING2
 };
 
-void parseTrajectoryMessage(const string& message, Vector3d& position) {
+void parseTrajectoryMessage(const string& message, Vector3d& position, double& timeToZone) {
     stringstream ss(message);
     double x, z, t;
     if (ss >> x >> z >> t) {
@@ -42,6 +47,7 @@ void parseTrajectoryMessage(const string& message, Vector3d& position) {
         position.z() = z;
         position.y() = 0.0;  // Since strike zone is in the xz plane
     }
+    timeToZone = t-.01;
 }
 
 string stateToString(int state) {
@@ -54,8 +60,10 @@ string stateToString(int state) {
             return "FOLLOWTHROUGH";
         case RESET:
             return "RESET";
-        case WAITING:
-            return "WAITING";
+        case WAITING1:
+            return "WAITING1";
+	    case WAITING2:
+            return "WAITING2";
         default:
             return "UNKNOWN";
     }
@@ -199,9 +207,13 @@ int main() {
     double tFollow = 2;
     double startTime;
     double curTime;
+    double bufferTime = 0.0;
 
     MatrixXd traj;
     VectorXd a;
+
+    Vector3d ball_position;
+    double timeToZone;
 
     // joint task
     auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
@@ -227,9 +239,7 @@ int main() {
     int data_interval = static_cast<int>(control_freq / data_freq);
 
     // Step 1: Calibration
-	// Vector3d OS_X_0 = robot->position(control_link, control_point) + (Vector3d)(0.0, 10.0, 0.0);
-
-	Vector3d OS_X_0 = Eigen::Vector3d(1.2, 5.0, 1.0);
+	Vector3d OS_X_0 = Eigen::Vector3d(1.2, 5.0, 1.4);
 	Matrix3d OS_R_0 = robot->rotation(control_link);
 
 	Matrix3d OS_R_OT;
@@ -256,67 +266,68 @@ int main() {
         robot->setDq(redis_client.getEigen(JOINT_VELOCITIES_KEY));
         robot->updateModel();
 
-        // Vector3d OS_Xd;
-		// Matrix3d OS_Rd;
+        Vector3d OS_Xd;
+		Matrix3d OS_Rd;
 
 
-		// if (data_counter % data_interval == 0 ) {
+		if (data_counter % data_interval == 0 ) {
 
-		// 	// Step 2: relative position and orientation read 
-		// 	Vector3d pos = redis_client.getEigen(RIGID_BODY_POS);
-		// 	Vector3d OT_X = pos;
+			// Step 2: relative position and orientation read 
+			Vector3d pos = redis_client.getEigen(RIGID_BODY_POS);
+			Vector3d OT_X = pos;
 
-		// 	Vector4d quat = redis_client.getEigen(RIGID_BODY_ORI);
-		// 	Quaterniond quatObj(quat[3], quat[0], quat[1], quat[2]);
-		// 	Matrix3d OT_R = quatObj.toRotationMatrix();
+			Vector4d quat = redis_client.getEigen(RIGID_BODY_ORI);
+			Quaterniond quatObj(quat[3], quat[0], quat[1], quat[2]);
+			Matrix3d OT_R = quatObj.toRotationMatrix();
 
-		// 	Vector3d OT_X_rel = OT_X - OT_X_0;
-		// 	Matrix3d OT_R_rel = OT_R.transpose() * OT_R_0;
+			Vector3d OT_X_rel = OT_X - OT_X_0;
+			Matrix3d OT_R_rel = OT_R.transpose() * OT_R_0;
 
-		// 	// Step 3: tracking position and orientation in OpenSai Frame
-		// 	Vector3d OS_X = OS_X_0 + OS_R_OT * OT_X_rel;
-		// 	Matrix3d OS_R = OS_R_OT * OT_R_rel * OS_R_OT.transpose() * OS_R_0;
+			// Step 3: tracking position and orientation in OpenSai Frame
+			Vector3d OS_X = OS_X_0 + OS_R_OT * OT_X_rel;
+			Matrix3d OS_R = OS_R_OT * OT_R_rel * OS_R_OT.transpose() * OS_R_0;
 
-		// 	OS_Xd = OS_X;
-		// 	OS_Rd = OS_R;
+			OS_Xd = OS_X;
+			OS_Rd = OS_R;
 
-		// 	//debugging prints
-		// 	cout << OS_X << endl;
+			//debugging prints
+			cout << OS_X << endl;
 
-		// 	// Add position and time to history
-		// 	position_history.push_back(OS_X);
-		// 	time_history.push_back(time);
+			// Add position and time to history
+			position_history.push_back(OS_X);
+			time_history.push_back(time);
 
-		// 	// Ensure we have enough data points to compute the velocity
-		// 	if (position_history.size() > 1) {
-		// 		// Compute the finite difference for velocity
-		// 		Vector3d pos_prev = position_history[position_history.size() - 2];
-		// 		double time_prev = time_history[time_history.size() - 2];
+			// Ensure we have enough data points to compute the velocity
+			if (position_history.size() > 1) {
+				// Compute the finite difference for velocity
+				Vector3d pos_prev = position_history[position_history.size() - 2];
+				double time_prev = time_history[time_history.size() - 2];
 
-		// 		double dt = time - time_prev;
+				double dt = time - time_prev;
 				
-		// 		Vector3d velocity = (OS_X - pos_prev) / dt;
+				Vector3d velocity = (OS_X - pos_prev) / dt;
 
-		// 		// Print the smoothed velocity
-		// 		cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
+				// Print the smoothed velocity
+				cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
 
-        //         redis_client.setEigen(BALL_POS,OS_X);
-        //         redis_client.setEigen(BALL_VEL, velocity);
+                redis_client.setEigen(BALL_POS,OS_X);
+                redis_client.setEigen(BALL_VEL, velocity);
 
-		// 	// Keep only the latest 2 positions and times
-		// 	if (position_history.size() > 2) {
-		// 		position_history.pop_front();
-		// 		time_history.pop_front();
-		// 	}
-        // }
-		// }
+			// Keep only the latest 2 positions and times
+			if (position_history.size() > 2) {
+				position_history.pop_front();
+				time_history.pop_front();
+			}
+        }
+		}
 
-        // data_counter++;
+        data_counter++;
 
 
         // Print state name only on state change
         if (state != last_state) {
             cout << "Current State: " << stateToString(state) << endl;
+            redis_client.set(CONTROLLER_STATE, stateToString(state));
             last_state = state;  // Update last_state to the current state
         }
 
@@ -330,13 +341,14 @@ int main() {
 			command_torques = joint_task->computeTorques();
 			if ((robot->q() - q_desired).norm() < 1e-2) {
 				cout << "Reached Start Position" << endl;
-				state = WAITING;
+				state = WAITING1;
 				// Initialize or update the starting position and orientation of the end-effector,
         		// which will be used in subsequent states for motion planning.
 				startPosition = robot->position(control_link, control_point);
 				startOrientation = robot->rotation(control_link);
+                startTime = time;
 			}
-		} else if (state == WAITING) {
+		} else if (state == WAITING1) {
 			// Continuously update the robot's position to maintain the ready posture
 			N_prec.setIdentity();
 			joint_task->updateTaskModel(N_prec);
@@ -345,36 +357,78 @@ int main() {
 			// Check if a new ball trajectory is ready
 			if (new_ball_ready) {
 				std::string trajectory_str = redis_client.get(BALL_TRAJECTORY);
-				Vector3d ball_position;
-				parseTrajectoryMessage(trajectory_str, ball_position);
+				parseTrajectoryMessage(trajectory_str, ball_position, timeToZone);
 				cout << "Trigger Swing. Ball trajectory: " << trajectory_str << endl;
-				// Reset the new ball signal
-				redis_client.setBool(NEW_BALL_SIGNAL, false);
+                if (timeToZone <= tSwing + bufferTime){
+                    // Reset the new ball signal
+                    redis_client.setBool(NEW_BALL_SIGNAL, false);
 
+                    // set tSwing to timeToZone
+                    tSwing = timeToZone - bufferTime;
 
-				// Re-update starting position and velocity based on current state
-				start = robot->position(control_link, control_point);
-				startVelocity = robot->linearVelocity(control_link, control_point);
+                    // Re-update starting position and velocity based on current state
+                    start = robot->position(control_link, control_point);
+                    startVelocity = robot->linearVelocity(control_link, control_point);
 
-				// Calculate axis of rotation for the motion phase
-				MatrixXd intermediateMatrix = startOrientation.transpose() * posX;
-				thetaFinal = acos((intermediateMatrix(0, 0) + intermediateMatrix(1, 1) + intermediateMatrix(1, 1) - 1) / 2);
-				axis = computeAxis(thetaFinal, intermediateMatrix);
+                    // Calculate axis of rotation for the motion phase
+                    MatrixXd intermediateMatrix = startOrientation.transpose() * posX;
+                    thetaFinal = acos((intermediateMatrix(0, 0) + intermediateMatrix(1, 1) + intermediateMatrix(1, 1) - 1) / 2);
+                    axis = computeAxis(thetaFinal, intermediateMatrix);
 
-				// Prepare conditions for motion trajectory
-				desired_endPosition = Vector3d(ball_position.x(), 0, ball_position.z()); 
-				desired_endVelocity = Vector3d(-3, 15, 1.5);  // Trying out increasing the velocity since right now the hit is very weak
-				VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
-				conditions << start, startVelocity, desired_endPosition, desired_endVelocity;
-				traj = computeTrajMatrix(tSwing);
-				a = traj.lu().solve(conditions);
+                    // Prepare conditions for motion trajectory
+                    desired_endPosition = Vector3d(ball_position.x(), 0.0, ball_position.z()); 
+                    desired_endVelocity = Vector3d(-3, 15, 1.5);  // Trying out increasing the velocity since right now the hit is very weak
+                    VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
+                    conditions << start, startVelocity, desired_endPosition, desired_endVelocity;
+                    traj = computeTrajMatrix(tSwing);
+                    a = traj.lu().solve(conditions);
 
-				// Transition to motion
-				state = MOTION;
-				pose_task->reInitializeTask();
-				joint_task->reInitializeTask();
-				startTime = time;
+                    // Transition to motion
+                    state = MOTION;
+                    pose_task->reInitializeTask();
+                    joint_task->reInitializeTask();
+                    startTime = time;
+                } else {
+                    startTime = time;
+                    state = WAITING2;
+                }
 			}
+        } else if (state == WAITING2){
+            // Continuously update the robot's position to maintain the ready posture
+			N_prec.setIdentity();
+			joint_task->updateTaskModel(N_prec);
+			command_torques = joint_task->computeTorques();
+            curTime = time;
+            double dt = curTime - startTime;
+            if (timeToZone - dt <= tSwing + bufferTime){
+                // Reset the new ball signal
+                redis_client.setBool(NEW_BALL_SIGNAL, false);
+
+                // Re-update starting position and velocity based on current state
+                start = robot->position(control_link, control_point);
+                startVelocity = robot->linearVelocity(control_link, control_point);
+
+                // Calculate axis of rotation for the motion phase
+                MatrixXd intermediateMatrix = startOrientation.transpose() * posX;
+                thetaFinal = acos((intermediateMatrix(0, 0) + intermediateMatrix(1, 1) + intermediateMatrix(1, 1) - 1) / 2);
+                axis = computeAxis(thetaFinal, intermediateMatrix);
+
+                // Prepare conditions for motion trajectory
+                desired_endPosition = Vector3d(ball_position.x(), 0.0, ball_position.z()); 
+                desired_endVelocity = Vector3d(0, 8, 1);  // Trying out increasing the velocity since right now the hit is very weak
+                VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
+                conditions << start, startVelocity, desired_endPosition, desired_endVelocity;
+                traj = computeTrajMatrix(tSwing);
+                a = traj.lu().solve(conditions);
+
+                // Transition to motion
+                state = MOTION;
+                pose_task->reInitializeTask();
+                joint_task->reInitializeTask();
+                cout << "Trigger Swing. Ball trajectory: " << ball_position.transpose() << endl;
+                startTime = time;
+                
+            }
 		} else if (state == MOTION) {
             // update goal position, velocity, accleration
             curTime = time;
@@ -386,7 +440,7 @@ int main() {
             pose_task->setGoalLinearVelocity(velocity);
             pose_task->setGoalLinearAcceleration(acceleration);
             // update goal orientation:
-            desired_orientation = startOrientation * AngleAxisd(thetaFinal * dt / tSwing, axis).toRotationMatrix();
+            desired_orientation = startOrientation * AngleAxisd((thetaFinal) * dt / tSwing, axis).toRotationMatrix();
             // orthonormalize(desired_orientation);
             desired_orientation = orthogonalize(desired_orientation);
             pose_task->setGoalOrientation(desired_orientation);
@@ -406,6 +460,7 @@ int main() {
             // cout << command_torques.transpose() << endl;
             if (dt > tSwing) {
                 cout << tSwing << " Seconds Passed" << endl;
+                cout << robot->position(control_link, control_point).transpose() << " " << ball_position.transpose() << endl;
                 // Update Starting Position and Velocity
                 startPosition = robot->position(control_link, control_point);
                 startVelocity = robot->linearVelocity(control_link, control_point);
@@ -415,7 +470,7 @@ int main() {
                 thetaFinal = acos((intermediateMatrix(0, 0) + intermediateMatrix(1, 1) + intermediateMatrix(1, 1) - 1) / 2);
                 axis = computeAxis(thetaFinal, intermediateMatrix);
                 // Update desired end position and velocity of next state
-                desired_endPosition = Vector3d(0, 1.2, .4);
+                desired_endPosition = Vector3d(0, 1.2, ball_position.z());
                 desired_endVelocity = Vector3d(0, 0, 0);
                 VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
                 conditions << startPosition, startVelocity, desired_endPosition, desired_endVelocity;
@@ -493,9 +548,11 @@ int main() {
             if (dt > tReset) {
                 cout << "full cycle complete!" << endl;
                 redis_client.setBool(NEW_BALL_SIGNAL, false);
+                tSwing = 0.5;
                 state = POSTURE;
             }
         }
+
 
         // execute redis write callback
         redis_client.setEigen(JOINT_TORQUES_COMMANDED_KEY, command_torques);
