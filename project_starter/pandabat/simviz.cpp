@@ -64,6 +64,11 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics);
 Eigen::Vector3d mapVelocity(double input_vy, double input_vz);
 
+// void playSound(const string& soundPath) {
+//     string command = "cmd.exe /C powershell -c (New-Object Media.SoundPlayer \"" + soundPath + "\").PlaySync()";
+//     system(command.c_str());
+// }
+
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
 	static const string robot_file = string(CS225A_URDF_FOLDER) + "/panda/panda_arm_bat.urdf";
@@ -200,6 +205,8 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
     sim->enableGravityCompensation(true);
 	sim->enableJointLimits(robot_name);
 
+	//playSound("/mnt/c/Users/enriq/Desktop/Spring2024/CS225A/OpenSai/cs225a-baseball/project_starter/pandabat/WiiSports.wav");
+
 	while (fSimulationRunning) {
 		timer.waitForNextLoop();
 		VectorXd control_torques = redis_client.getEigen(JOINT_TORQUES_COMMANDED_KEY);
@@ -246,6 +253,10 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
 
     string input_line;
     double x, z, vy = -9.8;  // Preset negative y velocity
+
+	ball_launched = false;
+	new_ball_ready = false;
+	redis_client.set(BUTTON_LAST_STATE, "true");
 	// cout << endl << "Enter 'x z' coordinates for the new ball: ";
     // while (fSimulationRunning) {
 	// 	// Prompt for the next set of coordinates
@@ -301,15 +312,10 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
 										Eigen::Vector3d(0.0, 0.0, 1.0),
 										Eigen::Vector3d(1.2, 0, 1.5));
 			}
-			// graphics->setCameraPose("camera_E_Pitcher", 
-			// 				Eigen::Vector3d(1.2, 7, 1.5),
-			// 				Eigen::Vector3d(0.0, 0.0, 1.0),
-			// 				Eigen::Vector3d(1.2, 0, 1.5));
-			//cout << object_poses[0] << endl;
 		} else if (controllerState == "WAITING1" && ball_launched == false) {
             // Update ball's position continuously in WAITING1 state
-			// Vector3d currentPosition = redis_client.getEigen(BALL_POS);
-			Vector3d currentPosition = Eigen::Vector3d(0.9, 5, 1.6);
+			Vector3d currentPosition = redis_client.getEigen(BALL_POS);
+			// Vector3d currentPosition = Eigen::Vector3d(0.9, 5, 1.6);
 			Eigen::Affine3d new_pose;
 			new_pose.translation() = currentPosition;
 			sim->setObjectPose(object_names[0], new_pose);
@@ -326,8 +332,8 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
                 new_ball_position = currentPosition;  // Use the current position
 
 				// Get y-component of velocity from Redis, map it, and set x, z to zero
-                // Vector3d input_v = redis_client.getEigen(BALL_VEL);
-				Vector3d input_v = Eigen::Vector3d(0, -4.8, 0);
+                Vector3d input_v = redis_client.getEigen(BALL_VEL);
+				// Vector3d input_v = Eigen::Vector3d(0, -4.8, 0);
 				double input_vy = input_v[1];
 				double input_vz = input_v[2];
                 new_ball_velocity = mapVelocity(input_vy, input_vz);  // Use mapped velocity
@@ -349,9 +355,9 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
 		
 		else if (controllerState == "FOLLOWTHROUGH") {
 			graphics->setCameraPose("camera_E_Pitcher", 
-							Eigen::Vector3d(2.3, -8.8, 1.9),
+							Eigen::Vector3d(2.5, -8.8, 1.9),
 							Eigen::Vector3d(0.0, 0.0, 1.0),
-							Eigen::Vector3d(2.15, -7.8, 1.8));
+							Eigen::Vector3d(2.35, -7.8, 1.8));
 		} 
     }
 }
@@ -403,7 +409,7 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 
 Eigen::Vector3d mapVelocity(double input_vy, double input_vz) {
     // Map from [0, -5] to [-5, -10]
-    double mapped_vy = input_vy - 5.0;
+    double mapped_vy = (2*input_vy) - 5.0;
 
     // Clipping the mapped y-velocity to ensure it remains within the new bounds
     if (mapped_vy < -10) {
@@ -412,10 +418,10 @@ Eigen::Vector3d mapVelocity(double input_vy, double input_vz) {
         mapped_vy = -5;
     }
 
-	// input_vz += 1;
-	// if (input_vz < 0) {
-	// 	input_vz = 0;
-	// }
+	double mapped_vz = 1.0 + (2*input_vz);
+	if (input_vz < 1.0) {
+		input_vz = 1.0;
+	}
 
     // Return the new velocity vector with x and z set to zero
     return Eigen::Vector3d(0, mapped_vy, input_vz);

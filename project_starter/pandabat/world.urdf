@@ -10,7 +10,7 @@
 	<static_object name="Base">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <visual>
-            <origin xyz="1 9.7 -0.03" rpy="1.5708  0 0" />
+            <origin xyz="1.2 9.7 -0.03" rpy="1.5708  0 0" />
             <geometry>
                 <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/Baseball_Field.obj" scale="1.3 1.3 1.3"/>
             </geometry>
@@ -39,7 +39,7 @@
 	<static_object name="Stadium">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <visual>
-            <origin xyz="-1.6 8.8 -0.04" rpy="1.5708 0 0.785398" />
+            <origin xyz="-1.4 8.8 -0.04" rpy="1.5708 0 0.785398" />
 			<geometry>
                 <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/NewStadium1.obj" scale="2.9 5.5 2.9"/>
             </geometry>
@@ -108,10 +108,10 @@
 	    <visual>
 	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
 	        <geometry>
-				<box size="0.4 0 0.01" />
+				<box size="0.4 0 0.04" />
 	        </geometry>
 	        <material name="material">
-		        <color rgba="1.0 0 0 1.0" />
+		        <color rgba="0.0 0.0 0.0 1.0" />
 	        </material>
 	    </visual>
 	</static_object>
@@ -121,10 +121,10 @@
 	    <visual>
 	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
 	        <geometry>
-				<box size="0.4 0 0.01" />
+				<box size="0.4 0 0.04" />
 	        </geometry>
 	        <material name="material">
-		        <color rgba="1.0 0 0 1.0" />
+		        <color rgba="0.0 0.0 0.0 1.0" />
 	        </material>
 	    </visual>
 	</static_object>
@@ -134,10 +134,10 @@
 	    <visual>
 	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
 	        <geometry>
-				<box size="0.01 0 0.5" />
+				<box size="0.04 0 0.5" />
 	        </geometry>
 	        <material name="material">
-		        <color rgba="1.0 0 0 1.0" />
+		        <color rgba="0.0 0.0 0.0 1.0" />
 	        </material>
 	    </visual>
 	</static_object>
@@ -147,10 +147,10 @@
 	    <visual>
 	        <origin xyz="0.0 0.0 -0.0" rpy="0 0 0" />
 	        <geometry>
-				<box size="0.01 0 0.5" />
+				<box size="0.04 0 0.5" />
 	        </geometry>
 	        <material name="material">
-		        <color rgba="1.0 0 0 1.0" />
+		        <color rgba="0.0 0.0 0.0 1.0" />
 	        </material>
 	    </visual>
 	</static_object>
@@ -176,15 +176,15 @@
 	</light> -->
 
 	<camera name="camera_A_fixed">
-		<position xyz="3.5 7 2" /> 
+		<position xyz="3.7 7 2" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
-		<lookat xyz="1.0 0 0.5" /> 
+		<lookat xyz="1.2 0 0.5" /> 
 	</camera>
 
 	<camera name="camera_B_overhead">
-		<position xyz="2 0 5.0" /> 
+		<position xyz="2.2 0 5.0" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
-		<lookat xyz="1.0 0 0.5" /> 
+		<lookat xyz="1.2 0 0.5" /> 
 	</camera>
 
 	<camera name="camera_C_side">
@@ -194,9 +194,9 @@
 	</camera>
 
 	<camera name="camera_D_back">
-		<position xyz="2.3 -8.8 1.9" /> 
+		<position xyz="2.5 -8.8 1.9" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
-		<lookat xyz="2.15 -7.8 1.8" /> 
+		<lookat xyz="2.35 -7.8 1.8" /> 
 	</camera>
 
 	<camera name="camera_E_Pitcher">
