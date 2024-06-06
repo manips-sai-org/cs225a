@@ -41,7 +41,7 @@
         <visual>
             <origin xyz="-1.6 8.8 -0.04" rpy="1.5708 0 0.785398" />
 			<geometry>
-                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/NewStadium.obj" scale="2.9 6 2.9"/>
+                <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/NewStadium1.obj" scale="2.9 5.5 2.9"/>
             </geometry>
         </visual>
         <collision>
@@ -75,6 +75,20 @@
 			</geometry>
 		</collision>
 	</dynamic_object>
+
+
+	<!-- <static_object name="person1">
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+
+		<visual>
+			<origin xyz="-2.45 -2.3 -.18" rpy="0 3.14159 -1.0" />
+			<geometry>
+				 <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/person1.obj" scale=".02 .02 .02"/> 
+				<mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/person2.obj" scale="1 1 1"/>
+			</geometry>
+		</visual>
+
+	</static_object> -->
 
 	<!-- <static_object name="PitcherPosVisualizer">
 		<origin xyz="0 0 0" rpy="0 0 0" />
@@ -174,15 +188,15 @@
 	</camera>
 
 	<camera name="camera_C_side">
-		<position xyz="2.5 -1.5 1" />
+		<position xyz="2.5 -2 1" />
 		<vertical xyz="0.0 0.0 1.0" />
 		<lookat xyz="1.0 0 0.5" />
 	</camera>
 
 	<camera name="camera_D_back">
-		<position xyz="2 -3 1.0" /> 
+		<position xyz="2.3 -8.8 1.9" /> 
 		<vertical xyz="0.0 0.0 1.0" /> 
-		<lookat xyz="1.0 0 0.5" /> 
+		<lookat xyz="2.15 -7.8 1.8" /> 
 	</camera>
 
 	<camera name="camera_E_Pitcher">

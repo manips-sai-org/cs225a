@@ -47,7 +47,7 @@ void parseTrajectoryMessage(const string& message, Vector3d& position, double& t
         position.z() = z;
         position.y() = 0.0;  // Since strike zone is in the xz plane
     }
-    timeToZone = t-.01;
+    timeToZone = t;
 }
 
 string stateToString(int state) {
@@ -291,7 +291,7 @@ int main() {
 			OS_Rd = OS_R;
 
 			//debugging prints
-			cout << OS_X << endl;
+			//cout << OS_X << endl;
 
 			// Add position and time to history
 			position_history.push_back(OS_X);
@@ -308,7 +308,7 @@ int main() {
 				Vector3d velocity = (OS_X - pos_prev) / dt;
 
 				// Print the smoothed velocity
-				cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
+				//cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
 
                 redis_client.setEigen(BALL_POS,OS_X);
                 redis_client.setEigen(BALL_VEL, velocity);
@@ -415,7 +415,7 @@ int main() {
 
                 // Prepare conditions for motion trajectory
                 desired_endPosition = Vector3d(ball_position.x(), 0.0, ball_position.z()); 
-                desired_endVelocity = Vector3d(0, 8, 1);  // Trying out increasing the velocity since right now the hit is very weak
+                desired_endVelocity = Vector3d(-3, 15, 1.5);  // Trying out increasing the velocity since right now the hit is very weak
                 VectorXd conditions(startPosition.size() + startVelocity.size() + desired_endPosition.size() + desired_endVelocity.size());
                 conditions << start, startVelocity, desired_endPosition, desired_endVelocity;
                 traj = computeTrajMatrix(tSwing);

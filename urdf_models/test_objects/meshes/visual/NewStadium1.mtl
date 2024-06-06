@@ -1,0 +1,272 @@
+# Blender 4.1.1 MTL File: 'NewStadium.blend'
+# www.blender.org
+
+# Field Color
+newmtl 01_-_Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.45 0.25 0.11  # Brown
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl 02_-_Default
+Ns 20.000006
+Ka 0.150 0.150 0.150
+Kd 0.65 0.45 0.25
+Ks 0.150 0.150 0.150
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+newmtl 03_-_Default
+Ns 20.000006
+Ka 0.075 0.075 0.075
+Kd 0.075 0.074510 0.639216
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+# Bases
+newmtl 07_-_Default
+Ns 0.000000
+Ka 0.075 0.075 0.075       
+Kd 0.45 0.25 0.11          
+Ks 0.075 0.075 0.075       
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl 07_-_Default.001
+Ns 171.483734
+Ka 0.075 0.075 0.075
+Kd 0.000000 0.000000 0.000000
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl 08_-_Default
+Ns 20.000006
+Ka 0.075 0.075 0.075
+Kd 0.262745 0.262745 0.262745
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+# RAILINGS!
+newmtl 09_-_Default
+Ns 250.000000
+Ka 0.15 0.15 0.10        # Slightly golden ambient reflectance
+Kd 0.80 0.68 0.21        # Deep gold
+Ks 0.50 0.50 0.40        # Strong specular reflectance for a metallic look
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl 09_-_Default.001
+Ns 20.000006
+Ka 0.075 0.075 0.075
+Kd 0.45 0.45 0.45
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+# Outside Field
+newmtl 13_-_Default
+Ns 250.000000
+Ka 0.15 0.15 0.15          
+Kd 0.09 0.315 0.045        
+Ks 0.15 0.15 0.15          
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+# Bleachers
+newmtl 15_-_Default
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.55 0.082 0.082
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+# Base for the ladders (POLES AT THE BACK, YELLOW!)
+newmtl 21_-_Default
+Ns 250.000000
+Ka 0.15 0.15 0.15
+Kd 1.00 0.90 0.10        # Bright yellow
+Ks 0.15 0.15 0.15
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Bamboo
+Ns 370.069489
+Ka 0.075 0.075 0.075
+Kd 0.223494 0.401969 0.083290
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Black
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.25 0.25 0.25
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+# Cement
+newmtl Concrete_Stucco
+Ns 150.000000
+Ka 0.20 0.20 0.20        # Moderate ambient reflectance
+Kd 0.45 0.45 0.45        # Light grey
+Ks 0.10 0.10 0.10        # Moderate specular reflectance
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.001
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.25 0.25 0.25
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.002
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.75 0.75 0.75
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.003
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.05 0.05 0.05
+Ks 0.9 0.9 0.9
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.006
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.25 0.25 0.25
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+// Posts behind benches and holding surrounding fence
+newmtl Metal_Galvanized
+Ns 250.000000
+Ka 0.05 0.05 0.05        # Low ambient reflectance
+Kd 0.35 0.35 0.35        # Dark grey
+Ks 0.05 0.05 0.05        # Low specular reflectance
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Putih
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.75 0.75 0.75
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+# Surrounding Fence
+newmtl SFX_ChainLink
+Ns 150.000000
+Ka 0.20 0.20 0.20
+Kd 0.55 0.55 0.55  # Lighter gray color
+Ks 0.25 0.25 0.25
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+# Player benches and front fence
+newmtl SFX_ChainLinkDugout
+Ns 100.000000
+Ka 0.15 0.15 0.15
+Kd 0.45 0.45 0.45  # Darker gray color
+Ks 0.15 0.15 0.15
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000  
+illum 4
+
+newmtl S_Red
+Ns 0.000000
+Ka 0.075 0.075 0.075
+Kd 0.55 0.082 0.082
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl White
+Ns 360.000000
+Ka 0.075 0.075 0.075
+Kd 0.75 0.75 0.75
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl default
+Ns 20.000006
+Ka 0.075 0.075 0.075
+Kd 0.011765 0.192157 0.749020
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+
+newmtl default.008
+Ns 20.000006
+Ka 0.075 0.075 0.075
+Kd 0.255929 0.754066 0.063541
+Ks 0.075 0.075 0.075
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1

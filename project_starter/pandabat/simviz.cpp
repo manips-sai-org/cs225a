@@ -46,7 +46,7 @@ bool new_ball_ready = false;
 Eigen::Vector3d new_ball_position;
 Eigen::Vector3d new_ball_velocity;
 bool ball_launched = false;
-bool strike_thrown = false;
+bool strike_thrown = true;
 Eigen::Vector3d last_ball_pose;
 
 // specify urdf and robots 
@@ -60,9 +60,9 @@ const int n_objects = object_names.size();
 
 // simulation thread + function prototypes
 void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
-void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client);
-void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim);
-Eigen::Vector3d mapVelocity(double input_vy);
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics);
+void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics);
+Eigen::Vector3d mapVelocity(double input_vy, double input_vz);
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -86,7 +86,7 @@ int main() {
 	//graphics->showLinkFrame(true, robot_name, "link0", 0.25);
 	//graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
-	graphics->addUIForceInteraction(robot_name);
+	// graphics->addUIForceInteraction(robot_name);
 
 	// load robots
 	auto robot = std::make_shared<Sai2Model::Sai2Model>(robot_file, false);
@@ -154,7 +154,7 @@ int main() {
 	thread sim_thread(simulation, sim);
 
 	// Start the user input thread
-    thread input_thread(handleUserInput, sim);
+    thread input_thread(handleUserInput, sim, graphics);
 
 	// while window is open:
 	while (graphics->isWindowOpen() && fSimulationRunning) {		
@@ -238,7 +238,7 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 // NOTE: Sperate thread is running this, and cin does not understand when the input has been closed so killing the simulation
 // will leave the window hanging. Need to kill the terminal too so that the simulation actually stops since it waits for the
 // input_thread to join. To do this, just do CTR+D in the terminal or just hit enter.
-void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
+void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics) {
 
     // create redis client
     auto redis_client = Sai2Common::RedisClient();
@@ -291,43 +291,72 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 
 	while (fSimulationRunning) {
         string controllerState = redis_client.get(CONTROLLER_STATE);
-
-        if (controllerState == "WAITING1" && ball_launched == false) {
+		if (strike_thrown == false){
+			if (object_poses[0].translation().y() < -4){
+				cout << "resetting" << endl;
+				strike_thrown = true;
+				ball_launched = false;
+				graphics->setCameraPose("camera_E_Pitcher", 
+										Eigen::Vector3d(1.2, 7, 1.5),
+										Eigen::Vector3d(0.0, 0.0, 1.0),
+										Eigen::Vector3d(1.2, 0, 1.5));
+			}
+			// graphics->setCameraPose("camera_E_Pitcher", 
+			// 				Eigen::Vector3d(1.2, 7, 1.5),
+			// 				Eigen::Vector3d(0.0, 0.0, 1.0),
+			// 				Eigen::Vector3d(1.2, 0, 1.5));
+			//cout << object_poses[0] << endl;
+		} else if (controllerState == "WAITING1" && ball_launched == false) {
             // Update ball's position continuously in WAITING1 state
-			Vector3d currentPosition = redis_client.getEigen(BALL_POS);
+			// Vector3d currentPosition = redis_client.getEigen(BALL_POS);
+			Vector3d currentPosition = Eigen::Vector3d(0.9, 5, 1.6);
 			Eigen::Affine3d new_pose;
 			new_pose.translation() = currentPosition;
 			sim->setObjectPose(object_names[0], new_pose);
 			object_poses[0] = new_pose;
-			cout << "Pos updated." << endl;
+			//cout << "Pos updated." << endl;
 		
 
             // Check if the button is pressed to launch the ball
-            if (redis_client.get(BUTTON_LAST_STATE) == "true") {
+            if (redis_client.get(BUTTON_LAST_STATE) == "false") {
 
-                cout << "Button press detected in WAITING1 state, launching new ball." << endl;
+                cout << "Button press release in WAITING1 state, launching new ball." << endl;
 
                 lock_guard<mutex> lock(ball_mutex);
                 new_ball_position = currentPosition;  // Use the current position
 
 				// Get y-component of velocity from Redis, map it, and set x, z to zero
-                // double input_vy = redis_client.getEigen(BALL_VEL).y();
-                // new_ball_velocity = mapVelocity(input_vy);  // Use mapped velocity
-                new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  // Use predefined velocity
+                // Vector3d input_v = redis_client.getEigen(BALL_VEL);
+				Vector3d input_v = Eigen::Vector3d(0, -4.8, 0);
+				double input_vy = input_v[1];
+				double input_vz = input_v[2];
+                new_ball_velocity = mapVelocity(input_vy, input_vz);  // Use mapped velocity
+                //new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  // Use predefined velocity
 				
 				ball_launched = true;
                 new_ball_ready = true;
-                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
-                redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
+                computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client, graphics);
+                redis_client.set(BUTTON_LAST_STATE, "true");  // Acknowledge handling by setting to true
             }
         } else if (controllerState == "POSTURE") {
             // Reset the ball_launched flag when in POSTURE state
             ball_launched = false;
-        }
+			graphics->setCameraPose("camera_E_Pitcher", 
+							Eigen::Vector3d(1.2, 7, 1.5),
+							Eigen::Vector3d(0.0, 0.0, 1.0),
+							Eigen::Vector3d(1.2, 0, 1.5));
+        } 
+		
+		else if (controllerState == "FOLLOWTHROUGH") {
+			graphics->setCameraPose("camera_E_Pitcher", 
+							Eigen::Vector3d(2.3, -8.8, 1.9),
+							Eigen::Vector3d(0.0, 0.0, 1.0),
+							Eigen::Vector3d(2.15, -7.8, 1.8));
+		} 
     }
 }
 
-void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client) {
+void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity, Sai2Common::RedisClient& redis_client, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics) {
     double g = -9.81;
     double y0 = position.y();  // Initial y-coordinate
     double vy = velocity.y();  // Initial velocity in the y-direction
@@ -362,24 +391,32 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 		ball_launched = true;
 		strike_thrown = true;
 	} else {
+		graphics->setCameraPose("camera_E_Pitcher", 
+							Eigen::Vector3d(2.5, -2, 1),
+							Eigen::Vector3d(0.0, 0.0, 1.0),
+							Eigen::Vector3d(1.0, 0, 0.5));
 		ball_launched = true;
 		strike_thrown = false;
 		cout << "The ball will miss the strike zone, crossing at x = " << x << ", z = " << z << " at time t = " << t << " seconds." << endl;
 	}
 }
 
+Eigen::Vector3d mapVelocity(double input_vy, double input_vz) {
+    // Map from [0, -5] to [-5, -10]
+    double mapped_vy = input_vy - 5.0;
 
-// Eigen::Vector3d mapVelocity(double input_vy) {
-//     // Map from [0, -5] to [-5, -10]
-//     double mapped_vy = -5 - input_vy;
+    // Clipping the mapped y-velocity to ensure it remains within the new bounds
+    if (mapped_vy < -10) {
+        mapped_vy = -10;
+    } else if (mapped_vy > -5) {
+        mapped_vy = -5;
+    }
 
-//     // Clipping the mapped y-velocity to ensure it remains within the new bounds
-//     if (mapped_vy < -10) {
-//         mapped_vy = -10;
-//     } else if (mapped_vy > -5) {
-//         mapped_vy = -5;
-//     }
+	// input_vz += 1;
+	// if (input_vz < 0) {
+	// 	input_vz = 0;
+	// }
 
-//     // Return the new velocity vector with x and z set to zero
-//     return Eigen::Vector3d(0, mapped_vy, 0);
-// }
+    // Return the new velocity vector with x and z set to zero
+    return Eigen::Vector3d(0, mapped_vy, input_vz);
+}
