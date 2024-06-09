@@ -76,33 +76,6 @@
 		</collision>
 	</dynamic_object>
 
-
-	<!-- <static_object name="person1">
-		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-
-		<visual>
-			<origin xyz="-2.45 -2.3 -.18" rpy="0 3.14159 -1.0" />
-			<geometry>
-				 <mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/person1.obj" scale=".02 .02 .02"/> 
-				<mesh filename="${CS225A_URDF_FOLDER}/test_objects/meshes/visual/person2.obj" scale="1 1 1"/>
-			</geometry>
-		</visual>
-
-	</static_object> -->
-
-	<!-- <static_object name="PitcherPosVisualizer">
-		<origin xyz="0 0 0" rpy="0 0 0" />
-	    <visual>
-	        <origin xyz="0.0 10.0 0.0" rpy="0 0 0" />
-	        <geometry>
-				<sphere radius="0.5" />
-	        </geometry>
-	        <material name="material">
-		        <color rgba="1.0 0 0 1.0" />
-	        </material>
-	    </visual>
-	</static_object> -->
-
 	<static_object name="StrikeZoneTop">
 		<origin xyz="1.2 0.0 0.65" rpy="0 0 0" />
 	    <visual>
@@ -169,11 +142,6 @@
 		<position xyz="0.0 2.0 10.0" />
 		<lookat xyz="0.0 -1.0 2.0" />
 	</light>
-
-	<!-- <light name="light1" type="spot">
-		<position xyz="0.0 -10 4.0" />
-		<lookat xyz="0.0 -10 1.0" />
-	</light> -->
 
 	<camera name="camera_A_fixed">
 		<position xyz="3.7 7 2" /> 

@@ -2,11 +2,11 @@
 # www.blender.org
 
 newmtl Ball_1
-Ns 30.000000  # Reduced shininess for less intense specular highlights
-Ka 0.300000 0.300000 0.300000  # Reduced ambient light reflection
-Kd 0.700000 0.700000 0.700000  # Reduced diffuse reflection to lower overall brightness
-Ks 0.200000 0.200000 0.200000  # Lowered specular to make the shine less intense
-Ke 0.000000 0.000000 0.000000  # Emission is zero
+Ns 30.000000 
+Ka 0.300000 0.300000 0.300000 
+Kd 0.700000 0.700000 0.700000 
+Ks 0.200000 0.200000 0.200000 
+Ke 0.000000 0.000000 0.000000 
 Ni 1.450000
 d 1.000000
 illum 2

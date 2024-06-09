@@ -145,25 +145,13 @@
 		</inertial>
 		<visual>
 			<origin xyz=".02 -0.12 -0.12" rpy="0.0 0.0 -1.2" />
-			<!-- <geometry>
-				<cylinder radius="0.05" length="1.1"/>
-			</geometry> -->
-			<!-- <geometry>
-				<box size="1.25 .175 0.01" />
-			</geometry> -->
 			<geometry>
 				<mesh filename="meshes/visual/Bat.obj" scale="0.05 0.05 0.05"/>
 			</geometry>
-			<!-- <material name="bat_color">
-				<color rgba="0.74 0.43 0.26 1.0" />
-			</material > -->
 		</visual>
 			
 		<collision>
 			<origin xyz="0 0 -0.2" rpy="0.0 1.5708 -1.2" />
-			<!-- <geometry>
-				<cylinder radius="0.05" length="1.1"/>
-			</geometry> -->
 			<geometry>
 				<box size="1.2 .175 0.01" />
 			</geometry>

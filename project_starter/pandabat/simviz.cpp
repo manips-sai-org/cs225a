@@ -64,10 +64,6 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics);
 Eigen::Vector3d mapVelocity(double input_vy, double input_vz);
 
-// void playSound(const string& soundPath) {
-//     string command = "cmd.exe /C powershell -c (New-Object Media.SoundPlayer \"" + soundPath + "\").PlaySync()";
-//     system(command.c_str());
-// }
 
 int main() {
 	Sai2Model::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -87,9 +83,9 @@ int main() {
 	// load graphics scene
 	auto graphics = std::make_shared<Sai2Graphics::Sai2Graphics>(world_file, "Baseball Panda", false);
 	graphics->setBackgroundColor(25.0/255, 189.0/255, 255.0/255);  // set blue background 	
-	//graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
-	//graphics->showLinkFrame(true, robot_name, "link0", 0.25);
-	//graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
+	// graphics->showLinkFrame(true, robot_name, "link7", 0.2);  
+	// graphics->showLinkFrame(true, robot_name, "link0", 0.25);
+	// graphics->showLinkFrame(true, robot_name, "end-effector", 0.2);
 	// graphics->getCamera(camera_name)->setClippingPlanes(0.1, 50);  // set the near and far clipping planes 
 	// graphics->addUIForceInteraction(robot_name);
 
@@ -112,29 +108,10 @@ int main() {
 	}
 
 	/*------- Set up baseball ball -------*/
-	// std::string input_line;  // To store the whole input line
-	// double x, y, z;          // Variables to store user input coordinates for position
-	// std::cout << "Enter initial position of " << object_names[0] << " (x y z): ";
-	// std::getline(std::cin, input_line);  // Read the whole line of input
-	// std::istringstream iss_pos(input_line);  // Use istringstream to process the line
-	// iss_pos >> x >> y >> z;  // Extract position coordinates from the line
-
 	Eigen::Affine3d new_pose;
 	new_pose.translation() = Eigen::Vector3d(1.2, 1.0, 1.0);
 	sim->setObjectPose(object_names[0], new_pose);
 	object_poses[0] = new_pose; // Update the pose in the global vector
-
-	// double vx, vy, vz;       // Variables to store user input coordinates for velocity
-	// std::cout << "Enter initial velocity of " << object_names[0] << " (vx vy vz): ";
-	// std::getline(std::cin, input_line);  // Read the whole line of input for velocity
-	// std::istringstream iss_vel(input_line);  // Process the line for velocity
-	// iss_vel >> vx >> vy >> vz;  // Extract velocity coordinates
-
-	// // Set the velocity with zero angular components
-	// Eigen::VectorXd initial_velocity(6);
-	// initial_velocity << vx, vy, vz, 0, 0, 0;  // No angular velocity
-	// sim->setObjectVelocity(object_names[0], initial_velocity);
-	// object_velocities[0] = initial_velocity; // Update the velocity in the global vector
 
     // set co-efficient of restition to zero for force control
     sim->setCollisionRestitution(0.0);
@@ -205,8 +182,6 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
     sim->enableGravityCompensation(true);
 	sim->enableJointLimits(robot_name);
 
-	//playSound("/mnt/c/Users/enriq/Desktop/Spring2024/CS225A/OpenSai/cs225a-baseball/project_starter/pandabat/WiiSports.wav");
-
 	while (fSimulationRunning) {
 		timer.waitForNextLoop();
 		VectorXd control_torques = redis_client.getEigen(JOINT_TORQUES_COMMANDED_KEY);
@@ -242,9 +217,6 @@ void simulation(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim) {
 	timer.printInfoPostRun();
 }
 
-// NOTE: Sperate thread is running this, and cin does not understand when the input has been closed so killing the simulation
-// will leave the window hanging. Need to kill the terminal too so that the simulation actually stops since it waits for the
-// input_thread to join. To do this, just do CTR+D in the terminal or just hit enter.
 void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::shared_ptr<Sai2Graphics::Sai2Graphics> graphics) {
 
     // create redis client
@@ -257,53 +229,11 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
 	ball_launched = false;
 	new_ball_ready = false;
 	redis_client.set(BUTTON_LAST_STATE, "true");
-	// cout << endl << "Enter 'x z' coordinates for the new ball: ";
-    // while (fSimulationRunning) {
-	// 	// Prompt for the next set of coordinates
-	// 	if (ball_launched == false) {
-	// 		Vector3d OS_X = redis_client.getEigen(BALL_POS);
-	// 		Eigen::Affine3d new_pose;
-	// 		new_pose.translation() = OS_X;
-	// 		last_ball_pose = OS_X;
-	// 		sim->setObjectPose(object_names[0], new_pose);
-	// 		object_poses[0] = new_pose;
-	// 	}
-		
-
-    //     // if (getline(cin, input_line)) {
-    //     //     istringstream iss(input_line);
-    //     //     if (iss >> x >> z) {
-    //     //         lock_guard<mutex> lock(ball_mutex);
-    //     //         new_ball_position = Eigen::Vector3d(x, 5.0, z);
-    //     //         new_ball_velocity = Eigen::Vector3d(0, vy, 0);
-    //     //         new_ball_ready = true;
-    //     //         cout << "New ball placed." << endl;
-
-    //     //         // Calculate and announce the crossing position
-    //     //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
-
-	// 	// 		cout << endl << "Enter 'x z' coordinates for the new ball: ";
-    //     //     }
-    //     // }
-
-    //     if (redis_client.get(BUTTON_LAST_STATE) == "true") {  // Check if the button state is true
-    //         cout << "Button press detected, launching new ball." << endl;
-
-    //         lock_guard<mutex> lock(ball_mutex);
-    //         new_ball_position = last_ball_pose;  	// Set new position
-	// 		Eigen::Vector3d velocityLast = redis_client.getEigen(BALL_VEL);
-    //         new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  		// Set new velocity
-    //         new_ball_ready = true;
-    //         ball_launched = true;
-    //         computeZIntersectionWithPlane(new_ball_position, new_ball_velocity, redis_client);
-    //         redis_client.set(BUTTON_LAST_STATE, "false");  // Acknowledge handling by setting to false
-    //     }
-    // }
 
 	while (fSimulationRunning) {
         string controllerState = redis_client.get(CONTROLLER_STATE);
 		if (strike_thrown == false){
-			if (object_poses[0].translation().y() < -4){
+			if (object_poses[0].translation().y() < -3){	// Wait for ball to go a little behind bat to reinitialize
 				cout << "resetting" << endl;
 				strike_thrown = true;
 				ball_launched = false;
@@ -315,14 +245,11 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
 		} else if (controllerState == "WAITING1" && ball_launched == false) {
             // Update ball's position continuously in WAITING1 state
 			Vector3d currentPosition = redis_client.getEigen(BALL_POS);
-			// Vector3d currentPosition = Eigen::Vector3d(0.9, 5, 1.6);
 			Eigen::Affine3d new_pose;
 			new_pose.translation() = currentPosition;
 			sim->setObjectPose(object_names[0], new_pose);
 			object_poses[0] = new_pose;
-			//cout << "Pos updated." << endl;
 		
-
             // Check if the button is pressed to launch the ball
             if (redis_client.get(BUTTON_LAST_STATE) == "false") {
 
@@ -331,13 +258,11 @@ void handleUserInput(std::shared_ptr<Sai2Simulation::Sai2Simulation> sim, std::s
                 lock_guard<mutex> lock(ball_mutex);
                 new_ball_position = currentPosition;  // Use the current position
 
-				// Get y-component of velocity from Redis, map it, and set x, z to zero
+				// Get y/z-component of velocity from Redis and map it
                 Vector3d input_v = redis_client.getEigen(BALL_VEL);
-				// Vector3d input_v = Eigen::Vector3d(0, -4.8, 0);
 				double input_vy = input_v[1];
 				double input_vz = input_v[2];
                 new_ball_velocity = mapVelocity(input_vy, input_vz);  // Use mapped velocity
-                //new_ball_velocity = Eigen::Vector3d(0, -9.8, 0);  // Use predefined velocity
 				
 				ball_launched = true;
                 new_ball_ready = true;
@@ -408,7 +333,7 @@ void computeZIntersectionWithPlane(const Eigen::Vector3d& position, const Eigen:
 }
 
 Eigen::Vector3d mapVelocity(double input_vy, double input_vz) {
-    // Map from [0, -5] to [-5, -10]
+    // Scale and Map from [0, -5] to [-5, -10], to match human velocity intuition to simulation
     double mapped_vy = (2*input_vy) - 5.0;
 
     // Clipping the mapped y-velocity to ensure it remains within the new bounds
@@ -418,11 +343,11 @@ Eigen::Vector3d mapVelocity(double input_vy, double input_vz) {
         mapped_vy = -5;
     }
 
-	double mapped_vz = 1.0 + (2*input_vz);
+	// Map to at least one= 1.0 since we always want to throw upwards, boost to match intuition to simulation
 	if (input_vz < 1.0) {
 		input_vz = 1.0;
 	}
 
-    // Return the new velocity vector with x and z set to zero
+    // Return the new velocity vector with x set to zero, strike zone is narrow so no x
     return Eigen::Vector3d(0, mapped_vy, input_vz);
 }

@@ -1,7 +1,3 @@
-
-
-
-
 /**
  * @file controller.cpp
  * @brief Controller file
@@ -169,13 +165,12 @@ int main() {
     Affine3d compliant_frame = Affine3d::Identity();
     compliant_frame.translation() = control_point;
     auto pose_task = std::make_shared<Sai2Primitives::MotionForceTask>(robot, control_link, compliant_frame);
-    // pose_task->setPosControlGains(400, 40, 0);
-    // pose_task->setOriControlGains(400, 40, 0);
     pose_task->setPosControlGains(500, 30, 0);
     pose_task->setOriControlGains(150, 30, 0);
     MatrixXd startOrientation;
     MatrixXd endOrientation;
     Matrix3d desired_orientation;
+
     // Rotation Matrices of Bat pointing in primary vector directions
     Matrix3d posX = Matrix3d::Zero(3, 3);
     posX(0, 2) = 1;
@@ -217,7 +212,6 @@ int main() {
 
     // joint task
     auto joint_task = std::make_shared<Sai2Primitives::JointTask>(robot);
-    // joint_task->setGains(400, 40, 0);
     joint_task->setGains(500, 30, 0);
 
     VectorXd q_desired(dof);
@@ -290,9 +284,6 @@ int main() {
 			OS_Xd = OS_X;
 			OS_Rd = OS_R;
 
-			//debugging prints
-			//cout << OS_X << endl;
-
 			// Add position and time to history
 			position_history.push_back(OS_X);
 			time_history.push_back(time);
@@ -306,9 +297,6 @@ int main() {
 				double dt = time - time_prev;
 				
 				Vector3d velocity = (OS_X - pos_prev) / dt;
-
-				// Print the smoothed velocity
-				//cout << "Time: " << time << " Velocity: " << velocity.transpose() << endl;
 
                 redis_client.setEigen(BALL_POS,OS_X);
                 redis_client.setEigen(BALL_VEL, velocity);
