@@ -1,0 +1,11 @@
+# Blender MTL File: 'orange_arms_ger.blend'
+# Material Count: 1
+
+newmtl material_0.0
+Ns 90.196078
+Ka 0.000000 0.000000 0.000000
+Kd 0.147122 0.182001 0.383498
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2

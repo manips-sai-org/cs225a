@@ -1,0 +1,6 @@
+newmtl DefaultMaterial
+Ka 0.15 0.15 0.15
+Kd 0.7 0.3 0.0
+Ks 0.1 0.1 0.1
+illum 2
+Ns 25.6

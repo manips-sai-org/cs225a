@@ -1,0 +1,996 @@
+<?xml version="1.0"?>
+<robot name="DLR_TORO">
+
+    <link name="ground">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1e-9" />
+        <inertia ixx="1e-9" iyy="1e-9" izz="1e-9" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    </link>
+    
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!! virtual links plus hip !!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+    <link name="floating_virtual1">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1e-9" />
+            <inertia ixx="0" iyy="0" izz="0" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <link name="floating_virtual2">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1e-9" />
+            <inertia ixx="0" iyy="0" izz="0" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <link name="floating_virtual3">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1e-9" />
+            <inertia ixx="0" iyy="0" izz="0" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <link name="floating_virtual4">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1e-9" />
+            <inertia ixx="0" iyy="0" izz="0" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    <link name="floating_virtual5">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1e-9" />
+            <inertia ixx="0" iyy="0" izz="0" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+
+
+
+    <link name="hip_base">
+        <inertial>
+			<origin xyz="-0.0253800000 -0.0003500000 -0.1077200000" rpy="0 0 0" />
+			<mass value="5.6174600000" />
+			<inertia  ixx="0.0566741600" iyy="0.0141009900" izz="0.0519184600" ixy="-0.0000604001" ixz="-0.0010933370" iyz="-0.0000343105" />
+		</inertial>
+        <visual>
+            <geometry>
+                <mesh filename="meshes/obj/upper_hip.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+
+    <joint name="floating_base_p1" type="prismatic">
+        <parent link="ground"/>
+        <child link="floating_virtual1"/>
+        <!-- <origin xyz="0.000000 0.000000 1.089000" rpy="0.000000 0.000000 0.000000" /> -->
+        <origin xyz="0.000000 0.000000 2.089000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="1 0 0"/>
+        <calibration rising="0.0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+    <joint name="floating_base_p2" type="prismatic">
+        <parent link="floating_virtual1"/>
+        <child link="floating_virtual2"/>
+        <origin xyz="0.000000 0.000000 0.00000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="0 1 0"/>
+        <calibration rising="0.0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+    <joint name="floating_base_p3" type="prismatic">
+        <parent link="floating_virtual2"/>
+        <child link="floating_virtual3"/>
+        <origin xyz="0.000000 0.000000 0.00000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="0 0 1"/>
+        <calibration rising="0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+    <joint name="floating_base_r1" type="revolute">
+        <parent link="floating_virtual3"/>
+        <child link="floating_virtual4"/>
+        <origin xyz="0.000000 0.000000 0.00000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="1 0 0"/>
+        <calibration falling="0.0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+    <joint name="floating_base_r2" type="revolute">
+        <parent link="floating_virtual4"/>
+        <child link="floating_virtual5"/>
+        <origin xyz="0.000000 0.000000 0.00000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="0 0 1"/>
+        <calibration falling="0.0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+    <joint name="floating_base_r3" type="revolute">
+        <parent link="floating_virtual5"/>
+        <child link="hip_base"/>
+        <origin xyz="0.000000 0.000000 0.00000" rpy="0.000000 0.000000 0.000000" />
+        <axis xyz="0 1 0"/>
+        <calibration falling="0.0" />
+        <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+    </joint>
+
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!  legs - right  !!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+
+    <link name="RL_KOSY_L1">
+        <inertial>
+            <origin xyz="0.0140200000 -0.0003900000 -0.0807700000" rpy="0 0 0" />
+            <mass value="3.1576128000" />
+            <inertia  ixx="0.0132241200" iyy="0.0128226400" izz="0.0055660800" ixy="-0.0002500743" ixz="-0.0022333460" iyz="-0.0004034797" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/obj/right_lower_hip.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_frontal" type="revolute">
+        <origin xyz="-0.0000000000 -0.1000000000 -0.1254789680" rpy="0 0 0" />
+        <parent link="hip_base"/>
+        <child link="RL_KOSY_L1"/> 
+        <limit effort="176" velocity="1.9199" lower="-1.5708" upper="0.7854" />
+        <calibration falling="-0.0" />
+        <axis xyz="1 0 0"/>   
+    </joint>
+
+    <link name="RL_KOSY_L23">
+        <inertial>
+            <origin xyz="-0.0004400000 -0.0134800000 -0.1181100000" rpy="0 0 0" />
+            <mass value="2.6274499000" />
+            <inertia  ixx="0.0186767700" iyy="0.0182876800" izz="0.0041391160" ixy="0.0000149158" ixz="-0.0000216283" iyz="0.0029088950" />
+        </inertial>
+        <visual>
+        <origin  xyz="0 0 0" rpy="-1.5708 0 3.1416 "/>
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link2.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_sagittal" type="revolute">
+        <origin xyz="-0.0000000000 -0.0350000000 -0.1200000000" rpy="0 0 0" />
+        <parent link="RL_KOSY_L1"/>
+        <child link="RL_KOSY_L23"/> 
+        <limit lower="-2.0071" upper="1.5708" effort="100" velocity="2.7402" />
+        <calibration falling="-35.0" />
+        <axis xyz="0 1 0"/>    
+    </joint>
+
+    <link name="RL_KOSY_L4">
+        <inertial>
+            <origin xyz="-0.0001800000 0.0197800000 0.0475700000" rpy="0 0 0" />
+            <mass value="2.6220074000" />
+            <inertia  ixx="0.0181853400" iyy="0.0177957500" izz="0.0046458290" ixy="0.0000220452" ixz="-0.0000193978" iyz="0.0018474590" />
+        </inertial>
+        <visual>
+            <origin  xyz="0 0 -0.399900088" rpy="3.1416 0 0"/>
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link3.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_self_rotation" type="revolute">
+        <parent link="RL_KOSY_L23"/>
+        <child link="RL_KOSY_L4"/> 
+        <limit lower="-2.0944" upper="2.0944" effort="100" velocity="2.7402" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>     
+    </joint>
+
+
+    <link name="RL_KOSY_L56">
+        <inertial>
+            <origin xyz="-0.0013700000 -0.0074900000 -0.1697900000" rpy="0 0 0" />
+            <mass value="5.7433829000" />
+            <inertia  ixx="0.0904821100" iyy="0.0891927700" izz="0.0139187300" ixy="0.0002627257" ixz="0.0006447136" iyz="0.0098359460" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="meshes/obj/right_calf.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_knee" type="revolute">
+        <origin xyz="0.0000000000 0.0000000000 -0.3999000880" rpy="0 0 0" />
+        <parent link="RL_KOSY_L4"/>
+        <child link="RL_KOSY_L56"/> 
+        <limit lower="0.2" upper="1.8326" effort="165" velocity="3.0718" />
+        <calibration falling="45.0" />
+         <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="RL_ankle">
+        <inertial>
+            <origin xyz="0.0142800000 0.0001000000 -0.0000600000" rpy="0 0 0" />
+            <mass value="0.3906700000" />
+            <inertia  ixx="0.0005022947" iyy="0.0004818338" izz="0.0007966313" ixy="-0.0000013421" ixz="0.0000010653" iyz="0.0000001977" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="meshes/obj/ankle.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_ankle_frontal" type="revolute">
+        <origin xyz="-0.0000000000 0.0220500000 -0.4000000000" rpy="0 0 0" />
+        <parent link="RL_KOSY_L56"/>
+        <child link="RL_ankle"/> 
+        <limit lower="-0.3403" upper="0.3403" effort="50" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="1 0 0"/> 
+    </joint>
+
+
+    <link name="RL_foot">
+         <tcp number="0"/>
+        <inertial>
+            <origin xyz="0.02 0.0 -0.045" rpy="0 0 0" />
+            <mass value="1.4241951000" />
+            <inertia  ixx="0.0039254437" iyy="0.0056384521" izz="0.0049198016" ixy="-0.0000052044" ixz="0.0014223826" iyz="0.0000040064" />
+        </inertial>     
+        <visual>
+            <origin xyz="0.04 0 -0.08" />
+            <geometry>
+                <mesh filename="meshes/obj/foot.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_rl_ankle_sagittal" type="revolute">
+        <origin xyz="-0.0000000000 0.0000000000 -0.0200000" rpy="0 0 0" />
+        <parent link="RL_ankle"/>
+        <child link="RL_foot"/> 
+        <limit lower="-0.7804" upper="0.7804" effort="165" velocity="3.0718" />
+        <calibration falling="-20.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="RL_end_effector">
+         <tcp number="0"/>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.001" />
+            <inertia  ixx="0.001" iyy="0.001" izz="0.001" ixy="-0.0" ixz="0.0" iyz="0.0" />
+        </inertial>     
+<!--         <visual>
+            <geometry>
+                <box size="0.2 0.1 0.02" />
+            </geometry>
+            <material name="material_ee">
+                <color rgba="0.0 0.8 0.0 1.0" />
+            </material>
+        </visual> -->
+        <collision>
+            <geometry>
+                <box size="0.2 0.1 0.02" />
+                <!-- <box size="0.3 0.15 0.02" /> -->
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="j_rfoot_fixed" type="fixed">
+        <origin xyz="0.04 0 -0.08" rpy="0 0 0" />
+        <parent link="RL_foot"/>
+        <child link="RL_end_effector"/> 
+    </joint>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!  legs - left   !!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+
+    <link name="LL_KOSY_L1">
+        <inertial>
+            <origin xyz="0.0140200000 0.0004000000 -0.0803900000" rpy="0 0 0" />
+            <mass value="3.1576128000" />
+            <inertia  ixx="0.0131418500" iyy="0.0127404000" izz="0.0055660580" ixy="0.0002490634" ixz="-0.0022168610" iyz="0.0003874600" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="meshes/obj/left_lower_hip.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ll_frontal" type="revolute">
+        <origin xyz="0.0000000000 0.1000000000 -0.1254789680" rpy="0 0 0" />
+        <parent link="hip_base"/>
+        <child link="LL_KOSY_L1"/> 
+        <limit lower="-0.7804" upper="1.5708" effort="176" velocity="1.9199" />
+        <calibration falling="0.0" />
+        <axis xyz= " 1 0 0 "/>
+    </joint>
+
+    <link name="LL_KOSY_L23">
+        <inertial>
+            <origin xyz="0.0004400000 0.0134800000 -0.1181100000" rpy="0 0 0" />
+            <mass value="2.6274499000" />
+            <inertia  ixx="0.0186767700" iyy="0.0182876800" izz="0.0041391160" ixy="0.0000149158" ixz="0.0000216283" iyz="-0.0029088950" />
+        </inertial>
+         <visual>
+            <origin xyz="0 0 0" rpy= "-1.5708 0 0"/>
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link2.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ll_sagittal" type="revolute">
+        <origin xyz="0.0000000000 0.0350000000 -0.1200000000" rpy="0 0 0" />
+        <parent link="LL_KOSY_L1"/>
+        <child link="LL_KOSY_L23"/> 
+        <limit lower="-2.0071" upper="1.5708" effort="100" velocity="2.7402" />
+        <calibration falling="-35.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+
+
+
+    <link name="LL_KOSY_L4">
+        <inertial>
+            <origin xyz="0.0001800000 -0.0197800000 0.0475700000" rpy="0 0 0" />
+            <mass value="2.6220074000" />
+            <inertia  ixx="0.0181853400" iyy="0.0177957500" izz="0.0046458290" ixy="0.0000220452" ixz="0.0000193978" iyz="-0.0018474590" />
+        </inertial>       
+         <visual>
+            <origin  xyz="0 0 -0.399900088" rpy="0 3.1416 0"/>
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link3.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ll_self_rotation" type="revolute">
+        <parent link="LL_KOSY_L23"/>
+        <child link="LL_KOSY_L4"/> 
+        <limit lower="-2.0944" upper="2.0944" effort="100" velocity="2.7402" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+
+
+    <link name="LL_KOSY_L56">
+        <inertial>
+            <origin xyz="-0.0017200000 0.0075200000 -0.1697300000" rpy="0 0 0" />
+            <mass value="5.7433829000" />
+            <inertia  ixx="0.0904466300" iyy="0.0891587900" izz="0.0139048900" ixy="-0.0001614719" ixz="0.0007332664" iyz="-0.0098185250" />
+        </inertial>
+         <visual>
+            <geometry>
+                <mesh filename="meshes/obj/left_calf.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ll_knee" type="revolute">
+        <origin xyz="0.0000000000 0.0000000000 -0.3999000880" rpy="0 0 0" />
+        <parent link="LL_KOSY_L4"/>
+        <child link="LL_KOSY_L56"/> 
+        <limit lower="0.2" upper="1.8326" effort="165" velocity="3.0718" />
+        <calibration falling="45.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+
+    <link name="LL_ankle">
+        <inertial>
+            <origin xyz="0.0142800000 0.0001000000 -0.0000600000" rpy="0 0 0" />
+            <mass value="0.3906700000" />
+            <inertia  ixx="0.0005022947" iyy="0.0004818338" izz="0.0007966313" ixy="-0.0000013421" ixz="0.0000010653" iyz="0.0000001977" />
+        </inertial>
+         <visual>
+            <geometry>
+                <mesh filename="meshes/obj/ankle.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ll_ankle_frontal" type="revolute">
+        <origin xyz="0.0000000000 -0.0220500000 -0.4000000000" rpy="0 0 0" />
+        <parent link="LL_KOSY_L56"/>
+        <child link="LL_ankle"/> 
+        <limit lower="-0.3403" upper="0.3403" effort="50" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="1 0 0"/>
+    </joint>
+
+    <link name="LL_foot">
+         <tcp number="1"/>
+        <tcp number="1"/> 
+        <inertial>
+            <origin xyz="0.02 0.0 -0.045" rpy="0 0 0" />
+            <mass value="1.4241951000" />
+            <inertia  ixx="0.0039235265" iyy="0.0056313673" izz="0.0049161089" ixy="0.0000049045" ixz="0.0014182543" iyz="-0.0000046132" />
+        </inertial>
+        <visual>
+            <origin xyz="0.04 0 -0.08" />
+            <geometry>
+                <mesh filename="meshes/obj/foot.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ll_ankle_sagittal" type="revolute">
+        <origin xyz="-0.0000000000 0.0000000000 -0.0200000" rpy="0 0 0" />
+        <parent link="LL_ankle"/>
+        <child link="LL_foot"/> 
+        <limit lower="-0.7854" upper="0.7854" effort="165" velocity="3.0718" />
+        <calibration falling="-20.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="LL_end_effector">
+         <tcp number="0"/>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.001" />
+            <inertia  ixx="0.001" iyy="0.001" izz="0.001" ixy="-0.0" ixz="0.0" iyz="0.0" />
+        </inertial>     
+<!--         <visual>
+            <geometry>
+                <box size="0.2 0.1 0.02" />
+            </geometry>
+            <material name="material_ee">
+                <color rgba="0.0 0.8 0.0 1.0" />
+            </material>
+        </visual> -->
+        <collision>
+            <geometry>
+                <box size="0.2 0.1 0.02" />
+                <!-- <box size="0.3 0.15 0.02" /> -->
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="j_lfoot_fixed" type="fixed">
+        <origin xyz="0.04 0 -0.08" rpy="0 0 0" />
+        <parent link="LL_foot"/>
+        <child link="LL_end_effector"/> 
+    </joint>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!    Trunk    !!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+
+    <link name="trunk">
+        <inertial>
+            <origin xyz="-0.0772300000 -0.0064300000 0.1945200000" rpy="0 0 0" />
+            <mass value="19.6443820000" />
+            <inertia  ixx="0.4140931300" iyy="0.4412850500" izz="0.2319975000" ixy="-0.0090228103" ixz="0.0016661460" iyz="0.0148581080" />
+        </inertial>
+         <visual>
+            <geometry>
+                <mesh filename="meshes/obj/trunk.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_waist" type="revolute">
+        <parent link="hip_base"/>
+        <child link="trunk"/> 
+        <limit lower="-2.0944" upper="2.0944" effort="100" velocity="2.7402" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/> 
+    </joint>
+
+      
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!   arms - right   !!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+    <link name="ra_link1">
+        <inertial>
+            <origin xyz="-0.0183100000 -0.0004571088 -0.0550082644" rpy="0 0 0"/>
+            <mass value="2.6220074000" />
+            <inertia ixx="0.0163447800" iyy="0.0168339022" izz="0.0042262898" ixy="-0.0000450521" ixz="0.0016914376" iyz="0.0000513506" />
+        </inertial>
+        <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="0.0000031811 -0.0000024488  1.5707981634" />
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link1.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ra_sagittal" type="revolute">
+        <origin xyz="0.0000000000 -0.2590563550  0.3552250220" rpy="1.0471975512 0.0000000000 0.0000000000" />
+        <parent link="trunk"/>
+        <child link="ra_link1"/> 
+        <limit lower="-2.0944" upper="2.0944" effort="100" velocity="2.7402" />
+        <calibration falling="15.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+
+    <link name="ra_link2">
+        <inertial>
+            <origin xyz="-0.0171459632  0.0157700000 -0.0099223205" rpy="0 0 0"/>
+            <mass value="1.0979371000" />
+            <inertia ixx="0.0019485690" iyy="0.0032123630" izz="0.0024298790" ixy="-0.0002409816" ixz="-0.0004213554" iyz="-0.0001401085" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-1.0471975512  0.0000000000 -1.5707963268" />
+            <geometry>
+                <mesh filename="meshes/obj/va_right_shoulder_front.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ra_frontal" type="revolute">
+        <origin xyz="0.0539500000 0.0000000000 0.0000000000" rpy="0.0000000000 0.0000000000 1.5707963268" />
+        <parent link="ra_link1"/>
+        <child link="ra_link2"/> 
+        <limit lower="-0.2618" upper="3.1416" effort="100" velocity="2.7402" />
+        <calibration falling="15.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="ra_link3">
+        <inertial>
+            <origin xyz="-0.0024100000 -0.0101800000  0.2010000000" rpy="0 0 0"/>
+            <mass value="2.3628586000" />
+            <inertia ixx="0.0188188000" iyy="0.0185273500" izz="0.0035042020" ixy="-0.0001558288" ixz="0.0007985828" iyz="0.0020103610" />
+        </inertial>
+        <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+            <geometry>
+                <mesh filename="meshes/obj/va_right_upper_arm.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_ra_self_rotation" type="revolute">
+        <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-3.1415926536 -1.0471975512 -3.1415926536" />
+        <parent link="ra_link2"/>
+        <child link="ra_link3"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="40" velocity="2.0944" />
+        <calibration falling="-15.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+    <link name="ra_link4">
+        <inertial>
+            <origin xyz="-0.0184900000  0.0167000000  0.0292700000" rpy="0 0 0"/>
+            <mass value="0.7247867400" />
+            <inertia ixx="0.0013664280" iyy="0.0013830570" izz="0.0010473530" ixy="-0.0001050223" ixz="-0.0001630621" iyz="-0.0003003930" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+            <geometry>
+                <mesh filename="meshes/obj/va_right_lower_elbow.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ra_elbow" type="revolute">
+        <origin xyz="-0.0000000000 -0.0300000000  0.3129000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="ra_link3"/>
+        <child link="ra_link4"/> 
+        <limit lower="0.5" upper="2.5831" effort="40" velocity="2.0944" />
+        <calibration falling="70.0" />
+        <axis xyz="1 0 0"/>
+    </joint>
+
+
+
+    <link name="ra_link5">
+        <inertial>
+            <origin xyz="0.0005200000  0.0004000000 -0.1168400000" rpy="0 0 0"/>
+            <mass value="2.2114157000" />
+            <inertia ixx="0.0179711600" iyy="0.0183094100" izz="0.0029926190" ixy="-0.0000199261" ixz="0.0000759583" iyz="0.0006364064" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="3.1415926536 -0.0000000000  1.5707889804" />
+            <geometry>
+                <mesh filename="meshes/obj/va_right_lower_arm.stl.obj"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="0.0000000000  0.001000000 -0.06900000" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+            <geometry>
+                <mesh filename="meshes/obj/wrist_cap.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ra_wrist_self_rotation" type="revolute">
+        <origin xyz="-0.0115000000  0.0300000000  0.3059000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="ra_link4"/>
+        <child link="ra_link5"/> 
+        <limit lower="-2.5307" upper="2.0595" effort="40" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="ra_link6">
+        <tcp number="2"/>        
+        <inertial>
+            <origin xyz="0.0000334374 -0.0022440200 -0.0512098000" rpy="0 0 0"/>
+            <mass value="0.2863747200" />
+            <inertia ixx="0.0021686577" iyy="0.0032369857" izz="0.0015915745" ixy="-0.0000000609" ixz="-0.0000001700" iyz="-0.0000011072" />
+        </inertial>     
+         <visual>
+            <origin xyz="0.0000000000  0.0000000000 -0.00000000" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+            <geometry>
+                <mesh filename="meshes/obj/wrist.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_ra_wrist_frontal" type="revolute">
+        <origin xyz="-0.0000000000 -0.0140000000  0.00000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="ra_link5"/>
+        <child link="ra_link6"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="35" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="ra_end_effector">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.1" />
+            <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="-0.0" ixz="-0.0" iyz="-0.0" />
+        </inertial>   
+           <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.01"/>
+            </geometry>
+            <material name="material_ee">
+                <color rgba="0.0 0.6 0.8 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.01"/>
+                <!-- <box size="0.2 0.2 0.01"/> -->
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- <joint name="j_rhand_fixed" type="fixed">
+            <origin xyz="0 0 0.056" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+        <parent link="ra_link6"/>
+        <child link="ra_end_effector"/> 
+    </joint> -->
+
+    <joint name="j_rhand_revolute" type="revolute">
+        <origin xyz="0 0 0.056" rpy="-3.1415926536  0.0000000000 -1.5707963268" />
+        <parent link="ra_link6"/>
+        <child link="ra_end_effector"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="35" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!   arms - left   !!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+
+      <link name="la_link1">
+        <inertial>
+            <origin xyz="-0.0183100000  0.0004570513  0.0550116361" rpy="0 0 0"/>
+            <mass value="2.6220074000" />
+            <inertia ixx="0.0163439400" iyy="0.0168330402" izz="0.0042263208" ixy="0.0000450567" ixz="-0.0016915732" iyz="0.0000513268" />
+        </inertial>
+        <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="3.1415894725 -0.0000024488 -1.5707981634" />
+            <geometry>
+                <mesh filename="meshes/obj/kuka-link1.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_la_sagittal" type="revolute">
+        <origin xyz="0.0000000000 0.2590563550 0.3552250220" rpy="2.0943951024 0.0000000000 0.0000000000" />
+        <parent link="trunk"/>
+        <child link="la_link1"/> 
+        <limit lower="-2.0944" upper="2.0944" effort="100" velocity="2.7402" />
+        <calibration falling="15.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+
+    <link name="la_link2">
+        <inertial>
+            <origin xyz="-0.0157700000 -0.0198100000 -0.0000200000" rpy="0 0 0"/>
+            <mass value="1.0979371000" />
+            <inertia ixx="0.0032123630" iyy="0.0017039920" izz="0.0026744560" ixy="0.0002787504" ixz="0.0000008467" iyz="-0.0000022644" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-1.5707963268  0.0000000000  0.0000000000" />
+            <geometry>
+                <mesh filename="meshes/obj/va_left_shoulder_front.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_la_frontal" type="revolute">
+        <origin xyz="0.0539500000 0.0000000000 0.0000000000" rpy="-0.5235987756  0.0000000000  0.0000000000" />
+        <parent link="la_link1"/>
+        <child link="la_link2"/> 
+        <limit lower="-0.2618" upper="3.1416" effort="100" velocity="2.7402" />
+        <calibration falling="15.0" />
+        <axis xyz="1 0 0"/>
+    </joint>
+
+
+
+      <link name="la_link3">
+        <inertial>
+            <origin xyz="0.0101800000 -0.2020200000  0.0021900000" rpy="0 0 0"/>
+            <mass value="2.3628586000" />
+            <inertia ixx="0.0185311900" iyy="0.0035057930" izz="0.0188158500" ixy="0.0020059250" ixz="-0.0001209208" iyz="0.0007827924" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-1.5707963268  0.0000000000  0.0000000000" />
+            <geometry>
+                <mesh filename="meshes/obj/va_left_upper_arm.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_la_self_rotation" type="revolute">
+        <parent link="la_link2"/>
+        <child link="la_link3"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="40" velocity="2.0944" />
+        <calibration falling="-15.0" />
+         <axis xyz="0 1 0"/>
+    </joint>
+
+      <link name="la_link4">
+        <inertial>
+            <origin xyz="-0.0168700000 -0.0291600000  0.0184900000" rpy="0 0 0"/>
+            <mass value="0.7247867400" />
+            <inertia ixx="0.0013880760" iyy="0.0010478510" izz="0.0013720460" ixy="-0.0003019505" ixz="-0.0001053814" iyz="-0.0001648003" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-1.5707963268  0.0000000000  0.0000000000" />
+            <geometry>
+                <mesh filename="meshes/obj/va_left_lower_elbow.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_la_elbow" type="revolute">
+        <origin xyz="0.0300000000 -0.3128000000 -0.0000000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="la_link3"/>
+        <child link="la_link4"/> 
+        <limit lower="0.5" upper="2.5831" effort="40" velocity="2.0944" />
+        <calibration falling="70.0" />
+         <axis xyz="0 0 1"/>
+    </joint>
+
+
+
+
+    <link name="la_link5">
+        <inertial>
+            <origin xyz="-0.0004000000  0.1168400000  0.0005200000" rpy="0 0 0"/>
+            <mass value="2.2114157000" />
+            <inertia ixx="0.0183094100" iyy="0.0029926190" izz="0.0179711600" ixy="0.0006364064" ixz="0.0000199261" iyz="-0.0000759583" />
+        </inertial>
+         <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="1.5707963268 -0.0000073464 -3.1415926536" />
+            <geometry>
+                <mesh filename="meshes/obj/va_left_lower_arm.stl.obj"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="-0.001000000 0.069000000 0.0000000000" rpy="-1.5707963268  0.0000000000  0.0000000000" />
+            <geometry>
+                <mesh filename="meshes/obj/wrist_cap.stl.obj"/>
+            </geometry>
+        </visual>
+      </link>
+
+    <joint name="j_la_wrist_self_rotation" type="revolute">
+        <origin xyz="-0.0300000000 -0.3058000000  0.0115000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="la_link4"/>
+        <child link="la_link5"/> 
+        <limit lower="-2.5307" upper="2.0595" effort="40" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+
+
+
+      <link name="la_link6">
+        <tcp number="3"/>
+        <inertial>
+            <origin xyz="0.0022440200  0.0512098000 -0.0000334374" rpy="0 0 0"/>
+            <mass value="0.2863747200" />
+            <inertia ixx="0.0032369857" iyy="0.0015915745" izz="0.0021686577" ixy="-0.0000011072" ixz="0.0000000609" iyz="0.0000001700" />
+        </inertial> 
+        <visual>
+            <origin xyz="0.0000000000 0.0000000000 0.0000000000" rpy="-1.5707963268  0.0000000000  0.0000000000" />
+            <geometry>
+                <mesh filename="meshes/obj/wrist.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_la_wrist_frontal" type="revolute">
+        <origin xyz="0.0140000000 -0.0000000000 -0.0000000000" rpy="0.0000000000 0.0000000000 0.0000000000" />
+        <parent link="la_link5"/>
+        <child link="la_link6"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="40" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="1 0 0"/>
+    </joint>
+
+    <link name="la_end_effector">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.1" />
+            <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="-0.0" ixz="-0.0" iyz="-0.0" />
+        </inertial>   
+           <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.01"/>
+            </geometry>
+            <material name="material_ee">
+                <color rgba="0.0 0.8 0.0 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.01"/>
+                <!-- <box size="0.2 0.2 0.01"/> -->
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- <joint name="j_lhand_fixed" type="fixed">
+            <origin xyz="0 -0.056 0" rpy="-1.5707963268  0.0000000000 0.0000000000" />
+        <parent link="la_link6"/>
+        <child link="la_end_effector"/> 
+    </joint> -->
+
+    <joint name="j_lhand_revolute" type="revolute">
+        <origin xyz="0 -0.056 0" rpy="-1.5707963268  0.0000000000 0.0000000000" />
+        <parent link="la_link6"/>
+        <child link="la_end_effector"/> 
+        <limit lower="-1.8326" upper="1.8326" effort="35" velocity="2.0944" />
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+      
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!    head    !!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+    <link name="neck_link1">
+        <inertial>
+            <origin xyz="-0.0129300000 -0.0003400000 0.0721200000" rpy="0 0 0" />
+            <mass value="0.2300000000" />
+            <inertia  ixx="0.0002923376" iyy="0.0003986288" izz="0.0002180134" ixy="-0.0000038209" ixz="0.0001039658" iyz="0.0000013502" />
+        </inertial>
+         <visual>
+            <origin  xyz="0 0 -0.037"/>
+            <geometry>
+                <mesh filename="meshes/obj/neck.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_neck_self_rotation" type="revolute">
+        <origin xyz="0.0548813000 0.0000000000 0.3505590000" rpy="0 0 0" />
+        <parent link="trunk"/>
+        <child link="neck_link1"/> 
+        <limit lower="-1.5708" upper="1.5708" effort="8.4" velocity="4.7124" /> 
+        <calibration falling="0.0" />
+        <axis xyz="0 0 1"/>
+    </joint>
+
+
+    <link name="neck_link2">
+        <tcp number="4"/>
+         <inertial>
+            <origin xyz="0.00 0.0 0.08" rpy="0 0 0" />
+            <mass value="1.4522900000" />
+            <inertia  ixx="0.0048135662" iyy="0.0059177034" izz="0.0067590509" ixy="-0.0000203783" ixz="-0.0006221121" iyz="0.0000996016" />
+        </inertial>
+         <visual>
+            <origin  xyz="0.0 0 0.0"/>
+            <geometry>
+                <mesh filename="meshes/obj/head.stl.obj"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="j_neck_sagittal" type="revolute">
+        <origin xyz="-0.035 0 0.05"/>
+        <parent link="neck_link1"/>
+        <child link="neck_link2"/> 
+        <limit lower="-0.5236" upper="1.5708" effort="8.4" velocity="4.7124" /> 
+        <calibration falling="0.0" />
+        <axis xyz="0 1 0"/>
+    </joint>
+
+
+</robot>

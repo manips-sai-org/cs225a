@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<world name="demo_world" gravity="0.0 0.0 -9.81">
+
+	<robot name="Divebot">
+		<model dir="./resources" path="Divebot_Hybrid.urdf" name="Divebot" />
+	</robot>
+
+	<light name="light1" type="directional">
+		<position xyz="2.0 -2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light2" type="directional">
+		<position xyz="2.0 2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light3" type="directional">
+		<position xyz="-2.0 2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light4" type="directional">
+		<position xyz="-2.0 -2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<camera name="camera_fixed">
+		<position xyz="-0.5 -0.5 2.0" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="1.0 1.0 1.0" />
+	</camera>
+
+	<!-- <camera name="camera_fixed">
+		<position xyz="4.0 4.0 0.5" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</camera> -->
+
+</world>

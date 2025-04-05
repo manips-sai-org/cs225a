@@ -1,0 +1,1112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robot_model">
+  <link name="ground">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisX">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisY">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="PrisZ">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="RotZ">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="RotY">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.000001" />
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+
+  <link
+    name="body">
+    <inertial>
+      <origin
+        xyz="-0.41768 0.50641 0.022451"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.5909"
+        ixy="-0.66839"
+        ixz="0.077434"
+        iyy="3.5756"
+        iyz="0.53822"
+        izz="4.5266" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/body.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/body.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint name="PrisX_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="ground" />
+    <child link="PrisX" />
+    <axis xyz="1 0 0" />
+    <!-- TODO: check that calibration mimics initial_joint_q behavior -->
+    <!-- <calibration falling="2.84851" /> -->
+    <!-- TODO: change lower, upper, effort, and velocity limits -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <joint name="PrisY_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisX" />
+    <child link="PrisY" />
+    <axis xyz="0 1 0" />
+    <!-- <calibration falling="1.94773" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <joint name="PrisZ_Joint" type="prismatic">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisY" />
+    <child link="PrisZ" />
+    <axis xyz="0 0 1" />
+    <!-- <calibration falling="0.703213" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <joint name="RotZ_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="PrisZ" />
+    <child link="RotZ" />
+    <axis xyz="0 0 1" />
+    <!-- <calibration falling="-185.3157504" /> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <joint name="RotY_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="RotZ" />
+    <child link="RotY" />
+    <axis xyz="0 1 0" />
+    <!-- <calibration falling="0.0"/> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <joint name="RotX_Joint" type="revolute">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+    <parent link="RotY" />
+    <child link="body" />
+    <axis xyz="1 0 0" />
+    <!-- <calibration falling="0.0"/> -->
+    <limit lower="-500.00" upper="500.00" effort="4000" velocity="1000" />
+  </joint>
+
+  <link
+    name="ra_base">
+    <inertial>
+      <origin
+        xyz="0.17913 -0.027883 0.30715"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.1362"
+        ixy="-0.092043"
+        ixz="-0.46783"
+        iyy="3.5756"
+        iyz="-0.8532"
+        izz="3.9813" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_base.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="body_ra_base"
+    type="fixed">
+    <origin
+      xyz="-0.07383 0.068072 0.47852"
+      rpy="-1.5708 0 2.3562" />
+    <parent
+      link="body" />
+    <child
+      link="ra_base" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="ra_1">
+    <inertial>
+      <origin
+        xyz="-0.21548 0.17913 -0.22064"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.5726"
+        ixy="0.22387"
+        ixz="0.37211"
+        iyy="4.1362"
+        iyz="0.42097"
+        izz="2.9843" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_1.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_base_1"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="3.1416 0.68303 1.5708" />
+    <parent
+      link="ra_base" />
+    <child
+      link="ra_1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="ra_2">
+    <inertial>
+      <origin
+        xyz="0.21548 -0.17597 -0.13585"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.5726"
+        ixy="-0.20599"
+        ixz="-0.3823"
+        iyy="2.9144"
+        iyz="-0.30303"
+        izz="4.2061" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_2.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_1_2"
+    type="revolute">
+    <origin
+      xyz="0 0.20629 0"
+      rpy="1.0358 0 3.1416" />
+    <parent
+      link="ra_1" />
+    <child
+      link="ra_2" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="ra_3">
+    <inertial>
+      <origin
+        xyz="0.20453 -0.12404 0.179"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.4777"
+        ixy="0.22038"
+        ixz="0.41464"
+        iyy="2.9144"
+        iyz="-0.29273"
+        izz="4.301" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_3.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_2_3"
+    type="revolute">
+    <origin
+      xyz="-0.019923 -0.051925 0"
+      rpy="0 1.2423 0" />
+    <parent
+      link="ra_2" />
+    <child
+      link="ra_3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="ra_4">
+    <inertial>
+      <origin
+        xyz="0.10398 -0.20453 0.20544"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.1122"
+        ixy="-0.12175"
+        ixz="-0.56638"
+        iyy="4.4777"
+        iyz="-0.45351"
+        izz="4.1032" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_4.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_4.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_3_4"
+    type="revolute">
+    <origin
+      xyz="0 -0.27146 0.0021175"
+      rpy="0 0.22624 1.5708" />
+    <parent
+      link="ra_3" />
+    <child
+      link="ra_4" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="ra_5">
+    <inertial>
+      <origin
+        xyz="-0.16253 -0.2397 0.16324"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.9464"
+        ixy="0.34981"
+        ixz="0.57921"
+        iyy="4.6345"
+        iyz="-0.010995"
+        izz="3.1122" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/ra_5.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_4_5"
+    type="revolute">
+    <origin
+      xyz="-0.059255 -0.0004 0"
+      rpy="-1.5708 1.378 -1.5708" />
+    <parent
+      link="ra_4" />
+    <child
+      link="ra_5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="rh_base">
+    <inertial>
+      <origin
+        xyz="0.14604 0.28556 -0.51862"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.6202"
+        ixy="0.44969"
+        ixz="-0.14501"
+        iyy="3.7022"
+        iyz="0.62992"
+        izz="3.3706" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/rh_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/rh_base.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="ra_5_rh_base"
+    type="fixed">
+    <origin
+      xyz="0.025621 -0.014338 -0.37122"
+      rpy="2.9496 0.15424 -1.6007" />
+    <parent
+      link="ra_5" />
+    <child
+      link="rh_base" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="la_base">
+    <inertial>
+      <origin
+        xyz="0.21529 0.031019 0.27339"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.9813"
+        ixy="0.8532"
+        ixz="-0.46783"
+        iyy="3.5756"
+        iyz="0.092043"
+        izz="4.1362" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_base.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="body_la_base"
+    type="fixed">
+    <origin
+      xyz="-0.072122 -0.063535 0.47539"
+      rpy="1.5708 0 -2.3562" />
+    <parent
+      link="body" />
+    <child
+      link="la_base" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="la_1">
+    <inertial>
+      <origin
+        xyz="-0.247880758202067 0.215293328604545 0.119422499549682"
+        rpy="0 0 0" />
+      <mass
+        value="56.0902216685423" />
+      <inertia
+        ixx="4.06001920808986"
+        ixy="-0.0587190955518408"
+        ixz="-0.213000765014978"
+        iyy="3.98131211097043"
+        iyz="-0.971270911985976"
+        izz="3.65171639701959" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_1.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_base_1"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 1.0089 -1.5708" />
+    <parent
+      link="la_base" />
+    <child
+      link="la_1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="la_2">
+    <inertial>
+      <origin
+        xyz="0.247880758202066 -0.0954434090074107 0.0723415818353377"
+        rpy="0 0 0" />
+      <mass
+        value="56.0902216685423" />
+      <inertia
+        ixx="4.06001920808986"
+        ixy="-0.19848637403793"
+        ixz="0.0970588347378452"
+        iyy="2.83235341444184"
+        iyz="0.0441923072917427"
+        izz="4.80067509354818" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_2.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_1_2"
+    type="revolute">
+    <origin
+      xyz="0 0.20629 0"
+      rpy="-0.847 0 3.1416" />
+    <parent
+      link="la_1" />
+    <child
+      link="la_2" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="la_3">
+    <inertial>
+      <origin
+        xyz="0.17264 -0.037426 -0.21713"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.7548"
+        ixy="-0.038171"
+        ixz="0.20319"
+        iyy="2.8324"
+        iyz="0.19973"
+        izz="4.1059" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_3.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_2_3"
+    type="revolute">
+    <origin
+      xyz="-0.019923 -0.058017 0"
+      rpy="0 -1.1629 0" />
+    <parent
+      link="la_2" />
+    <child
+      link="la_3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="la_4">
+    <inertial>
+      <origin
+        xyz="0.12268 -0.17264 -0.28774"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.1806"
+        ixy="-0.045965"
+        ixz="0.60177"
+        iyy="4.7548"
+        iyz="-0.20157"
+        izz="3.7576" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_4.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_4.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_3_4"
+    type="revolute">
+    <origin
+      xyz="0 -0.26462 -0.0021175"
+      rpy="0 -0.40989 1.5708" />
+    <parent
+      link="la_3" />
+    <child
+      link="la_4" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="la_5">
+    <inertial>
+      <origin
+        xyz="0.19645 -0.27179 0.17867"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.059"
+        ixy="0.50033"
+        ixz="-0.57109"
+        iyy="4.4534"
+        iyz="0.19518"
+        izz="3.1806" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/la_5.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_4_5"
+    type="revolute">
+    <origin
+      xyz="-0.05599 -0.0004 0"
+      rpy="1.5708 1.1652 1.5708" />
+    <parent
+      link="la_4" />
+    <child
+      link="la_5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="lh_base">
+    <inertial>
+      <origin
+        xyz="0.16426 -0.063446 -0.60864"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.5063"
+        ixy="0.39141"
+        ixz="0.047511"
+        iyy="4.2393"
+        iyz="-0.43437"
+        izz="2.9475" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/lh_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/lh_base.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="la_5_lh_base"
+    type="fixed">
+    <origin
+      xyz="0.025621 -0.014338 -0.37449"
+      rpy="2.9496 0.15424 -1.6007" />
+    <parent
+      link="la_5" />
+    <child
+      link="lh_base" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="h_base">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_base.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="body_h_base"
+    type="fixed">
+    <origin
+      xyz="-0.24769 0 0.36842"
+      rpy="-2.7925 0 1.5708" />
+    <parent
+      link="body" />
+    <child
+      link="h_base" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="h_1">
+    <inertial>
+      <origin
+        xyz="-0.020671 0.030639 -0.11288"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="4.5344"
+        ixy="-0.47105"
+        ixz="-0.23512"
+        iyy="4.007"
+        iyz="-0.52446"
+        izz="3.1517" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_1.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="h_base_1"
+    type="revolute">
+    <origin
+      xyz="0 -0.10102 -0.12039"
+      rpy="-2.2689 -0.010156 -0.012104" />
+    <parent
+      link="h_base" />
+    <child
+      link="h_1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+  <link
+    name="h_2">
+    <inertial>
+      <origin
+        xyz="-0.095064 -0.059352 0.025375"
+        rpy="0 0 0" />
+      <mass
+        value="56.09" />
+      <inertia
+        ixx="3.7971"
+        ixy="-0.62072"
+        ixz="0.016811"
+        iyy="3.3841"
+        iyz="0.5727"
+        izz="4.5118" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="robot_model/meshes/h_2.obj" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint
+    name="h_1_2"
+    type="revolute">
+    <origin
+      xyz="0 0.036489 0"
+      rpy="1.6569 -1.0632 -1.6457" />
+    <parent
+      link="h_1" />
+    <child
+      link="h_2" />
+    <axis
+      xyz="0.022111 0.012766 0.99967" />
+    <limit
+      lower="-500"
+      upper="500"
+      effort="4000"
+      velocity="1000" />
+  </joint>
+</robot>
