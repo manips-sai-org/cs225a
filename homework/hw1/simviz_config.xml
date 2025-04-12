@@ -52,7 +52,7 @@ None of the corresponding config parameters can be changed at runtime.
 	-->
 	<robotOrObjectSpecificParameters name="PANDA"
 		dynamicsEnabled="true"
-		renderingEnabled="false"
+		renderingEnabled="true"
 		jointLimitsEnabled="true"
 		frictionCoefficient="0.5"
 		collisionRestitutionCoefficient="0.0"
