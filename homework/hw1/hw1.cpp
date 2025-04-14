@@ -127,14 +127,24 @@ int main(int argc, char** argv) {
         // In python, set up a redis connection, youd have a while loop running that ocntinuosuly pulls in the current value form the desired key, and exports it to MATplotlib. 
         // If you had a plotter that updated live, youd be watching it osciallte when you run, otherwise static.
         // between 0 and 1000
+        
+        VectorXd q_zero(dof); // dof is an int pulled from robot object
+        q_desired << 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0; // degrees
+        q_desired << q_desired * M_PI / 180.0; // radians
+
+        VectorXd q_desired(dof); // dof is an int pulled from robot object
+        q_desired << 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0; // degrees
+        q_desired << q_desired * M_PI / 180.0; // radians
+
         if(controller_number == 1) {
 
-            double kp = 0.0;      // chose your p gain
+            double kp = 400.0;      // chose your p gain
             double kv = 0.0;      // chose your d gain
 
-            VectorXd q_desired = initial_q;   // change to the desired robot joint angles for the question
+            // VectorXd q_desired = initial_q;   // change to the desired robot joint angles for the question
 
             control_torques.setZero();  // change to the control torques you compute
+            control_torques << <equation>;
         }
 
         // ---------------------------  question 2 ---------------------------------------
@@ -169,8 +179,8 @@ int main(int argc, char** argv) {
         redis_client.setInt("sai::simviz::gravity_comp_enabled", 0);
         redis_client.sendAllFromGroup();
     }
-
-    control_torques.setZero();
+    
+    control_torques.setZero(); // safety feature to make sure you only apply torques when you really want to
     redis_client.sendAllFromGroup();
 
     timer.stop();
