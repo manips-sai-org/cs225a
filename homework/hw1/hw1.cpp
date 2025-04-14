@@ -118,6 +118,15 @@ int main(int argc, char** argv) {
         // **********************
 
         // ---------------------------  question 1 ---------------------------------------
+        // algorithmic: write out full equation, get a term from mass matrix htat is multiplied by your theta double dot. Then calculate appropriate gains. 
+        // easier: export your theta0 q values and plot them (like HW 1). See if it is overdamped or underdamped based on response of theta.
+        // Get a nice plotting setup going from text file to plot. Just change path.
+        // Or learn how to read redis keys using a coding paltform like python, and directly capture the keys as they are written
+        // simulator <->redis<->controller: is OpenSai. We dump from controller to txt file and plot. Fancy: directly go from redis to plotting
+        // redis key. Sai::Robot::Panda::q::1 (like a key for a python dictionary)
+        // In python, set up a redis connection, youd have a while loop running that ocntinuosuly pulls in the current value form the desired key, and exports it to MATplotlib. 
+        // If you had a plotter that updated live, youd be watching it osciallte when you run, otherwise static.
+        // between 0 and 1000
         if(controller_number == 1) {
 
             double kp = 0.0;      // chose your p gain
