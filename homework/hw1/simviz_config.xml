@@ -25,7 +25,7 @@ None of the corresponding config parameters can be changed at runtime.
 	Unless marked Fixed, all the corresponding config parameters can be changed at runtime.
 	-->
 	<simParameters timestep="0.001"
-		speedupFactor="1.0"
+		speedupFactor="0.1"
 		enableJointLimits="true"
 		enableGravityCompensation="true"
 		frictionCoefficient="0.5"
