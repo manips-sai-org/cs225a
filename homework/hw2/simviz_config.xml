@@ -1,0 +1,102 @@
+<!-- 
+The <simvizConfiguration> element contains the configuration for the simulation and visualization of
+the virtual world. Only one is allowed per configuration file.
+Its attributes are:
+	- worldFilePath: Required. The path to the world file to be used
+	- mode: Optional. The mode of the simulation. Possible values are simviz, simOnly, vizOnly. Defaults to simviz
+	- publishMassMatrixToRedis: Optional. Whether to publish the mass matrix to redis for all simulated robots. Defaults to true.
+None of the corresponding config parameters can be changed at runtime.
+-->
+<simvizConfiguration worldFilePath="${HW2_FOLDER}/world.urdf"
+	mode="simviz"
+	publishMassMatrixToRedis="true">
+
+	<!-- 
+	The optional <simParameters> element contains the parameters for the simulation. Only one is allowed per simvizConfiguration element.
+	If it is not present, the default values are used.
+	Its attributes are:
+		- timestep: Optional - Fixed. The timestep of the simulation. Defaults to 0.001
+		- speedupFactor: Optional - Fixed. The speedup factor of the simulation. a value of 2 means that 1 second of real time 
+			would correspond to 2 seconds in the simulation. Defaults to 1.0
+		- enableJointLimits: Optional - Fixed. Whether to enable joint limits. Defaults to true
+		- enableGravityCompensation: Optional. Whether to enable gravity compensation on robots. Defaults to true
+		- frictionCoefficient: Optional. The global coefficient of friction (applied to all objects and models). Defaults to 0.5
+		- collisionRestitutionCoefficient: Optional. The global coefficient of restitution (applied to all objects and models). Defaults to 0.0
+	Unless marked Fixed, all the corresponding config parameters can be changed at runtime.
+	-->
+	<simParameters timestep="0.001"
+		speedupFactor="1.0"
+		enableJointLimits="true"
+		enableGravityCompensation="true"
+		frictionCoefficient="0.5"
+		collisionRestitutionCoefficient="0.0"/>
+
+	<!--
+	The optional <robotOrObjectSpecificParameters> element contains siulation and rendering parameters for a specific robot or object.
+	If not present for a given robot or object, the default values are used.
+	Its attributes are:
+		- name: Required. The name of the robot or object
+		- dynamicsEnabled: Optional. Whether to enable dynamics for the robot or object. If false, no forces/moments can be applied to
+			the robot/object, and its collision is disabled Defaults to true
+		- renderingEnabled: Optional. Whether to enable rendering for the robot or object If false, the object is invisible, 
+			but can still interact with the world, depending if its dynamics are enabled or not. Defaults to true
+		- jointLimitsEnabled: Optional. Whether to enable joint limits for the robot in simulation. No effect on objects. Defaults to true
+		- frictionCoefficient: Optional. The coefficient of friction for the robot or object. 
+			Overrides the default value if present. Defaults to 0.5
+		- collisionRestitutionCoefficient: Optional. The coefficient of restitution for the robot or object. 
+			Overrides the default value if present. Defaults to 0.0
+		- wireMeshRenderingMode: Optional. Whether to render the robot or object in wire mesh mode. Defaults to false
+		- framesRenderingEnabled: Optional. Whether to render the kinematic frames of the robot or object. Defaults to false
+		- frameSizeWhenRendering: Optional. The size of the kinematic frames when rendering. Defaults to 0.2
+	All the corresponding config parameters can be changed at runtime.
+	-->
+	<robotOrObjectSpecificParameters name="PANDA"
+		dynamicsEnabled="true"
+		renderingEnabled="true"
+		jointLimitsEnabled="true"
+		frictionCoefficient="0.5"
+		collisionRestitutionCoefficient="0.0"
+		wireMeshRenderingMode="false"
+		framesRenderingEnabled="false"
+		frameSizeWhenRendering="0.2" />
+
+	<!--
+	The optional <logger> element contains the parameters for the simviz logger.
+	Only one is allowed per simvizConfiguration element.
+	Its attributes are:
+		- logFolderName: Optional. The relative path of the folder where the log files will be saved.
+			If it does not exist, it will be created. Defaults to "log_files/simviz"
+		- logFrequency: Optional. The frequency in Hz at which the log files are saved. Defaults to 100 Hz
+		- enabledAtStartup: Optional. Whether to start logging data as soon as the simulation starts. Defaults to false
+		- addTimestampToFilename: Optional. Whether to add the timestamp of the logging start to the log file name. Defaults to true
+	None of the corresponding config parameters can be changed at runtime.
+	-->
+	<logger logFolderName="simviz_log_files"
+		logFrequency="100"
+		enabledAtStartup="false"
+		addTimestampToFilename="false" />
+
+	<!--
+	The optional <forceSensor> element allows to define a simulated force sensor.
+	Its attributes are:
+		- robotOrObjectName: Required. The name of the robot to which the sensor is attached
+		- linkName: Required if robot, Optional if object. The name of the link to which the sensor is attached
+		- filterCutoff: Optional. The cutoff frequency in Hz of the low-pass filter applied to the force/torque measurements. 
+			Set to 0 for no filtering. Defaults to 5.0 Hz
+	None of the corresponding config parameters can be changed at runtime.
+	-->
+	<!-- <forceSensor robotOrObjectName="PANDA"
+		linkName="end-effector"
+		filterCutoff="5.0"> -->
+		<!--
+		The optional <origin> element represents the transformation between the link frame and the sensor frame.
+		for the sensor. Its attributes are:
+			- xyz: Optional. The x, y, z translation of the sensor frame in the link frame in meters. Defaults to 0 0 0
+			- rpy: Optional. The rotation in XYZ euler angles in Radians of the sensor frame in the link frame. Defaults to 0 0 0
+		This frame cannot be changed at runtime.
+		-->
+		<!-- <origin xyz="0 0 0"
+			rpy="0 0 0" />
+	</forceSensor> -->
+
+</simvizConfiguration>
