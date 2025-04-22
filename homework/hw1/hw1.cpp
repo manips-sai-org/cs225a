@@ -1,10 +1,11 @@
-// some standard library includes
 #include <math.h>
 
 #include <iostream>
 #include <mutex>
 #include <string>
 #include <thread>
+#include <fstream>
+#include <csignal>
 
 // sai main libraries includes
 #include "SaiModel.h"
@@ -27,6 +28,14 @@ using namespace Eigen;
 
 // config file names and object names
 const string robot_file = "${CS225A_URDF_FOLDER}/panda/panda_arm_controller.urdf";
+
+std::ofstream jointFile;
+void onSigInt(int) {
+    std::cerr << "Caught SIGINT, closing file and exiting.\n";
+    if (jointFile.is_open()) jointFile.close();
+    std::exit(0);
+}
+
 
 int main(int argc, char** argv) {
     SaiModel::URDF_FOLDERS["CS225A_URDF_FOLDER"] = string(CS225A_URDF_FOLDER);
@@ -95,12 +104,31 @@ int main(int argc, char** argv) {
     robot->setDq(robot_dq);
     robot->updateModel();
 
+    // define gravity force and preallocate Jv and payload torque memory
+    Eigen::Vector3d g_world = robot->worldGravity();
+    const double m_payload = 2.5;
+    Eigen::Matrix<double,3,7> Jv;
+    Eigen::VectorXd T_payload(7);
+    Eigen::Vector3d payload_offset(0,0,0.0);
+
     // record initial configuration
     VectorXd initial_q = robot->q();
 
     // create a loop timer
     const double control_freq = 1000;
     SaiCommon::LoopTimer timer(control_freq);
+
+
+    std::signal(SIGINT, onSigInt);
+
+    jointFile.open("../../homework/hw1/q1_joint_pos.csv");
+    if(!jointFile){
+        std::cerr << "ERROR: could not open joint_positions.csv for writing\n";
+        return 1;
+    }
+    jointFile << "t,q0,q2,q3\n"; // header
+
+    std::size_t counter = 0;
 
     while (runloop) {
         // wait for next scheduled loop
@@ -129,48 +157,121 @@ int main(int argc, char** argv) {
         // between 0 and 1000
         
         VectorXd q_zero(dof); // dof is an int pulled from robot object
-        q_desired << 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0; // degrees
-        q_desired << q_desired * M_PI / 180.0; // radians
+        q_zero << -80.0, -45.0, 0.0, -125.0, 0.0, 80.0, 0.0; // degrees
+        q_zero << q_zero * M_PI / 180.0; // radians
 
         VectorXd q_desired(dof); // dof is an int pulled from robot object
-        q_desired << 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0; // degrees
+        q_desired << 90.0, -45.0, 0.0, -125.0, 0.0, 80.0, 0.0; // degrees
         q_desired << q_desired * M_PI / 180.0; // radians
 
         if(controller_number == 1) {
 
             double kp = 400.0;      // chose your p gain
-            double kv = 0.0;      // chose your d gain
-
-            // VectorXd q_desired = initial_q;   // change to the desired robot joint angles for the question
+            double kv = 50.0;      // chose your d gain
 
             control_torques.setZero();  // change to the control torques you compute
-            control_torques << <equation>;
+            control_torques = -kp*(robot_q - q_desired) 
+                        - kv * robot_dq;
+            
+            // write joint values as comma separated
+            if (++counter % 10 == 0) {
+                jointFile
+                    << time << ','
+                    << robot_q(0) << ','
+                    << robot_q(2) << ','
+                    << robot_q(3) << '\n';
+            }
         }
-
+        
         // ---------------------------  question 2 ---------------------------------------
         else if(controller_number == 2) {
 
-            control_torques.setZero();
+            double kp = 400.0;      // chose your p gain
+            double kv = 50.0;      // chose your d gain
+
+            // PD + gravity
+            control_torques = -kp * (robot_q - q_desired)
+                      -kv * robot_dq
+                      + robot->jointGravityVector();
+            
+            // write joint values as comma separated
+            if (++counter % 10 == 0) {
+                jointFile
+                    << time << ','
+                    << robot_q(0) << ','
+                    << robot_q(2) << ','
+                    << robot_q(3) << '\n';
+            }
+
         }
 
         // ---------------------------  question 3 ---------------------------------------
         else if(controller_number == 3) {
+            
+            double kp = 400.0;      // chose your p gain
+            double kv = 40.0;      // chose your d gain
 
-            control_torques.setZero();
+            control_torques = robot->M() * (-kp * (robot_q - q_desired) 
+                        - kv * robot_dq) 
+                        + robot->jointGravityVector();
+            
+            if (++counter % 10 == 0) {
+                jointFile
+                    << time << ','
+                    << robot_q(0) << ','
+                    << robot_q(2) << ','
+                    << robot_q(3) << '\n';
+            }
         }
 
         // ---------------------------  question 4 ---------------------------------------
         else if(controller_number == 4) {
 
-            control_torques.setZero();
+            double kp = 400.0;      // chose your p gain
+            double kv = 40.0;      // chose your d gain
+
+            control_torques = robot->M() * (-kp * (robot_q - q_desired)
+                      -kv * robot_dq)
+                      + robot->coriolisPlusGravity();
+            
+            if (++counter % 10 == 0) {
+                jointFile
+                    << time << ','
+                    << robot_q(0) << ','
+                    << robot_q(2) << ','
+                    << robot_q(3) << '\n';
+            }
         }
 
         // ---------------------------  question 5 ---------------------------------------
+        // Use controller 4 for question 5. Use this controller for bonus.
         else if(controller_number == 5) {
 
-            control_torques.setZero();
-        }
+            double kp = 400.0;      // chose your p gain
+            double kv = 40.0;      // chose your d gain
 
+            Jv = robot->JvWorldFrame("link7", payload_offset);
+            T_payload = Jv.transpose() * (m_payload * g_world);
+            // MatrixXd new_mass = robot->M();
+            // new_mass(8) += 2.5;
+
+            control_torques = robot->M() * (-kp * (robot_q - q_desired)
+                      -kv * robot_dq)
+                      + robot->coriolisPlusGravity()
+                      + T_payload;
+
+            std::cout << "T_payload = " << T_payload.transpose() << "\n";
+
+            
+            if (++counter % 10 == 0) {
+                jointFile
+                    << time << ','
+                    << robot_q(0) << ','
+                    << robot_q(2) << ','
+                    << robot_q(3) << '\n';
+            }
+        }
+        if (counter == 100) counter = 0;
         // **********************
         // WRITE YOUR CODE BEFORE
         // **********************
@@ -180,6 +281,8 @@ int main(int argc, char** argv) {
         redis_client.sendAllFromGroup();
     }
     
+    jointFile.close();
+
     control_torques.setZero(); // safety feature to make sure you only apply torques when you really want to
     redis_client.sendAllFromGroup();
 
