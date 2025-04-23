@@ -156,6 +156,7 @@ int main(int argc, char** argv) {
         // If you had a plotter that updated live, youd be watching it osciallte when you run, otherwise static.
         // between 0 and 1000
         
+
         VectorXd q_zero(dof); // dof is an int pulled from robot object
         q_zero << -80.0, -45.0, 0.0, -125.0, 0.0, 80.0, 0.0; // degrees
         q_zero << q_zero * M_PI / 180.0; // radians

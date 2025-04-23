@@ -1,5 +1,6 @@
 // some standard library includes
 #include <math.h>
+#define _USE_MATH_DEFINES
 
 #include <iostream>
 #include <fstream>
@@ -109,18 +110,18 @@ int main() {
 	// *************************************************************************
 
 	// ---------------------------  question 2-b -------------------------------
-	ee_pos_in_link = Vector3d(0.0, 0.0, 0.0); // modify this
+	ee_pos_in_link = Vector3d(0.0, 0.0, 2.5); // modify this
 
 	// ---------------------------  question 2-c -------------------------------
 	// part i
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	robot_q << 0.0, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateKinematics();
 	ee_position = robot->position(ee_link_name, ee_pos_in_link);
 	cout << "========================================= Q2-c-i" << endl << endl;
 	cout << "End effector position for configuration i\n" << ee_position.transpose() << endl << endl;
 	// part ii
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	robot_q << 1 * M_PI / 2, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateKinematics();
 	ee_position = robot->position(ee_link_name, ee_pos_in_link);
@@ -129,14 +130,14 @@ int main() {
 
 	// ---------------------------  question 2-d -------------------------------
 	// part i
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	robot_q << 0.0, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateKinematics();
 	ee_jacobian = robot->Jv(ee_link_name, ee_pos_in_link);
 	cout << "========================================= Q2-d-ii" << endl << endl;
 	cout << "Jv for configuration d-i\n" << ee_jacobian << endl << endl;
 	// part ii
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	robot_q << 1 * M_PI / 2, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateKinematics();
 	ee_jacobian = robot->Jv(ee_link_name, ee_pos_in_link);
@@ -147,14 +148,18 @@ int main() {
 	// part i
 	ofstream file_2e_i;
 	file_2e_i.open("../../homework/hw0/q2-e-i.txt");
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	robot_q << 0.0, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
-	file_2e_i << 0 << "\t" << 0 << "\t" << 0 << "\n"; // modify this
+	file_2e_i << robot->M()(0) << "\t" << robot->M()(4) << "\t" << robot->M()(8) << "\n"; // modify this
 	int n_steps = 250;
 	for(int i=0 ; i < n_steps ; i++)
 	{
-		// write your code
+		robot_q << 0.0, 0.5, -1 * M_PI / 2 + (i*M_PI)/n_steps;
+		robot->setQ(robot_q);
+		robot->updateModel();
+		file_2e_i << robot->M()(0) << "\t" << robot->M()(4) << "\t" << robot->M()(8) << "\n";
+
 	}
 	file_2e_i.close();
 
@@ -164,19 +169,22 @@ int main() {
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
-	file_2e_ii << 0 << "\t" << 0 << "\t" << 0 << "\n"; // modify this
+	file_2e_ii << robot->M()(0) << "\t" << robot->M()(4) << "\t" << robot->M()(8) << "\n"; // modify this
 	n_steps = 250;
 	for(int i=0 ; i < n_steps ; i++)
 	{
-		// write your code
+		robot_q << 0.0, i*2/n_steps, 0;
+		robot->setQ(robot_q);
+		robot->updateModel();
+		file_2e_ii << robot->M()(0) << "\t" << robot->M()(4) << "\t" << robot->M()(8) << "\n";
 	}
 	file_2e_ii.close();
 
 	// ---------------------------  question 2-f -------------------------------
 	// part i
 	ofstream file_2f_i;
-	file_2f_i.open("../../hw0/homework/q2-f-i.txt");
-	robot_q << 0.0, 0.0, 0.0; // modify this
+	file_2f_i.open("../../homework/hw0/q2-f-i.txt");
+	robot_q << 0.0, 0.5, -1 * M_PI / 2; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
 	g = robot->jointGravityVector();
@@ -184,13 +192,17 @@ int main() {
 	n_steps = 250;
 	for(int i=0 ; i < n_steps ; i++)
 	{
-		// write your code
+		robot_q << 0.0, 0.5, -1 * M_PI / 2 + (i*M_PI)/n_steps;
+		robot->setQ(robot_q);
+		robot->updateModel();
+		g = robot->jointGravityVector();
+		file_2f_i << g.transpose() << "\n";
 	}
 	file_2f_i.close();
 
 	// part ii
 	ofstream file_2f_ii;
-	file_2f_ii.open("../../hw0/homework/q2-f-ii.txt");
+	file_2f_ii.open("../../homework/hw0/q2-f-ii.txt");
 	robot_q << 0.0, 0.0, 0.0; // modify this
 	robot->setQ(robot_q);
 	robot->updateModel();
@@ -199,7 +211,11 @@ int main() {
 	n_steps = 250;
 	for(int i=0 ; i < n_steps ; i++)
 	{
-		// write your code
+		robot_q << 0.0, i*2/n_steps, 0;
+		robot->setQ(robot_q);
+		robot->updateModel();
+		g = robot->jointGravityVector();
+		file_2f_ii << g.transpose() << "\n";
 	}
 	file_2f_ii.close();
 
