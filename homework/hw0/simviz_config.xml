@@ -1,0 +1,10 @@
+<redisConfiguration namespacePrefix="opensai" />
+
+<simvizConfiguration worldFilePath="${HW0_FOLDER}/world.urdf"
+	mode="vizOnly">
+
+	<logger logFolderName="simviz_log_files"
+		logFrequency="100"
+		enabledAtStartup="false"
+		addTimestampToFilename="false" />
+</simvizConfiguration>
