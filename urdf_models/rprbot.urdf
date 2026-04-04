@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 
 <robot name="rprbot">
 
@@ -28,7 +28,7 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
             <geometry>
-                <cylinder radius="0.06" length="0.15"/>
+                <cylinder radius="0.06" length="0.15" />
             </geometry>
             <material name="material_blue">
                 <color rgba="0.3 0.3 0.9 1.0" />
@@ -45,13 +45,13 @@
         <visual>
             <origin xyz="0.0 0.0 -1.25" rpy="0 0 0" />
             <geometry>
-                <cylinder radius="0.03" length="2.5"/>
+                <cylinder radius="0.03" length="2.5" />
             </geometry>
         </visual>
         <visual>
             <origin xyz="0.0 0.0 -0.15" rpy="0 0 0" />
             <geometry>
-                <box size="0.1 0.15 0.05"/>
+                <box size="0.1 0.15 0.05" />
             </geometry>
             <material name="material_blue">
                 <color rgba="0.3 0.3 0.9 1.0" />
@@ -60,7 +60,7 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0 -1.57079632679 0" />
             <geometry>
-                <cylinder radius="0.06" length="0.15"/>
+                <cylinder radius="0.06" length="0.15" />
             </geometry>
             <material name="material_blue">
                 <color rgba="0.3 0.3 0.9 1.0" />
@@ -70,28 +70,27 @@
 
     <link name="link2">
         <inertial>
-            <origin xyz="0.0 0.0 2.5" rpy="0 0 0" />
-            <mass value="2" />
+            <origin xyz="0.0 0.0 1.5" rpy="0 0 0" />
+            <mass value="1" />
             <inertia ixx="0.0000001" iyy="0.0000001" izz="0.0000001" ixy="0" ixz="0" iyz="0" />
         </inertial>
         <visual>
-            <origin xyz="0.0 0.0 1.25" rpy="0 0 0" />
+            <origin xyz="0.0 0.0 0.75" rpy="0 0 0" />
             <geometry>
-                <cylinder radius="0.03" length="2.5"/>
+                <cylinder radius="0.03" length="1.5" />
             </geometry>
         </visual>
         <visual>
-            <origin xyz="0.0 0.0 2.5" rpy="0 0 0" />
+            <origin xyz="0.0 0.0 1.5" rpy="0 0 0" />
             <geometry>
                 <sphere radius="0.09" />
             </geometry>
             <material name="material_red">
-		        <color rgba="0.5 0.0 0.0 1.0" />
-	        </material>
+                <color rgba="0.5 0.0 0.0 1.0" />
+            </material>
         </visual>
-
     </link>
-    
+
     <joint name="j0" type="revolute">
         <parent link="base_link" />
         <child link="link0" />
@@ -115,7 +114,5 @@
         <axis xyz="1 0 0" />
         <limit lower="-2.967" upper="2.967" effort="176" velocity="1.7104" />
     </joint>
-    
+
 </robot>
-
-
