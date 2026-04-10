@@ -36,5 +36,8 @@ bin
 build
 .vscode
 
+# Data Files
+*.csv
+
 # Mac
 .DS_Store
