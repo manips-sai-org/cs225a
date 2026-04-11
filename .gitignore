@@ -33,6 +33,8 @@
 # Folders
 bin
 build
+logs/*
+!logs/.gitkeep
 .vscode
 
 # Data Files
