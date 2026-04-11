@@ -38,6 +38,7 @@ build
 
 # Data Files
 *.csv
+*.txt
 
 # Mac
 .DS_Store
