@@ -40,6 +40,7 @@ logs/*
 # Data Files
 *.csv
 *.txt
+!CMakeLists.txt
 
 # Mac
 .DS_Store
