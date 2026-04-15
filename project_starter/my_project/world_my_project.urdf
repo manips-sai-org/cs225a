@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<world name="world_my_project" gravity="0.0 0.0 -1.0">
+
+	<robot name="panda_arm_hand">
+		<model dir="${CS225A_URDF_FOLDER}/panda" path="panda_arm_hand.urdf"
+			name="panda_arm_hand" />
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+	</robot>
+
+	<static_object name="Base">
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+		<visual>
+			<origin xyz="0.0 0.0 -0.00635" rpy="0 0 0" />
+			<geometry>
+				<box size="5 5 0.0127" />
+			</geometry>
+			<material name="material">
+				<color rgba="0.1 0.1 0.1 1.0" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0.0 0.0 -0.00635" rpy="0 0 0" />
+			<geometry>
+				<box size="5 5 0.0127" />
+			</geometry>
+		</collision>
+	</static_object>
+
+	<dynamic_object name="Ball">
+		<origin xyz="0.7 0.0 0.5" rpy="0 0 0" />
+		<visual>
+			<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.03" />
+			</geometry>
+			<material name="material_red">
+				<color rgba="1.0 0.1 0.1 1.0" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0.0 0.0 0" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.03" />
+			</geometry>
+		</collision>
+		<inertial>
+			<mass value="0.2" />
+			<inertia ixx="1e-5" iyy="1e-5" izz="1e-5" ixy="0" ixz="0" iyz="0" />
+		</inertial>
+	</dynamic_object>
+
+
+	<light name="light1" type="directional">
+		<position xyz="2.0 -2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<light name="light2" type="directional">
+		<position xyz="2.0 2.0 2.0" />
+		<lookat xyz="0.0 0.0 0.0" />
+	</light>
+
+	<camera name="camera_fixed">
+		<position xyz="2.0 0.0 1.0" />
+		<vertical xyz="0.0 0.0 1.0" />
+		<lookat xyz="0 0 0.5" />
+	</camera>
+
+</world>
