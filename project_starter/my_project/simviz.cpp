@@ -76,6 +76,8 @@ int main()
 	robot->updateModel();
 	ui_torques = VectorXd::Zero(robot->dof());
 
+	graphics->addUIForceInteraction(robot_name);
+
 	// load simulation world
 	auto sim = std::make_shared<SaiSimulation::SaiSimulation>(world_file, false);
 	sim->setJointPositions(robot_name, robot->q());
